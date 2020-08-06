@@ -5,46 +5,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#774F8A8B">
 
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="100dp"
             android:layout_height="106dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginTop="30dp"
+            android:contentDescription="@string/logo"
             app:layout_constraintBottom_toTopOf="@id/headerText"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@android:drawable/ic_menu_myplaces" />
 
         <TextView
             android:id="@+id/headerText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="The Elderly Assistant"
-            android:textColor="#FF9800"
-            android:textSize="24sp"
+            android:text="@string/the_elderly_assistant"
+            android:textColor="#222831"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/btnIamAnElderly"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <Button
             android:id="@+id/btnIamAnElderly"
             android:layout_width="200dp"
             android:layout_height="100dp"
-            android:layout_marginTop="50dp"
-            android:background="#3F51B5"
-            android:text="i am an elderly"
-            android:textColor="#FFFFFF"
+            android:background="#4f8a8b"
+            android:text="@string/i_am_an_elderly"
+            android:textColor="#222831"
+            android:textSize="30sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/btnIamAVolunteer"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/headerText" />
@@ -53,10 +59,10 @@
             android:id="@+id/btnIamAVolunteer"
             android:layout_width="200dp"
             android:layout_height="100dp"
-            android:layout_marginTop="50dp"
-            android:background="#3F51B5"
-            android:text="i am a volunteer"
-            android:textColor="#FFFFFF"
+            android:background="#4f8a8b"
+            android:text="@string/i_am_a_volunteer"
+            android:textColor="#222831"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
