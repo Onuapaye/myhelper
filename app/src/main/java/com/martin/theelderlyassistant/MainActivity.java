@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 OpenActivity openActivity = new OpenActivity();
-                openActivity.openAnActivityScreen(ElderlyLoginActivity.class);
+                openActivity.openAnActivityScreen(MainActivity.this, ElderlyLoginActivity.class);
 
             }
         });
