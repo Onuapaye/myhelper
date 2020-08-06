@@ -19,7 +19,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
         this.openElderlyLoginScreen();
     }
 
-    /**
+    /***
      * Open the elderly login screen when clicked
      */
     private void openElderlyLoginScreen(){
