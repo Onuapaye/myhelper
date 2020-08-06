@@ -17,20 +17,10 @@ public class OpenActivity extends Activity {
     /**
      * Opens an activity when called
      */
-    public void openAnActivityScreen(Activity sourceActivity, Class<?> destinationActivity){
+    public void openAnActivityScreen(Activity sourceActivity, Class<? extends AppCompatActivity> destinationActivity){
         Intent intent = new Intent(sourceActivity, destinationActivity);
         startActivity(intent);
     }
 
 }
 
-//public class GenericClickListener implements View.OnClickListener {
-//
-//    public GenericClickListener(Activity sourceActivity, Class<? extends AppCompatActivity> destinationActivity) {
-//        @Override
-//        public void onClick (View view){
-//            Intent intent = new Intent(sourceActivity, destinationActivity);
-//            startActivity(intent);
-//        }
-//    }
-//}
