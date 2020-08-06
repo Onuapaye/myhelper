@@ -2,6 +2,11 @@ package com.martin.theelderlyassistant.helpers;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.view.View;
+import android.widget.TextView;
+
+import com.martin.theelderlyassistant.R;
+
 
 public class OpenActivity extends Activity {
 
@@ -12,4 +17,5 @@ public class OpenActivity extends Activity {
         Intent intent = new Intent(this, destinationActivity);
         startActivity(intent);
     }
+
 }
