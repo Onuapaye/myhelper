@@ -1,4 +1,4 @@
-package com.martin.theelderlyassistant;
+package com.martin.myhelper;
 
 import android.content.Context;
 

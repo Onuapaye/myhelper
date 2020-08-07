@@ -1,10 +1,10 @@
-package com.martin.theelderlyassistant.views;
+package com.martin.myhelper.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.martin.theelderlyassistant.R;
+import com.martin.myhelper.R;
 
 public class ElderlyHomeActivity extends AppCompatActivity {
 

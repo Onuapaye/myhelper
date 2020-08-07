@@ -1,21 +1,18 @@
-package com.martin.theelderlyassistant.views;
+package com.martin.myhelper.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
-import com.martin.theelderlyassistant.R;
-import com.martin.theelderlyassistant.helpers.FirebaseDatabaseCRUDHelper;
-import com.martin.theelderlyassistant.helpers.Utility;
-import com.martin.theelderlyassistant.model.ElderlyModel;
-
-import org.w3c.dom.Text;
+import com.martin.myhelper.R;
+import com.martin.myhelper.helpers.FirebaseDatabaseCRUDHelper;
+import com.martin.myhelper.helpers.Utility;
+import com.martin.myhelper.model.ElderlyModel;
 
 public class ElderlyRegistrationActivity extends AppCompatActivity {
 
@@ -76,6 +73,5 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
         mobileNumber = (EditText) findViewById(R.id.mobileNumber);
         password = (EditText) findViewById(R.id.password);
         retypePassword = (EditText) findViewById(R.id.retypePassword);
-        //firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), mobileNumber.getText().toString(), password.getText().toString(), retypePassword.getText().toString();
     }
 }

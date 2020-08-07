@@ -1,4 +1,4 @@
-package com.martin.theelderlyassistant.helpers;
+package com.martin.myhelper.helpers;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
-import com.martin.theelderlyassistant.model.ElderlyModel;
-import com.martin.theelderlyassistant.views.ElderlyLoginActivity;
+import com.martin.myhelper.model.ElderlyModel;
+import com.martin.myhelper.views.ElderlyLoginActivity;
 
 public class FirebaseDatabaseCRUDHelper {
 

@@ -8,7 +8,36 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:683571619256:android:08ebfcfebfe362788b5b4d",
+        "mobilesdk_app_id": "1:683571619256:android:186aa0cc5a48178c8b5b4d",
+        "android_client_info": {
+          "package_name": "com.martin.myhelper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683571619256-073gf884t9fitkbt80uhlof26a55emhb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0CNdWkstDjOIYxE0QqOdBHCCGWyjO7vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683571619256-073gf884t9fitkbt80uhlof26a55emhb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683571619256:android:23e1f9fe3df8b15a8b5b4d",
         "android_client_info": {
           "package_name": "com.martin.theelderlyassistant"
         }

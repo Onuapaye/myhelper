@@ -1,4 +1,4 @@
-package com.martin.theelderlyassistant.helpers;
+package com.martin.myhelper.helpers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.martin.theelderlyassistant.model.ElderlyModel;
+import com.martin.myhelper.model.ElderlyModel;
 
 public class Utility {
 

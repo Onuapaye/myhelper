@@ -1,17 +1,13 @@
-package com.martin.theelderlyassistant.views;
+package com.martin.myhelper.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.martin.theelderlyassistant.MainActivity;
-import com.martin.theelderlyassistant.R;
-
-import org.w3c.dom.Text;
+import com.martin.myhelper.R;
 
 public class ElderlyLoginActivity extends AppCompatActivity {
 

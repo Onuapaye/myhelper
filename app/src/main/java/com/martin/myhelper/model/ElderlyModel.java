@@ -1,5 +1,4 @@
-package com.martin.theelderlyassistant.model;
-import java.io.Serializable;
+package com.martin.myhelper.model;
 import com.google.firebase.database.Exclude;
 
 public class ElderlyModel {

@@ -1,4 +1,4 @@
-package com.martin.theelderlyassistant;
+package com.martin.myhelper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,13 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.martin.theelderlyassistant.helpers.OpenActivity;
-import com.martin.theelderlyassistant.views.ElderlyLoginActivity;
-import com.martin.theelderlyassistant.views.ElderlyRegistrationActivity;
-
-import static androidx.core.content.ContextCompat.startActivity;
+import com.martin.myhelper.views.ElderlyLoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
