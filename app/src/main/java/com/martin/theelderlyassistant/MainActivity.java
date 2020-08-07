@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.martin.theelderlyassistant.helpers.OpenActivity;
 import com.martin.theelderlyassistant.views.ElderlyLoginActivity;
+import com.martin.theelderlyassistant.views.ElderlyRegistrationActivity;
 
 import static androidx.core.content.ContextCompat.startActivity;
 
@@ -37,9 +38,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                OpenActivity openActivity = new OpenActivity();
-                openActivity.openAnActivityScreen(MainActivity.this, ElderlyLoginActivity.class);
-
+                Intent intent = new Intent(MainActivity.this, ElderlyLoginActivity.class);
+                startActivity(intent);
             }
         });
     }
