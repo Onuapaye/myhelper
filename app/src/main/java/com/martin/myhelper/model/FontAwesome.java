@@ -1,9 +1,8 @@
-package com.martin.theelderlyassistant.model;
+package com.martin.myhelper.model;
 
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 
 public class FontAwesome extends androidx.appcompat.widget.AppCompatTextView {

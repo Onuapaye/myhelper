@@ -1,16 +1,8 @@
-package com.martin.theelderlyassistant.helpers;
+package com.martin.myhelper.helpers;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.martin.theelderlyassistant.R;
-import com.martin.theelderlyassistant.views.ElderlyLoginActivity;
-import com.martin.theelderlyassistant.views.ElderlyRegistrationActivity;
 
 
 public class OpenActivity extends Activity {
