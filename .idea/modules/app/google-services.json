@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "683571619256",
+    "firebase_url": "https://elderly-assistant.firebaseio.com",
+    "project_id": "elderly-assistant",
+    "storage_bucket": "elderly-assistant.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683571619256:android:08ebfcfebfe362788b5b4d",
+        "android_client_info": {
+          "package_name": "com.martin.theelderlyassistant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683571619256-fskukeqt6bn1dlr8qdjj8akpp530e93m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.martin.theelderlyassistant",
+            "certificate_hash": "4b13f8065897fcbc4ea7cfb8a57dce4f5843c97e"
+          }
+        },
+        {
+          "client_id": "683571619256-073gf884t9fitkbt80uhlof26a55emhb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0CNdWkstDjOIYxE0QqOdBHCCGWyjO7vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683571619256-073gf884t9fitkbt80uhlof26a55emhb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

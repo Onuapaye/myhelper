@@ -30,4 +30,7 @@
     <string name="alreadyHaveAccount">Already have an account?</string>
     <string name="loginHere">Login Here</string>
     <string name="registrationTitle">Registration Screen</string>
+    <string name="viewListOfVolunteerService">View List \n Of Volunteers\' \nServices</string>
+    <string name="provideVolunteerFeedbackRatings">Provide Feedback &amp; Rating for Service Obtained</string>
+    <string name="homeScreenTitle">Home Screen</string>
 </resources>
