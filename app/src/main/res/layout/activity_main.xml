@@ -10,15 +10,16 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#774F8A8B">
+        android:layout_height="match_parent"
+        android:background="#774F8A8B"
+        >
 
 
         <ImageView
             android:id="@+id/logoImageView"
             android:layout_width="100dp"
             android:layout_height="106dp"
-            android:layout_marginTop="128dp"
+            android:layout_marginTop="52dp"
             android:contentDescription="@string/logo"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -37,29 +38,28 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
+            app:layout_constraintTop_toBottomOf="@+id/logoImageView"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/iAmAnElderlyButton"
             android:layout_width="200dp"
             android:layout_height="100dp"
+            android:layout_marginTop="68dp"
             android:background="#4f8a8b"
             android:text="@string/i_am_an_elderly"
             android:textColor="#222831"
             android:textSize="30sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/iAmAVolunteerButton"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/headerText"
-            app:layout_constraintVertical_bias="0.503" />
+            app:layout_constraintTop_toBottomOf="@+id/headerText" />
 
         <Button
             android:id="@+id/iAmAVolunteerButton"
             android:layout_width="200dp"
             android:layout_height="100dp"
-            android:layout_marginBottom="120dp"
             android:background="#4f8a8b"
             android:text="@string/i_am_a_volunteer"
             android:textColor="#222831"
@@ -68,7 +68,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iAmAnElderlyButton"
+            app:layout_constraintVertical_bias="0.469" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

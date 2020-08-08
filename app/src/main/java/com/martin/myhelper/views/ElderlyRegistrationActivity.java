@@ -65,21 +65,24 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                 // set values for validation
                 setFieldValues();
 
+                //  validate fields
+                Boolean validationSucceeded = Utility.validateElement(ElderlyRegistrationActivity.this, firstName, lastName, email, mobileNumber, password, retypePassword);
+
                 // validate edit fields
-                if (Utility.validateElement(firstName, lastName, email, mobileNumber, password, retypePassword)) {
-
-                    // create an instance of the ElderlyModel and assign values to it
-                    ElderlyModel elderlyModel = new ElderlyModel(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(),
-                            mobileNumber.getText().toString(), password.getText().toString(), retypePassword.getText().toString());
-                            elderlyModel.setElderlyId(Utility.getUUID());
-
-                    // call a method to create a record in the database
-                    crudHelper.createRecord(ElderlyRegistrationActivity.this, modelDatabaseReference, elderlyModel);
-
+                if ( ! validationSucceeded) {
                    /*Intent intent = new Intent(ElderlyRegistrationActivity.this, ElderlyLoginActivity.class);
                    startActivity(intent);*/
+                    Utility.showInformationDialog("Error Creating Record", "Record not saved.", ElderlyRegistrationActivity.this);
+                    return;
                 } else {
-//                   Utility.showInfoDialog( (AppCompatActivity) ElderlyRegistrationActivity, "");
+
+                   // create an instance of the ElderlyModel and assign values to it
+                   ElderlyModel elderlyModel = new ElderlyModel(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(),
+                                                mobileNumber.getText().toString(), password.getText().toString(), retypePassword.getText().toString());
+                                                elderlyModel.setElderlyId(Utility.getUUID());
+
+                   // call a method to create a record in the database
+                   crudHelper.createRecord(ElderlyRegistrationActivity.this, modelDatabaseReference, elderlyModel);
                 }
             }
         });
@@ -90,7 +93,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
     private void setFieldValues(){
         firstName = (EditText) findViewById(R.id.firstName);
         lastName = (EditText) findViewById(R.id.lastName);
-        email = (EditText) findViewById(R.id.username);
+        email = (EditText) findViewById(R.id.email);
         mobileNumber = (EditText) findViewById(R.id.mobileNumber);
         password = (EditText) findViewById(R.id.password);
         retypePassword = (EditText) findViewById(R.id.retypePassword);

@@ -1,5 +1,7 @@
 package com.martin.myhelper.helpers;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,7 +18,8 @@ public class FirebaseDatabaseCRUDHelper {
 
         //check if the object passed is an elderly model type
         if (elderlyModel == null){
-            Utility.showInfoDialog(appCompatActivity, "ERROR: Field validation failed. Elderly is null");
+            Utility.showInformationDialog("Null Object Detected", "Field validation failed. The passed model is null", appCompatActivity);
+//            Utility.showInfoDialog(appCompatActivity, "ERROR: Field validation failed. Elderly is null");
             return;
         } else {
 
@@ -26,9 +29,10 @@ public class FirebaseDatabaseCRUDHelper {
                     public void onComplete(@NonNull Task<Void> task){
                         if (task.isSuccessful()){
                             OpenActivity.openAnActivityScreen(appCompatActivity, ElderlyLoginActivity.class);
-                            Utility.showMessage(appCompatActivity, "INFO! Elderly record created successfully.");
+                            Utility.showInformationDialog("Record Created", "Elderly record created successfully", appCompatActivity);
                         } else {
-                            Utility.showInfoDialog(appCompatActivity, "Error: " + task.getException().getMessage());
+                            Log.e( "Create Elder", task.getException().getMessage());
+                            Utility.showInformationDialog("Create Record Error", task.getException().getMessage().toString(), appCompatActivity);
                         }
                     }
                 }
