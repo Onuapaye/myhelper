@@ -71,6 +71,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                     // create an instance of the ElderlyModel and assign values to it
                     ElderlyModel elderlyModel = new ElderlyModel(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(),
                             mobileNumber.getText().toString(), password.getText().toString(), retypePassword.getText().toString());
+                            elderlyModel.setElderlyId(Utility.getUUID());
 
                     // call a method to create a record in the database
                     crudHelper.createRecord(ElderlyRegistrationActivity.this, modelDatabaseReference, elderlyModel);

@@ -11,6 +11,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.martin.myhelper.model.ElderlyModel;
 
+import java.util.UUID;
+
 public class Utility {
 
     public static void showMessage(Context _context, String _message){
@@ -75,5 +77,9 @@ public class Utility {
 
     public static void showInfoDialog(final AppCompatActivity appCompatActivity, String _message){
 
+    }
+
+    public static String getUUID(){
+        return UUID.randomUUID().toString();
     }
 }

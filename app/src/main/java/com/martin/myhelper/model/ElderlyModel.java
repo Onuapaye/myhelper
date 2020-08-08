@@ -1,6 +1,8 @@
 package com.martin.myhelper.model;
 //import com.google.firebase.database.Exclude;
 
+import com.google.firebase.database.Exclude;
+
 public class ElderlyModel {
 
     // creation of fields or properties for the model
@@ -13,7 +15,10 @@ public class ElderlyModel {
     private String elderlyRetypePassword;
     private String key;
 
-    public ElderlyModel(){};
+    // create an empty constructor for firebase
+    public ElderlyModel(){
+        // used by firebase
+    };
 
     // constructor for the model class
     public ElderlyModel(String elderlyFirstName, String elderlyLastName, String elderlyEmail,
@@ -27,10 +32,6 @@ public class ElderlyModel {
         this.elderlyRetypePassword = elderlyRetypePassword;
     }
 
-    // create an empty constructor for firebase
-//    public ElderlyModel(){
-//        // this is needed for firebase
-//    }
 
     // generate getters and setters for the properties or fields
 
@@ -105,13 +106,13 @@ public class ElderlyModel {
     // the exclude annotation is provided to tell firebase to ignore generating
     // the key automatically
 
-//    @Exclude
-//    public String getKey() {
-//        return key;
-//    }
-//
-//    @Exclude
-//    public void setKey(String key) {
-//        this.key = key;
-//    }
+    @Exclude
+    public String getKey() {
+        return key;
+    }
+
+    @Exclude
+    public void setKey(String key) {
+        this.key = key;
+    }
 }
