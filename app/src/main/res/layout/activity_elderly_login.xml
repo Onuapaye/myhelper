@@ -13,33 +13,17 @@
         android:background="#774F8A8B">
 
 
-        <TextView
-            android:id="@+id/appTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/app_name"
-            android:textColor="#222831"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/pageHeaderTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.146"
-            app:layout_constraintStart_toEndOf="@+id/appLogo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.637" />
-
         <ImageView
             android:id="@+id/appLogo"
             android:layout_width="59dp"
             android:layout_height="54dp"
-            android:layout_marginStart="48dp"
-            android:layout_marginLeft="48dp"
             android:contentDescription="@string/logo"
             app:layout_constraintBottom_toTopOf="@+id/pageHeaderTitle"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.706"
+            app:layout_constraintVertical_bias="0.886"
+            app:srcCompat="@android:drawable/ic_menu_myplaces"
             tools:srcCompat="@android:drawable/ic_menu_myplaces" />
 
         <TextView
@@ -77,7 +61,8 @@
             android:id="@+id/password"
             android:layout_width="345dp"
             android:layout_height="45dp"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="20dp"
+            android:autofillHints="@string/password"
             android:ems="10"
             android:gravity="start"
             android:hint="@string/password"
@@ -85,22 +70,22 @@
             app:layout_constraintBottom_toTopOf="@+id/loginButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.515"
-            app:layout_constraintStart_toStartOf="parent"
-            android:autofillHints="@string/password"/>
+            app:layout_constraintStart_toEndOf="@+id/email"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/email"
             android:layout_width="343dp"
             android:layout_height="45dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="24dp"
+            android:autofillHints="@string/userName"
             android:ems="10"
             android:gravity="start"
             android:hint="@string/userName"
             android:inputType="textEmailAddress"
             app:layout_constraintBottom_toTopOf="@+id/password"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:autofillHints="@string/userName"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/loginButton"
@@ -115,23 +100,25 @@
             app:layout_constraintBottom_toTopOf="@+id/firstTimeUserTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.507"
+            app:layout_constraintStart_toEndOf="@+id/firstTimeUserTitle"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/resetPasswordLink"
-            android:layout_width="150dp"
-            android:layout_height="27dp"
-            android:layout_marginBottom="84dp"
+            android:layout_width="185dp"
+            android:layout_height="29dp"
+            android:layout_marginBottom="100dp"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center_horizontal"
             android:text="@string/clickHere"
             android:textColor="#222831"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:clickable="true"
-            android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.564"
+            app:layout_constraintStart_toEndOf="@+id/forgottenPasswordTitle"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -149,6 +136,7 @@
             app:layout_constraintBottom_toTopOf="@+id/forgottenPasswordTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toEndOf="@+id/resetPasswordLink"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -162,6 +150,7 @@
             app:layout_constraintBottom_toTopOf="@+id/resetPasswordLink"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.554"
+            app:layout_constraintStart_toEndOf="@+id/loginButton"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -176,6 +165,7 @@
             app:layout_constraintBottom_toTopOf="@+id/registerLink"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toEndOf="@+id/password"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

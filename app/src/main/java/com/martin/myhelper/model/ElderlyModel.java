@@ -1,5 +1,5 @@
 package com.martin.myhelper.model;
-import com.google.firebase.database.Exclude;
+//import com.google.firebase.database.Exclude;
 
 public class ElderlyModel {
 
@@ -105,13 +105,13 @@ public class ElderlyModel {
     // the exclude annotation is provided to tell firebase to ignore generating
     // the key automatically
 
-    @Exclude
-    public String getKey() {
-        return key;
-    }
-
-    @Exclude
-    public void setKey(String key) {
-        this.key = key;
-    }
+//    @Exclude
+//    public String getKey() {
+//        return key;
+//    }
+//
+//    @Exclude
+//    public void setKey(String key) {
+//        this.key = key;
+//    }
 }

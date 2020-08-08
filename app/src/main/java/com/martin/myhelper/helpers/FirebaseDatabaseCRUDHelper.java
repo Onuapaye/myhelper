@@ -21,7 +21,7 @@ public class FirebaseDatabaseCRUDHelper {
         } else {
 
             // push data to Firebase table or child called Elders
-            modelDatabaseReference.child("Elders").push().setValue(elderlyModel).addOnCompleteListener( new OnCompleteListener<Void>(){
+            modelDatabaseReference.child("elders").push().setValue(elderlyModel).addOnCompleteListener( new OnCompleteListener<Void>(){
                     @Override
                     public void onComplete(@NonNull Task<Void> task){
                         if (task.isSuccessful()){
