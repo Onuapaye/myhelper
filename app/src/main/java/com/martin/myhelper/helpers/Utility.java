@@ -17,7 +17,6 @@ public class Utility {
         Toast.makeText(_context, _message, Toast.LENGTH_SHORT).show();
     }
 
-
     // this validates some fields to check for their emptiness or nullability
     public static boolean validateElement(EditText... editTexts) {
         EditText firstNameText = editTexts[0];
