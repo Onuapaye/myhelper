@@ -87,7 +87,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                     FirebaseDatabaseCRUDHelper crudHelper = new FirebaseDatabaseCRUDHelper();
 
                     crudHelper.createUserRecord(ElderlyRegistrationActivity.this, firebaseAuth, ElderlyLoginActivity.class,
-                            email.getText().toString(), password.getText().toString(), "elders", modelArray);
+                            email.getText().toString(), password.getText().toString(), modelArray);
                 }
             }
         });

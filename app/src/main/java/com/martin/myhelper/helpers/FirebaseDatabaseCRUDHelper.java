@@ -50,7 +50,7 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
     private final String CREATE_RECORD_FAILED_TITLE = "RECORD CREATION FAILED";
     private final String CREATE_RECORD_FAILED_MSG = "Record NOT created successfully!";
     private final String PASSWORD_RESET_TITLE = "PASSWORD RESET";
-    private final int MODEL_ARRAY_LENGTH = 4;
+    private final int MODEL_ARRAY_LENGTH = 5;
     private final int REQUEST_CODE = 1000;
 
     private boolean userIsElder = false;
@@ -62,12 +62,12 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
     public ImageView profileImageView;
 
     public void createUserRecord(final AppCompatActivity appCompatActivity, final FirebaseAuth firebaseAuth, Class model,
-                                 String _email, String _password, final String tableAsCollection, final String[] modelArray){
+                                 String _email, String _password, final String[] modelArray){
 
         // if user account already exists
         if (getSystemCurrentUser()){
             Utility.showInformationDialog("RECORD EXISTS", "The user account already exist and cannot be created.", appCompatActivity);
-            OpenActivity.openAnActivityScreen(appCompatActivity, model);
+            //OpenActivity.openAnActivityScreen(appCompatActivity, model);
             return;
         } else {
 
@@ -85,7 +85,7 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
                         if (task.isSuccessful()) {
 
                             //create the user profile
-                            createProfileRecord(tableAsCollection, appCompatActivity, modelArray);
+                            createProfileRecord(appCompatActivity, modelArray);
 
                         } else {
                             Utility.showInformationDialog("ERROR!", task.getException().getMessage(), appCompatActivity);
@@ -97,11 +97,19 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
         }
     }
 
-    private void createProfileRecord(String collectionName, final AppCompatActivity appCompatActivity, String[] _modelArray){
+    private void createProfileRecord(final AppCompatActivity appCompatActivity, final String[] _modelArray){
         final FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
         FirebaseFirestore firebaseFirestore = Utility.getFirebaseFireStore();
 
         String currentUserID = firebaseAuth.getCurrentUser().getUid();
+        Log.d("USER_ID", currentUserID);
+
+        String collectionName = "";
+        if (Integer.parseInt(_modelArray[4]) == GenericModel.USER_TYPE_ELDER){
+            collectionName = "elders";
+        } if (Integer.parseInt(_modelArray[4]) == GenericModel.USER_TYPE_VOLUNTEER){
+            collectionName = "volunteers";
+        }
 
         // create an instance of the DocumentReference class of FirebaseStore
         DocumentReference documentReference = firebaseFirestore.collection(collectionName).document(currentUserID);
@@ -109,31 +117,51 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
         // create a hash map of the object to be stored
         Map<String, Object> modelMap = new HashMap<>();
 
-        if (MODEL_ARRAY_LENGTH == _modelArray.length) {
+        //if (MODEL_ARRAY_LENGTH == _modelArray.length) {
             modelMap.put("firstName", _modelArray[0]);
             modelMap.put("lastName", _modelArray[1]);
             modelMap.put("email", _modelArray[2]);
             modelMap.put("mobileNumber", _modelArray[3]);
             modelMap.put("userType", _modelArray[4]);
-        } else {
+        /*} else {
             modelMap.put("firstName", _modelArray[0]);
             modelMap.put("lastName", _modelArray[1]);
             modelMap.put("email", _modelArray[2]);
             modelMap.put("mobileNumber", _modelArray[3]);
             modelMap.put("userType", _modelArray[4]);
             modelMap.put("profileImage", _modelArray[5]);
-        }
+        }*/
 
         documentReference.set(modelMap).addOnSuccessListener(new OnSuccessListener<Void>() {
 
             @Override
             public void onSuccess(Void aVoid) {
 
-                // send an e-mail for verification
-                sendVerificationEmail(appCompatActivity);
+                //save image if user is a volunteer
+                if (Integer.parseInt(_modelArray[4]) == GenericModel.USER_TYPE_VOLUNTEER){
+                    uploadProfilePhoto();
+                }
 
-                // show a message for successful record recreation
-                Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE, CREATE_RECORD_SUCCESS_MSG, appCompatActivity);
+                // send an e-mail for verification
+                boolean _emailIsSent = sendVerificationEmailAtRegistration();
+                String _msgEmailSuccess = "\n An email is sent to your inbox for verification";
+                String _msgEmailFailure = "\n We could not send you a verification link. You can request for verification later.";
+
+                if (_emailIsSent) {
+                    // show a message for successful record recreation
+                    Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE, CREATE_RECORD_SUCCESS_MSG + _msgEmailSuccess, appCompatActivity);
+                } else {
+                    Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE, CREATE_RECORD_SUCCESS_MSG + _msgEmailFailure, appCompatActivity);
+                }
+
+                if (Integer.parseInt(_modelArray[4]) == GenericModel.USER_TYPE_ELDER) {
+
+                    OpenActivity.openAnActivityScreen(appCompatActivity, ElderlyLoginActivity.class);
+
+                } else if (Integer.parseInt(_modelArray[4]) == GenericModel.USER_TYPE_VOLUNTEER){
+
+                    //OpenActivity.openAnActivityScreen(appCompatActivity, ElderlyLoginActivity.class);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -300,7 +328,7 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
         }
     }
 
-    public void uploadProfilePhoto(ImageView imageView){
+    public void uploadProfilePhoto(){
 
         // open the image gallery
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -331,6 +359,7 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
         storageReference.putFile(_imagePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                profileImageView = (ImageView) findViewById(R.id.profileImage);
                 profileImageView.setImageURI(_imagePath);
                 imageUploadIsSuccess = true;
             }
@@ -502,6 +531,25 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
                 return;
             }
         });
+    }
+
+    boolean emailIsSent = false;
+    public boolean sendVerificationEmailAtRegistration(){
+
+        FirebaseUser firebaseUser = getFireBaseUser();
+        firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+               emailIsSent = true;
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+               emailIsSent = false;
+            }
+        });
+
+        return  emailIsSent;
     }
 
     /***
