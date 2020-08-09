@@ -1,18 +1,12 @@
 package com.martin.myhelper.model;
 //import com.google.firebase.database.Exclude;
 
-import com.google.firebase.database.Exclude;
+//import com.google.firebase.database.Exclude;
 
-public class ElderlyModel {
+public class ElderlyModel extends GenericModel {
 
     // creation of fields or properties for the model
     private String elderlyId;
-    private String elderlyFirstName;
-    private String elderlyLastName;
-    private String elderlyEmail;
-    private String elderlyMobileNumber;
-    private String elderlyPassword;
-    private String elderlyRetypePassword;
     private String key;
 
     // create an empty constructor for firebase
@@ -21,19 +15,16 @@ public class ElderlyModel {
     };
 
     // constructor for the model class
-    public ElderlyModel(String elderlyFirstName, String elderlyLastName, String elderlyEmail,
-                        String elderlyMobileNumber, String elderlyPassword, String elderlyRetypePassword) {
+    public ElderlyModel(String firstName, String lastName, String email,
+                        String mobileNumber, String password, String retypePassword, int userType) {
 
-        this.elderlyFirstName = elderlyFirstName;
-        this.elderlyLastName = elderlyLastName;
-        this.elderlyEmail = elderlyEmail;
-        this.elderlyMobileNumber = elderlyMobileNumber;
-        this.elderlyPassword = elderlyPassword;
-        this.elderlyRetypePassword = elderlyRetypePassword;
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setEmail(email);
+        this.setMobileNumber(mobileNumber);
+        this.setPassword(password);
+        this.setRetypePassword(retypePassword);
     }
-
-
-    // generate getters and setters for the properties or fields
 
     public String getElderlyId() {
         return elderlyId;
@@ -43,75 +34,22 @@ public class ElderlyModel {
         this.elderlyId = elderlyId;
     }
 
-    public String getElderlyFirstName() {
-        return elderlyFirstName;
-    }
-
-    public void setElderlyFirstName(String elderlyFirstName) {
-        this.elderlyFirstName = elderlyFirstName;
-    }
-
-    public String getElderlyLastName() {
-        return elderlyLastName;
-    }
-
-    public void setElderlyLastName(String elderlyLastName) {
-        this.elderlyLastName = elderlyLastName;
-    }
-
-    public String getElderlyEmail() {
-        return elderlyEmail;
-    }
-
-    public void setElderlyEmail(String elderlyEmail) {
-        this.elderlyEmail = elderlyEmail;
-    }
-
-    public String getElderlyMobileNumber() {
-        return elderlyMobileNumber;
-    }
-
-    public void setElderlyMobileNumber(String elderlyMobileNumber) {
-        this.elderlyMobileNumber = elderlyMobileNumber;
-    }
-
-    public String getElderlyPassword() {
-        return elderlyPassword;
-    }
-
-    public void setElderlyPassword(String elderlyPassword) {
-        this.elderlyPassword = elderlyPassword;
-    }
-
-    public String getElderlyRetypePassword() {
-        return elderlyRetypePassword;
-    }
-
-    public void setElderlyRetypePassword(String elderlyRetypePassword) {
-        this.elderlyRetypePassword = elderlyRetypePassword;
-    }
-
     @Override
     public String toString() {
         return "ElderlyModel{" +
-                "elderlyFirstName='" + elderlyFirstName + '\'' +
-                ", elderlyLastName='" + elderlyLastName + '\'' +
-                ", elderlyEmail='" + elderlyEmail + '\'' +
-                ", elderlyMobileNumber='" + elderlyMobileNumber + '\'' +
-                ", elderlyPassword='" + elderlyPassword + '\'' +
-                ", elderlyRetypePassword='" + elderlyRetypePassword + '\'' +
+                "elderlyId='" + elderlyId + '\'' +
+                ", key='" + key + '\'' +
                 '}';
     }
 
     // the exclude annotation is provided to tell firebase to ignore generating
     // the key automatically
-
-    @Exclude
+    //@Exclude
     public String getKey() {
         return key;
     }
 
-    @Exclude
+    //@Exclude
     public void setKey(String key) {
         this.key = key;
     }

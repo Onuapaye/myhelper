@@ -15,5 +15,8 @@ public class OpenActivity extends Activity {
         sourceActivity.startActivity(intent);
     }
 
+    /*public void openAnActivityScreen(Class destinationActivity){
+       startActivity(new Intent(getApplicationContext(), destinationActivity));
+    }*/
 }
 
