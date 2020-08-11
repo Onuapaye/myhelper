@@ -10,7 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#774F8A8B">
+        android:background="#774F8A8B"
+        android:paddingTop="50dp">
 
         <TextView
             android:id="@+id/alreadyHaveAccount"
@@ -59,11 +60,16 @@
             android:id="@+id/profileImage"
             android:layout_width="110dp"
             android:layout_height="100dp"
+            android:clickable="true"
             android:contentDescription="@string/profileImage"
+            android:focusable="true"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toTopOf="@+id/firstName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/no_photo"
+            tools:srcCompat="@drawable/no_photo" />
 
         <TextView
             android:id="@+id/registrationScreenTitle"
@@ -74,11 +80,11 @@
             android:textColor="#222831"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/profileImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.504"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="135dp"
-            app:layout_constraintBottom_toTopOf="@+id/profileImage"/>
+            tools:layout_editor_absoluteY="135dp" />
 
         <TextView
             android:id="@+id/pageHeaderTitle"

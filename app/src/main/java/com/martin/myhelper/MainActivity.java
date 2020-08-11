@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.martin.myhelper.views.ElderlyLoginActivity;
+import com.martin.myhelper.views.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(MainActivity.this, ElderlyLoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.putExtra("loginPageHeaderTitle", "ELDERLY PERSON");
                 startActivity(intent);
             }
         });

@@ -3,6 +3,7 @@
     package="com.martin.myhelper">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -11,11 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.VolunteerHomeActivity"></activity>
+        <activity android:name=".views.CreateVolunteerProfileActivity"></activity>
+        <activity android:name=".views.PasswordResetActivity" />
+        <activity android:name=".views.ProvideFeedbackActivity" />
+        <activity android:name=".views.ElderlyViewProvidedServiceActivity" />
+        <activity android:name=".views.VolunteerHomeActivity" />
         <activity android:name=".views.VolunteerRegistrationActivity" />
         <activity android:name=".views.ElderlyHomeActivity" />
         <activity android:name=".views.ElderlyRegistrationActivity" />
-        <activity android:name=".views.ElderlyLoginActivity" />
+        <activity android:name=".views.LoginActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
