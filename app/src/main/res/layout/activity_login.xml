@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.ElderlyLoginActivity"
+    tools:context=".views.LoginActivity"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,7 +47,7 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/aclonica"
             android:gravity="center"
-            android:text="@string/elderlyTitle"
+            android:text=""
             android:textAllCaps="true"
             android:textColor="#4F8A8B"
             android:textSize="24sp"

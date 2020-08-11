@@ -67,7 +67,7 @@
                 android:contentDescription="@string/viewListOfVolunteerService"
                 app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toEndOf="parent"
-                app:srcCompat="@drawable/ic_elderly_24px"
+                app:srcCompat="@android:drawable/ic_menu_view"
                 tools:ignore="MissingConstraints,VectorDrawableCompat"
                 tools:layout_editor_absoluteY="5dp" />
 
@@ -117,7 +117,7 @@
                 android:contentDescription="@string/provideVolunteerFeedbackRatings"
                 app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toEndOf="parent"
-                app:srcCompat="@drawable/ic_elderly_24px"
+                app:srcCompat="@android:drawable/ic_popup_sync"
                 tools:ignore="MissingConstraints,VectorDrawableCompat"
                 tools:layout_editor_absoluteY="5dp" />
 
@@ -139,6 +139,25 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="321dp"
+        android:layout_marginLeft="321dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginRight="41dp"
+        android:textAllCaps="true"
+        android:textColor="#009688"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/logout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

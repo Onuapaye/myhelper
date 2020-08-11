@@ -11,6 +11,11 @@ public class GenericModel {
     public static final int USER_TYPE_VOLUNTEER = 2;
     public static final int USER_TYPE_ADMIN = 0;
 
+    public static final String ELDERS = "elders";
+    public static final String VOLUNTEERS = "volunteers";
+    public static final String ADMINISTRATORS = "administrators";
+    public static int GLOBAL_USERTYPE;
+
     private EditText firstNameTextEdit, lastNameTextEdit, emailTextEdit, mobileNumberTextEdit, passwordTextEdit, retypePasswordTextEdit;
 
     private String firstName;

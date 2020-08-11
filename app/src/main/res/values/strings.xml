@@ -35,4 +35,19 @@
     <string name="provideVolunteerFeedbackRatings">Provide Feedback &amp; Rating for Service Obtained</string>
     <string name="homeScreenTitle">Home Screen</string>
     <string name="profileImage">Profile Image</string>
+    <string name="logout">Logout</string>
+    <string name="createPreferredServiceProfile">Create a Preferred Service Profile</string>
+    <string name="createServiceProfile">Create Service Profile</string>
+    <string name="editServiceProfile">Edit Service Profile</string>
+    <string name="viewElderlyPersonRequest">View Elderly Request for Service</string>
+    <string name="viewFeedback">View Feedback &amp; Rating</string>
+    <string name="viewProvidedServices">View Provided Service</string>
+    <string name="volunteerName">Volunteer Name</string>
+    <string name="volunteerMobile">+353243155255</string>
+    <string name="briefServiceDescription">Brief Service Description</string>
+    <string name="availableServices">Available Services</string>
+    <string name="provideFeedbackForVolunteer">Provided Feedback &amp; Rating</string>
+    <string name="emailMsgTitle">An e-mail with a link for Password Reset will be sent to your inbox</string>
+    <string name="resetPassword">Reset Password</string>
+    <string name="confirmReset">Confirm Reset</string>
 </resources>

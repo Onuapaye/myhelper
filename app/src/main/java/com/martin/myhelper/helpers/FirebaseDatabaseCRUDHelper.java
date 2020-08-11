@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,105 +33,99 @@ import com.martin.myhelper.R;
 import com.martin.myhelper.model.ElderlyModel;
 import com.martin.myhelper.model.GenericModel;
 import com.martin.myhelper.model.VolunteerModel;
-import com.martin.myhelper.views.ElderlyLoginActivity;
+import com.martin.myhelper.views.ElderlyHomeActivity;
+import com.martin.myhelper.views.LoginActivity;
+import com.martin.myhelper.views.VolunteerHomeActivity;
 import com.squareup.picasso.Picasso;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_FAILED_MSG;
+import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_FAILED_TITLE;
+import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_MSG;
+import static com.martin.myhelper.helpers.Utility.PASSWORD_RESET_TITLE;
+import static com.martin.myhelper.helpers.Utility.REQUEST_CODE;
+
 public class FirebaseDatabaseCRUDHelper extends Activity {
 
-    private final String NULL_OBJECT_DETECTED = "Null Object Detected";
-    private final String NULL_FIELD_MESSAGE = "Field validation failed. The passed model is null";
-    private final String CREATE_RECORD_SUCCESS_TITLE = "RECORD CREATED";
-    private final String CREATE_RECORD_SUCCESS_MSG = "Record created successfully!";
-    private final String CREATE_RECORD_FAILED_TITLE = "RECORD CREATION FAILED";
-    private final String CREATE_RECORD_FAILED_MSG = "Record NOT created successfully!";
-    private final String PASSWORD_RESET_TITLE = "PASSWORD RESET";
-    private final int MODEL_ARRAY_LENGTH = 5;
-    private final int REQUEST_CODE = 1000;
-
-    private boolean userIsElder = false;
+    private boolean isUserElder = false;
     private boolean imageUploadIsSuccess = false;
-    private Boolean isSuccess = false;
+    private boolean isUserCreated = false;
+    private boolean isProfileCreated = false;
+    private static boolean emailIsSent = false;
+    private boolean isUserLoginSuccessful;
 
-    private EditText firstName, lastName, email, mobileNumber,  userType;
+    private EditText firstName, lastName, email, mobileNumber;
     private ImageView profileImage;
     public ImageView profileImageView;
 
-    public void createUserRecord(final AppCompatActivity appCompatActivity, final FirebaseAuth firebaseAuth, Class model,
-                                 String _email, String _password, final String[] modelArray){
+    private FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+    private FirebaseUser firebaseUser;// = firebaseAuth.getCurrentUser();
+    private FirebaseFirestore firebaseFirestore;
+    private StorageReference storageReference = Utility.getFirebaseStorageReference();
 
-        // if user account already exists
-        if (getSystemCurrentUser()){
-            Utility.showInformationDialog("RECORD EXISTS", "The user account already exist and cannot be created.", appCompatActivity);
-            //OpenActivity.openAnActivityScreen(appCompatActivity, model);
-            return;
+    private GenericModel genericModel = new GenericModel();
+    private OpenActivity openActivity;
+    private int userType;
+
+    public boolean createUserRecord(final AppCompatActivity appCompatActivity, String _email, String _password, final String[] modelArray){
+
+        if (isUserTheCurrentFirebaseUser()){
+
+            // check if user email exists
+            if (this.getCurrentUserEmail() == email.getText().toString()) {
+                Utility.showInformationDialog("RECORD EXISTS", "The user account already exist and cannot be created.", appCompatActivity);
+                 isUserCreated = false;
+            }
         } else {
 
-            // if model passed is not empty or null
-            if (model == null) {
-                Utility.showInformationDialog(NULL_OBJECT_DETECTED, NULL_FIELD_MESSAGE, appCompatActivity);
-                return;
-            } else {
+            // create the user account via firebase auth if not null
+            firebaseAuth.createUserWithEmailAndPassword(_email, _password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
-                // create the user account via firebase auth if not null
-                firebaseAuth.createUserWithEmailAndPassword(_email, _password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
 
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+                    //create the user profile
+                    createProfileRecord(appCompatActivity, modelArray);
 
-                            //create the user profile
-                            createProfileRecord(appCompatActivity, modelArray);
-
-                        } else {
-                            Utility.showInformationDialog("ERROR!", task.getException().getMessage(), appCompatActivity);
-                            return;
-                        }
-                    }
-                });
-            }
+                     isUserCreated = true;
+                } else {
+                    Utility.showInformationDialog("ERROR!", task.getException().getMessage(), appCompatActivity);
+                     isUserCreated = false;
+                     return;
+                }
+                }
+            });
         }
+
+        return isUserCreated;
     }
 
-    private void createProfileRecord(final AppCompatActivity appCompatActivity, final String[] _modelArray){
-        final FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
-        FirebaseFirestore firebaseFirestore = Utility.getFirebaseFireStore();
-
-        String currentUserID = firebaseAuth.getCurrentUser().getUid();
-        Log.d("USER_ID", currentUserID);
+    private boolean createProfileRecord(final AppCompatActivity appCompatActivity, final String[] _modelArray){
 
         String collectionName = "";
         if (Integer.parseInt(_modelArray[4]) == GenericModel.USER_TYPE_ELDER){
-            collectionName = "elders";
+            collectionName = GenericModel.ELDERS;
         } if (Integer.parseInt(_modelArray[4]) == GenericModel.USER_TYPE_VOLUNTEER){
-            collectionName = "volunteers";
+            collectionName = GenericModel.VOLUNTEERS;
         }
 
         // create an instance of the DocumentReference class of FirebaseStore
-        DocumentReference documentReference = firebaseFirestore.collection(collectionName).document(currentUserID);
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+        DocumentReference documentReference = firebaseFirestore.collection(collectionName).document(this.getCurrentUserID());
 
         // create a hash map of the object to be stored
         Map<String, Object> modelMap = new HashMap<>();
 
-        //if (MODEL_ARRAY_LENGTH == _modelArray.length) {
-            modelMap.put("firstName", _modelArray[0]);
-            modelMap.put("lastName", _modelArray[1]);
-            modelMap.put("email", _modelArray[2]);
-            modelMap.put("mobileNumber", _modelArray[3]);
-            modelMap.put("userType", _modelArray[4]);
-        /*} else {
-            modelMap.put("firstName", _modelArray[0]);
-            modelMap.put("lastName", _modelArray[1]);
-            modelMap.put("email", _modelArray[2]);
-            modelMap.put("mobileNumber", _modelArray[3]);
-            modelMap.put("userType", _modelArray[4]);
-            modelMap.put("profileImage", _modelArray[5]);
-        }*/
+        modelMap.put("userID", this.getCurrentUserID());
+        modelMap.put("firstName", _modelArray[0]);
+        modelMap.put("lastName", _modelArray[1]);
+        modelMap.put("email", _modelArray[2]);
+        modelMap.put("mobileNumber", _modelArray[3]);
+        modelMap.put("userType", _modelArray[4]);
 
         documentReference.set(modelMap).addOnSuccessListener(new OnSuccessListener<Void>() {
 
@@ -143,33 +138,23 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
                 }
 
                 // send an e-mail for verification
-                boolean _emailIsSent = sendVerificationEmailAtRegistration();
-                String _msgEmailSuccess = "\n An email is sent to your inbox for verification";
-                String _msgEmailFailure = "\n We could not send you a verification link. You can request for verification later.";
+                boolean _emailIsSent = isVerificationEmailAtRegistrationSent(appCompatActivity);
 
-                if (_emailIsSent) {
-                    // show a message for successful record recreation
-                    Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE, CREATE_RECORD_SUCCESS_MSG + _msgEmailSuccess, appCompatActivity);
-                } else {
-                    Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE, CREATE_RECORD_SUCCESS_MSG + _msgEmailFailure, appCompatActivity);
+                if (_emailIsSent == false) {
+                    Utility.showInformationDialog("E-MAIL NOT DELIVERED", CREATE_RECORD_SUCCESS_MSG + "\n" + Utility.CREATE_RECORD_EMAIL_FAILURE_MSG, appCompatActivity);
                 }
-
-                if (Integer.parseInt(_modelArray[4]) == GenericModel.USER_TYPE_ELDER) {
-
-                    OpenActivity.openAnActivityScreen(appCompatActivity, ElderlyLoginActivity.class);
-
-                } else if (Integer.parseInt(_modelArray[4]) == GenericModel.USER_TYPE_VOLUNTEER){
-
-                    //OpenActivity.openAnActivityScreen(appCompatActivity, ElderlyLoginActivity.class);
-                }
+                isProfileCreated = true;
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE, CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
+                isProfileCreated = false;
+                return;
             }
         });
 
+        return isProfileCreated;
     }
 
     public void updateProfileRecord(final Context sourceActivity, final Class destinationActivity, String[] _modelArray, final AppCompatActivity appCompatActivity){
@@ -184,15 +169,21 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
         startActivity(intent);
 
         //2.get the extra data from intent and pass to model
+        this.getUserType(GenericModel.ELDERS);
         Intent extraIntentData = getIntent();
-        if(getUserType("elders")){
 
+        if(GenericModel.GLOBAL_USERTYPE == GenericModel.USER_TYPE_ELDER){
+
+            elderlyModel.setElderlyId(extraIntentData.getStringExtra("elderlyId"));
             elderlyModel.setFirstName(extraIntentData.getStringExtra("firstName"));
             elderlyModel.setLastName(extraIntentData.getStringExtra("lastName"));
             elderlyModel.setEmail(extraIntentData.getStringExtra("email"));
             elderlyModel.setMobileNumber(extraIntentData.getStringExtra("mobileNumber"));
             elderlyModel.setMobileNumber(extraIntentData.getStringExtra("userType"));
-        }else {
+
+        } else {
+
+            volunteerModel.setVolunteerID(extraIntentData.getStringExtra("volunteerId"));
             volunteerModel.setFirstName(extraIntentData.getStringExtra("firstName"));
             volunteerModel.setLastName(extraIntentData.getStringExtra("lastName"));
             volunteerModel.setEmail(extraIntentData.getStringExtra("email"));
@@ -209,34 +200,32 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
         //userType = findViewById(R.id.userType);
         profileImage = findViewById(R.id.profileImage);
 
-        if(getUserType("elders")){
+        if(GenericModel.GLOBAL_USERTYPE == GenericModel.USER_TYPE_ELDER){
+
             firstName.setText(elderlyModel.getFirstName());
             lastName.setText(elderlyModel.getLastName());
             //email.setText(elderlyModel.getEmail());
             mobileNumber.setText(elderlyModel.getMobileNumber());
-            userType.setText(elderlyModel.getUserType());
+            //userType.setText(elderlyModel.getUserType());
         } else {
             firstName.setText(volunteerModel.getFirstName());
             lastName.setText(volunteerModel.getLastName());
             //email.setText(volunteerModel.getEmail());
             mobileNumber.setText(volunteerModel.getMobileNumber());
-            userType.setText(volunteerModel.getUserType());
+            //userType.setText(volunteerModel.getUserType());
             profileImage.setImageURI(Uri.parse(volunteerModel.getProfileImage().toString()));
         }
 
-        final FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
-        FirebaseFirestore firebaseFirestore = Utility.getFirebaseFireStore();
-
-        String currentUserID = firebaseAuth.getCurrentUser().getUid();
-        String tableAsCollectionName;
-        if(getUserType("elders")){
-            tableAsCollectionName = "elders";
+        String tableAsCollectionName = "";
+        if( GenericModel.GLOBAL_USERTYPE == GenericModel.USER_TYPE_ELDER){
+            tableAsCollectionName = GenericModel.ELDERS;
         } else {
-            tableAsCollectionName = "volunteers";
+            tableAsCollectionName = GenericModel.VOLUNTEERS;
         }
 
         // create an instance of the DocumentReference class of FirebaseStore
-        DocumentReference documentReference = firebaseFirestore.collection(tableAsCollectionName).document(currentUserID);
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+        DocumentReference documentReference = firebaseFirestore.collection(tableAsCollectionName).document(getCurrentUserID());
 
         // create a hash map of the object to be stored
         Map<String, Object> modelMap = new HashMap<>();
@@ -244,7 +233,7 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
         modelMap.put("lastName", lastName.getText().toString());
         modelMap.put("email", email.getText().toString());
         modelMap.put("mobileNumber", mobileNumber.getText().toString());
-        modelMap.put("userType", userType.getText().toString());
+        //modelMap.put("userType", userType.getText().toString());
         modelMap.put("profileImage", profileImage.toString());
 
         documentReference.update(modelMap).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -253,7 +242,7 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
                 Utility.showInformationDialog("RECORD UPDATE", "You have successfully updated your account information", appCompatActivity);
 
                 // take user to his home page
-                OpenActivity.openAnActivityScreen(sourceActivity,destinationActivity);
+                openActivity.openAnActivityScreen(sourceActivity,destinationActivity);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -265,16 +254,15 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
     }
 
     public void updateUserEmail(final String _email, final AppCompatActivity appCompatActivity, final Context sourceActivity, final Class destinationActivity ){
-        final FirebaseUser firebaseUser = this.getFireBaseUser();
-        final FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
 
+        firebaseUser = getFireBaseUser();
         firebaseUser.updateEmail(_email).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Utility.showInformationDialog("E-MAIL CHANGE", "You have successfully changed your e-mail. You have to re-login to the app", appCompatActivity);
                 firebaseAuth.signOut();
 
-                OpenActivity.openAnActivityScreen(sourceActivity, destinationActivity);
+                openActivity.openAnActivityScreen(sourceActivity, destinationActivity);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -291,7 +279,6 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
     }
 
     public void sendPasswordResetLink(final String _email, final AppCompatActivity appCompatActivity, final Class destinationActivity){
-        final FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
         firebaseAuth.sendPasswordResetEmail(_email).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -300,7 +287,8 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
                 firebaseAuth.signOut();
 
                 // redirect user to login
-                OpenActivity.openAnActivityScreen(appCompatActivity, destinationActivity);
+                openActivity.openAnActivityScreen(appCompatActivity, destinationActivity);
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -311,14 +299,16 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
     }
 
     private void setProfileDataToIntent(Intent intent, String[] _modelArray){
-
-        if(getUserType("elders")){
+        this.getUserType(GenericModel.ELDERS);
+        if( GenericModel.GLOBAL_USERTYPE == GenericModel.USER_TYPE_ELDER){
             intent.putExtra("firstName", _modelArray[0]);
             intent.putExtra("lastName", _modelArray[1]);
             intent.putExtra("email", _modelArray[2]);
             intent.putExtra("mobileNumber", _modelArray[3]);
             intent.putExtra("userType", _modelArray[4]);
+
         } else {
+
             intent.putExtra("firstName", _modelArray[0]);
             intent.putExtra("lastName", _modelArray[1]);
             intent.putExtra("email", _modelArray[2]);
@@ -353,8 +343,7 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
     private boolean pushImageToFirebaseStorage(final Uri _imagePath){
 
         // create a child reference to the
-        StorageReference storageReference = Utility.getFirebaseStorage();
-        storageReference.child(getUserID()).child( getUserID() + "profileImage");
+        storageReference.child(getCurrentUserID()).child( getCurrentUserID() + "profileImage");
 
         storageReference.putFile(_imagePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -375,8 +364,7 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
     private void pushImageToFirebaseStorage(final Uri _imagePath, final AppCompatActivity appCompatActivity){
 
         // create a child reference to the
-        StorageReference storageReference = Utility.getFirebaseStorage();
-        storageReference.child(getUserID()).child( getUserID() + "profileImage");
+        storageReference.child(getCurrentUserID()).child( getCurrentUserID() + "profileImage");
 
         storageReference.putFile(_imagePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -397,14 +385,13 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
     private void pushImageToFirebaseStorage(Uri _imagePath, final AppCompatActivity appCompatActivity, final Context _sourceActivity, final Class _destinationActivity){
 
         // create a child reference to the
-        StorageReference storageReference = Utility.getFirebaseStorage();
-        storageReference.child(getUserID()).child( getUserID() + "profileImage");
+        storageReference.child(getCurrentUserID()).child( getCurrentUserID() + "profileImage");
 
         storageReference.putFile(_imagePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Utility.showInformationDialog("IMAGE UPLOAD", "Image UPLOADED successfully. ", appCompatActivity );
-                    OpenActivity.openAnActivityScreen(_sourceActivity, _destinationActivity);
+                    openActivity.openAnActivityScreen(_sourceActivity, _destinationActivity);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -417,8 +404,7 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
 
     public void showUserProfileImage(){
         // create a child reference to the
-        StorageReference storageReference = Utility.getFirebaseStorage();
-        storageReference.child("users/" + getUserID() + "profileImage").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        storageReference.child("users/" + getCurrentUserID() + "profileImage").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Picasso.get().load(uri).into(profileImageView);
@@ -426,24 +412,28 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
         });
     }
 
-    public String getUserID(){
-        final FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
-        String currentUserID = firebaseAuth.getCurrentUser().getUid();
-        return currentUserID;
+    public String getCurrentUserID(){
+        String id = firebaseAuth.getCurrentUser().getUid();
+        Log.wtf("USER_ID2", id);
+        return id;
+    }
+
+    public String getCurrentUserID(FirebaseAuth firebaseAuth){
+        String id = firebaseAuth.getCurrentUser().getUid();
+        Log.wtf("USER_ID3", id);
+        System.console().printf("", id);
+        return id;
     }
 
     /***
      * Gets or fetches a user's record from the database
      * @param collectionName
      */
-    public void getUserRecord(String collectionName){
-        FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
-        FirebaseFirestore firebaseFirestore = Utility.getFirebaseFireStore();
+    public void getCurrentUserRecord(String collectionName){
 
-        String userID = getFireBaseUser().getUid();
-        final GenericModel genericModel = new GenericModel();
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+        DocumentReference documentReference = firebaseFirestore.collection(collectionName).document(this.getCurrentUserID());
 
-        DocumentReference documentReference = firebaseFirestore.collection(collectionName).document(userID);
         documentReference.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -462,7 +452,7 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
                    elderlyModel.setUserType(Integer.parseInt(value.getString(" userType")));
                    elderlyModel.setMobileNumber(value.getString(" mobileNumber"));
 
-               } else {
+               } else if( Integer.parseInt(userType) == genericModel.USER_TYPE_ADMIN ){
                    // the user is a volunteer
 
                    // create an instance of the volunteer model class
@@ -479,92 +469,111 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
         });
     }
 
+    public String getCurrentUserEmail(){
+        return firebaseUser.getEmail();
+    }
+
+
     /***
      * Gets the current user and checks if the UserType is an Elder or a Volunteer.
      * @param modelTableAsCollection
      * @return true if the user is an elder else returns false
      */
-    public boolean getUserType(String modelTableAsCollection){
-
-        FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
-        FirebaseFirestore firebaseFirestore = Utility.getFirebaseFireStore();
-
-        // get the user id
-        String userID = getFireBaseUser().getUid();
-
-        DocumentReference documentReference = firebaseFirestore.collection(modelTableAsCollection).document(userID);
+    /*public int getUserType(String modelTableAsCollection){
+        Log.d("USERID", this.getCurrentUserID() + " " + modelTableAsCollection);
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+        DocumentReference documentReference = firebaseFirestore.collection(modelTableAsCollection).document(this.getCurrentUserID());
         documentReference.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
 
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                String userType = value.getString("userType");
-
-                // if type of user is elderly
-                if( Integer.parseInt(userType) == GenericModel.USER_TYPE_ELDER ){
-                    userIsElder = true;
-                } else{
-                    userIsElder = false;
-                }
+                userType = Integer.parseInt(value.getString("userType"));
             }
         });
 
-        return userIsElder;
+        return userType;
+    }*/
+
+    public void getUserType(String modelTableAsCollection){
+
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+        final DocumentReference documentReference = firebaseFirestore.collection(modelTableAsCollection).document(this.getCurrentUserID());
+
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()){
+                        String ut = documentSnapshot.getString("userType");
+                        userType = Integer.parseInt(ut);
+                        System.out.print("------>>TINO IS " + userType);
+                        System.out.print("------>>TINO2 IS " + ut);
+                        GenericModel.GLOBAL_USERTYPE = userType;
+                    }
+                }
+            }
+        });
     }
+
 
     /***
      * Sends an email to a User after account is created or when it is called
      * @param appCompatActivity
      */
-    public void sendVerificationEmail(final AppCompatActivity appCompatActivity){
-        FirebaseUser firebaseUser = getFireBaseUser();
+    public void reSendVerificationEmail(final AppCompatActivity appCompatActivity){
+
+        firebaseUser = firebaseAuth.getCurrentUser();
         firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Utility.showInformationDialog("User Account Created!",
-                        "Your account is created successfully. \nA verification e-mail is sent to your inbox to activate your account.",
+                Utility.showInformationDialog("E-MAIL SENT",
+                        "A verification e-mail is sent to your inbox to activate your account.",
                         appCompatActivity);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Utility.showInformationDialog("Error !", e.getMessage(), appCompatActivity);
+                Utility.showInformationDialog("E-MAIL NOT SENT", e.getMessage(), appCompatActivity);
                 return;
             }
         });
     }
 
-    boolean emailIsSent = false;
-    public boolean sendVerificationEmailAtRegistration(){
+    public boolean isVerificationEmailAtRegistrationSent(final AppCompatActivity appCompatActivity){
 
-        FirebaseUser firebaseUser = getFireBaseUser();
-        firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-               emailIsSent = true;
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-               emailIsSent = false;
-            }
-        });
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+       if (checkIfEmailIsVerify() == false){
+
+           firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+               @Override
+               public void onSuccess(Void aVoid) {
+                   emailIsSent = true;
+               }
+           }).addOnFailureListener(new OnFailureListener() {
+               @Override
+               public void onFailure(@NonNull Exception e) {
+                   emailIsSent = false;
+               }
+           });
+       }
 
         return  emailIsSent;
     }
 
     /***
      * Checks if a User has verified his email after registration
-     * @return
+     * @return boolean
      */
     public Boolean checkIfEmailIsVerify(){
-        FirebaseUser firebaseUser = getFireBaseUser();
-        boolean isVerified = false;
+        boolean isVerified;
+
+        firebaseUser = firebaseAuth.getCurrentUser();
 
         if(firebaseUser.isEmailVerified()){
             isVerified = true;
-        } else {
-            isVerified = false;
-        }
+        } else isVerified = false;
 
         return isVerified;
     }
@@ -574,7 +583,6 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
      * @return
      */
     public FirebaseUser getFireBaseUser(){
-        FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
         return  firebaseAuth.getCurrentUser();
     }
 
@@ -584,44 +592,35 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
      * @param destinationActivity
      * @param appCompatActivity
      */
-    public void logOutUser(Context sourceActivity, Class destinationActivity, AppCompatActivity appCompatActivity){
-        FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
+    public void logOutFireStoreUser(Context sourceActivity, Class destinationActivity, AppCompatActivity appCompatActivity){
         firebaseAuth.signOut();
 
-        OpenActivity.openAnActivityScreen(sourceActivity, destinationActivity);
+        openActivity.openAnActivityScreen(sourceActivity, destinationActivity);
 
-        Utility.showInformationDialog("Sign Out", "You have successfully signed out from the application", appCompatActivity);
+        Utility.showInformationDialog("SIGN OUT", "You have successfully signed out from the application", appCompatActivity);
     }
 
     /***
      * Logs-in a user into the application after a successful authentication using FirebaseAuth. It opens
      * a new activity or screen if successful else remains on the same page
-     * @param modelClass
-     * @param context
-     * @param appCompatActivity
+     * @param sourceActivity
+     * @param destinationActivity
      * @param _email
      * @param _password
      */
-    public void loginFireStoreUser(final Class modelClass, final Context context, final AppCompatActivity appCompatActivity, final String _email, String _password){
-        FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
+    public void loginFireStoreUser(final Context sourceActivity, final Class destinationActivity, final AppCompatActivity appCompatActivity, final String _email, final String _password){
 
-        firebaseAuth.signInWithEmailAndPassword(_email, _password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+        firebaseAuth.signInWithEmailAndPassword(_email, _password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-
-                    // check if the user has verified his e-mail address or account
-                    if (checkIfEmailIsVerify()){
-                        OpenActivity.openAnActivityScreen(context, modelClass);
-                    } else {
-                        Utility.promptUserBeforeEmailResetLinkIsSent(appCompatActivity);
-                        return;
-                    }
-
-                } else {
-                    Utility.showInformationDialog("LOGIN ERROR", task.getException().getMessage(), appCompatActivity );
-                    return;
-                }
+            public void onSuccess(AuthResult authResult) {
+                // get and set user type
+                getUserType(GenericModel.ELDERS);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Utility.showInformationDialog("LOGIN ERROR", e.getMessage(), appCompatActivity);
             }
         });
     }
@@ -634,12 +633,12 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
      * @param appCompatActivity
      */
     public void resetUserPassword(String _email, final Context _sourceActivity, final Class _destinationActivity, final AppCompatActivity appCompatActivity){
-        FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
+
         firebaseAuth.sendPasswordResetEmail(_email).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Utility.showInformationDialog(PASSWORD_RESET_TITLE, "A password reset link IS SENT your e-mail successfully", appCompatActivity);
-                OpenActivity.openAnActivityScreen(_sourceActivity, _destinationActivity);
+                openActivity.openAnActivityScreen(_sourceActivity, _destinationActivity);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -654,8 +653,8 @@ public class FirebaseDatabaseCRUDHelper extends Activity {
      * Gets the current user from the system
      * @return true if the record is found else false
      */
-    public boolean getSystemCurrentUser(){
-        FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationReference();
+    public boolean isUserTheCurrentFirebaseUser(){
+
         if (firebaseAuth.getCurrentUser() != null){
             return true;
         } else {
