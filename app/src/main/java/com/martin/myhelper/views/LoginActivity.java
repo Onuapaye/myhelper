@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 String[] _emailPassword = { email.getText().toString(), password.getText().toString() };
                 crudHelper = new ElderlyVolunteerCRUDHelper();
-Log.i("UTYPE", String.valueOf(userType));
+
                 if(userType == GenericModel.USER_TYPE_ELDER){
                     loginFireStoreUser(LoginActivity.this, ElderlyHomeActivity.class, LoginActivity.this, _emailPassword , "elders");
                 } else {
