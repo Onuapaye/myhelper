@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,7 +11,7 @@
     <TextView
         android:id="@+id/pageHeaderTitle"
         android:layout_width="0dp"
-        android:layout_height="31dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="50dp"
@@ -29,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/registrationScreenTitle"
+        android:id="@+id/availableServicesTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -47,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/pageHeaderTitle" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/availableServiceTypeSpinner"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginStart="24dp"
@@ -56,9 +57,18 @@
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:background="#774F8A8B"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registrationScreenTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/availableServicesTitle" />
+
+    <com.martin.myhelper.helpers.MultiSelectionSpinner
+        android:id="@+id/mySpinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -74,7 +84,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner"
+        app:layout_constraintTop_toBottomOf="@+id/availableServiceTypeSpinner"
         app:layout_constraintVertical_bias="0.04000002">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,7 +92,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/registrationScreenTitle2"
+                android:id="@+id/panelTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -90,7 +100,7 @@
                 android:layout_marginEnd="246dp"
                 android:layout_marginRight="246dp"
                 android:padding="5dp"
-                android:text="Service Profile Details"
+                android:text="@string/serviceProfileDetails"
                 android:textColor="#222831"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -99,47 +109,54 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
-                android:id="@+id/spinner5"
+                android:id="@+id/availableDaysTimeDropDown"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="8dp"
                 android:background="#774F8A8B"
+                android:padding="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinner2"
+                app:layout_constraintTop_toBottomOf="@+id/availableDaysDropDown"
                 tools:listitem="Day for service profivision" />
 
             <Spinner
-                android:id="@+id/spinner2"
+                android:id="@+id/availableDaysDropDown"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="16dp"
+                android:background="#774F8A8B"
+                android:padding="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
 
             <Spinner
-                android:id="@+id/spinner4"
+                android:id="@+id/availableDayForCallsDropDown"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="45dp"
                 android:background="#774F8A8B"
+                android:padding="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinner5" />
+                app:layout_constraintTop_toBottomOf="@+id/availableDaysDropDown" />
 
             <Button
-                android:id="@+id/loginButton2"
+                android:id="@+id/confirmCreateServiceProfile"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 android:background="#4f8a8b"
                 android:gravity="center"
-                android:text="Confirm"
+                android:text="@string/confirmButton"
                 android:textColor="#222831"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="324dp" />
+                app:layout_constraintTop_toBottomOf="@+id/availableDayForCallsDropDown" />
 
             <EditText
                 android:id="@+id/editTextTextMultiLine"
@@ -149,11 +166,12 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="@string/briefServiceDescription"
+                android:autofillHints="@string/briefServiceDescription"
                 android:inputType="textMultiLine"
                 android:minLines="5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/registrationScreenTitle2" />
+                app:layout_constraintTop_toBottomOf="@+id/panelTitle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 

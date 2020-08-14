@@ -1,11 +1,16 @@
 package com.martin.myhelper.helpers;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -21,7 +26,9 @@ import com.martin.myhelper.model.ElderlyModel;
 
 import java.util.UUID;
 
-public class Utility {
+import static com.martin.myhelper.model.GenericModel.PICK_IMAGE_REQUEST;
+
+public class Utility extends Activity {
 
     private static final String REQUIRED_FIELD_TITLE = "Required Field Empty";
     private static final String MIN_PASSWORD_INVALID = "Minimum Required Length";
@@ -63,38 +70,35 @@ public class Utility {
         EditText retypePassword = editTexts[5];
 
         if (firstNameText.getText() == null || firstNameText.getText().toString().isEmpty()){
-            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your first name.", appCompatActivity);
-//            firstNameText.setError("First name is required.");
-            return false;
+            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your first name.", appCompatActivity);return false;
         }
 
         if (lastNameText.getText() == null || lastNameText.getText().toString().isEmpty()){
             Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your last name.", appCompatActivity);
-//            lastNameText.setError("Last name is required.");
             return  false;
         }
 
         if (emailText.getText() == null || emailText.getText().toString().isEmpty()){
-//            emailText.setError("E-mail address is required");
             Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your e-mail address.", appCompatActivity);
             return false;
         }
 
         if (mobileNumberText.getText() == null || mobileNumberText.getText().toString().isEmpty()){
             Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your mobile number.", appCompatActivity);
-//            mobileNumberText.setError("Mobile number is required");
+            return false;
+        }
+
+        if (mobileNumberText.getText().toString().trim().length() != 10){
+            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter a mobile number NOT less/greater than 10 characters", appCompatActivity);
             return false;
         }
 
         if (password.getText() == null || password.getText().toString().isEmpty()){
-            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your password.", appCompatActivity);
-//            password.setError("Password is required");
-            return false;
+            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your password.", appCompatActivity);return false;
         }
 
         if (!retypePassword.getText().toString().equals(password.getText().toString())){
             Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Your password do not match. Please try again", appCompatActivity);
-//            password.setError("Password does not match");
             return false;
         }
 
@@ -133,6 +137,58 @@ public class Utility {
         return true;
     }
 
+    public static boolean validateInputsOnCreateServiceType(AppCompatActivity appCompatActivity, EditText... editTexts ) {
+        EditText serviceTypeNameText = editTexts[0];
+        EditText serviceTypeText = editTexts[1];
+
+        if (serviceTypeNameText.getText() == null || serviceTypeNameText.getText().toString().isEmpty()) {
+            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter service type name.", appCompatActivity);
+            return false;
+        }
+
+        if (serviceTypeText.getText() == null || serviceTypeText.getText().toString().isEmpty()) {
+            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter service type description.", appCompatActivity);
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean validateInputsOnCreateVolunteerProfile(AppCompatActivity appCompatActivity, EditText description, Spinner... spinners) {
+        String availableServiceSpinner = (String) spinners[0].getSelectedItem();
+        String availableDaysSpinner = (String) spinners[1].getSelectedItem();
+        String availableDaysTimeSpinner = (String) spinners[1].getSelectedItem();
+        String availableDaysForCallsSpinner = (String) spinners[2].getSelectedItem();
+        EditText serviceDescription = description;
+
+        if (availableServiceSpinner == null || availableServiceSpinner.isEmpty()) {
+            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please select an available service type", appCompatActivity);
+            return false;
+        }
+
+        if (availableDaysSpinner == null || availableDaysSpinner.isEmpty()) {
+            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please select your available day(s) for the service type", appCompatActivity);
+            return false;
+        }
+
+        if (availableDaysTimeSpinner == null || availableDaysTimeSpinner.isEmpty()) {
+            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please select your available time(s) for the service type", appCompatActivity);
+            return false;
+        }
+
+        if (availableDaysForCallsSpinner == null || availableDaysForCallsSpinner.isEmpty()) {
+            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please select your available time(s) for calls", appCompatActivity);
+            return false;
+        }
+
+        if (serviceDescription.getText() == null || serviceDescription.getText().toString().isEmpty()) {
+            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter service type description.", appCompatActivity);
+            return false;
+        }
+
+        return true;
+    }
+
     public static ElderlyModel getElderly(Intent intent, Context context){
         try {
             return (ElderlyModel) intent.getSerializableExtra("ELDERLY_KEY");
@@ -142,6 +198,7 @@ public class Utility {
         }
         return  null;
     }
+
 
     /***
      * Gets a reference to the Firebase Realtime Database
@@ -172,7 +229,13 @@ public class Utility {
      * @return
      */
     public static StorageReference getFirebaseStorageReference(){
+        //FirebaseStorage firebaseStorage = getFirebaseStorageInstance();
+        //StorageReference storageReference = firebaseStorage.getReference();
         return FirebaseStorage.getInstance().getReference();
+    }
+
+    public static FirebaseStorage getFirebaseStorageInstance(){
+        return FirebaseStorage.getInstance();
     }
 
     /***
@@ -238,7 +301,7 @@ public class Utility {
      */
     public static void promptUserBeforeEmailResetLinkIsSent(final AppCompatActivity _appCompactActivity){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(_appCompactActivity);
-        final FirebaseDatabaseCRUDHelper crudHelper = new FirebaseDatabaseCRUDHelper();
+        final ElderlyVolunteerCRUDHelper crudHelper = new ElderlyVolunteerCRUDHelper();
 
         // set dialog title
         alertDialogBuilder.setTitle("ACCOUNT NOT VERIFIED");
@@ -271,7 +334,7 @@ public class Utility {
 
     public static void promptUserBeforePasswordResetLinkIsSent(final String _email, final AppCompatActivity _appCompactActivity, final Class destinationClass){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(_appCompactActivity);
-        final FirebaseDatabaseCRUDHelper crudHelper = new FirebaseDatabaseCRUDHelper();
+        final ElderlyVolunteerCRUDHelper crudHelper = new ElderlyVolunteerCRUDHelper();
 
         // set dialog title
         alertDialogBuilder.setTitle("RESET PASSWORD LINK?");
@@ -304,7 +367,7 @@ public class Utility {
 
     public static boolean isEmailAddressValid(CharSequence _emailAddress){
 
-        return (!TextUtils.isEmpty(String.valueOf(_emailAddress)) && Patterns.EMAIL_ADDRESS.matcher(String.valueOf(_emailAddress)).matches());
+        return !TextUtils.isEmpty(String.valueOf(_emailAddress)) && Patterns.EMAIL_ADDRESS.matcher(String.valueOf(_emailAddress)).matches();
     }
 
     public static boolean isPasswordLengthValid(CharSequence data) {
