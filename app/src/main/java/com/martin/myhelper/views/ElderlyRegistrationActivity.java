@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 //import com.google.firebase.database.DatabaseReference;
 import com.martin.myhelper.R;
+import com.martin.myhelper.helpers.ElderlyCRUDHelper;
 import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
 import com.martin.myhelper.helpers.OpenActivity;
 import com.martin.myhelper.helpers.Utility;
@@ -32,7 +33,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
     private Context context = ElderlyRegistrationActivity.this;
     private AppCompatActivity appCompatActivity = ElderlyRegistrationActivity.this;
 
-    private ElderlyVolunteerCRUDHelper crudHelper = new ElderlyVolunteerCRUDHelper();
+    private ElderlyCRUDHelper crudHelper = new ElderlyCRUDHelper();
     private Button button;
 
     private Intent intent;
@@ -105,20 +106,13 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                             String.valueOf(userType),
                     };
 
-                    //intent = getIntent();
-                    //intent.getExtras();
+                    crudHelper.createElderlyUserRecord(ElderlyRegistrationActivity.this, modelArray);
 
-                    //final int userType = intent.getIntExtra("userType",0);
-                    //if(userType == GenericModel.USER_TYPE_ELDER) {
-                        crudHelper.createUserRecord(ElderlyRegistrationActivity.this, modelArray);
-                    //} else {
-                    //    crudHelper.createUserRecord(ElderlyRegistrationActivity.this, modelArray, null);
-                    //}
                     // redirect to login activity
-                    intent = new Intent(context, LoginActivity.class);
+                    /*intent = new Intent(context, LoginActivity.class);
                     intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG);
                     intent.putExtra("loginPageHeaderTitle", "ELDERLY PERSON");
-                    startActivity(intent);
+                    startActivity(intent);*/
 
                 }
             }
@@ -155,35 +149,12 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
             if (!hasFocus){
                 if (Integer.parseInt(String.valueOf(password.getText().toString().trim().length())) > 0){
 
-                    if (!Utility.isPasswordLengthValid(password.getText().toString().trim())){
+                    if (!Utility.isPasswordLengthValid(password.getText().toString().trim())
+                            || !Utility.isPasswordHavingNumberAndSymbol(password.getText().toString().trim())
+                            || !Utility.isPasswordHavingLowerCase(password.getText().toString().trim())
+                            || !Utility.isPasswordHavingUpperCase(password.getText().toString().trim()) ){
 
-                        // show message that password length is invalid
-                        Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE, Utility.INVALID_PASSWORD_LENGTH_MSG, appCompatActivity);
-                        password.getFocusable();
-                        return;
-                    }
-
-                    if (!Utility.isPasswordHavingNumberAndSymbol(password.getText().toString().trim())){
-
-                        // show message that password is not containing a number or symbol
-                        Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE, Utility.INVALID_PASSWORD_NUMBER_SYMBOL_MSG, appCompatActivity);
-                        password.getFocusable();
-                        return;
-                    }
-
-                    if (!Utility.isPasswordHavingLowerCase(password.getText().toString().trim())){
-
-                        // show a message that password does not contain an upper case
-                        Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE, Utility.INVALID_PASSWORD_LOWERCASE_MSG, appCompatActivity);
-                        password.getFocusable();
-                        return;
-                    }
-
-                    if (!Utility.isPasswordHavingUpperCase(password.getText().toString().trim())) {
-
-                        // show a message that password does not contain a lower case
-                        Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE, Utility.INVALID_PASSWORD_UPPERCASE_MSG, appCompatActivity);
-                        password.getFocusable();
+                        Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE, Utility.INVALID_PASSWORD_ALL_MSG, appCompatActivity);
                         return;
                     }
                 }

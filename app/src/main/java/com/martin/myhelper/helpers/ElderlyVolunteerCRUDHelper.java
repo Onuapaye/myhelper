@@ -71,7 +71,7 @@ public class ElderlyVolunteerCRUDHelper extends Activity {
     //public ImageView profileImageView;
 
     private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;// = firebaseAuth.getCurrentUser();
+    private FirebaseUser firebaseUser;
     private FirebaseFirestore firebaseFirestore;
     private StorageReference storageReference;
 
@@ -103,7 +103,7 @@ public class ElderlyVolunteerCRUDHelper extends Activity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
-                    Log.d("URI", modelArray[6].toString());
+                    Log.d("URI", modelArray[6]);
                     // create the user profile
                     createElderlyOrVolunteerRecord(appCompatActivity, modelArray, Uri.parse(modelArray[6]));
 
