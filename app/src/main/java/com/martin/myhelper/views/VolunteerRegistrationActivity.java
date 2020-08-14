@@ -25,6 +25,7 @@ import com.martin.myhelper.R;
 import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
 import com.martin.myhelper.helpers.OpenActivity;
 import com.martin.myhelper.helpers.Utility;
+import com.martin.myhelper.helpers.VolunteerCRUDHelper;
 import com.martin.myhelper.model.GenericModel;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
@@ -47,7 +48,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
     private Context context = VolunteerRegistrationActivity.this;
     private AppCompatActivity appCompatActivity = VolunteerRegistrationActivity.this;
 
-    private ElderlyVolunteerCRUDHelper crudHelper;
+    private VolunteerCRUDHelper crudHelper;
     private StorageReference storageReference;
     public static StorageTask storageTask;
 
@@ -109,6 +110,11 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 //  validate fields
                 boolean validationSucceeded = Utility.validateInputsOnCreate(appCompatActivity, firstName, lastName, email, mobileNumber, password, retypePassword);
 
+                if (imageUri == null){
+                    Utility.showInformationDialog("IMAGE VALIDATION FAILED", "Please upload your image", appCompatActivity);
+                    return;
+                }
+
                 if ( !validationSucceeded ) {
                     return;
                 } else {
@@ -121,19 +127,18 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                         mobileNumber.getText().toString(),
                         password.getText().toString(),
                         String.valueOf(userType),
-                        String.valueOf(imageUri),
                         imageExtension = getFileExtension(imageUri)
                     };
 
                    // call method to create the record for the volunteer
-                   crudHelper = new ElderlyVolunteerCRUDHelper();
-                   crudHelper.createUserRecord(appCompatActivity, modelArray);
+                   crudHelper = new VolunteerCRUDHelper();
+                   crudHelper.createVolunteerUserRecord(appCompatActivity, modelArray, imageUri);
 
                     // redirect to login activity
-                    intent = new Intent(context, LoginActivity.class);
+                    /*intent = new Intent(context, LoginActivity.class);
                     intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG);
                     intent.putExtra("loginPageHeaderTitle", "VOLUNTEER");
-                    startActivity(intent);
+                    startActivity(intent);*/
 
                 }
             }
@@ -168,37 +173,15 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 if (!hasFocus){
                     if (Integer.parseInt(String.valueOf(password.getText().toString().trim().length())) > 0){
 
-                        if (!Utility.isPasswordLengthValid(password.getText().toString().trim())){
+                        if (!Utility.isPasswordLengthValid(password.getText().toString().trim())
+                                || !Utility.isPasswordHavingNumberAndSymbol(password.getText().toString().trim())
+                                || !Utility.isPasswordHavingLowerCase(password.getText().toString().trim())
+                                || !Utility.isPasswordHavingUpperCase(password.getText().toString().trim()) ){
 
-                            // show message that password length is invalid
-                            Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE, Utility.INVALID_PASSWORD_LENGTH_MSG, appCompatActivity);
-                            password.getFocusable();
+                            Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE, Utility.INVALID_PASSWORD_ALL_MSG, appCompatActivity);
                             return;
                         }
 
-                        if (!Utility.isPasswordHavingNumberAndSymbol(password.getText().toString().trim())){
-
-                            // show message that password is not containing a number or symbol
-                            Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE, Utility.INVALID_PASSWORD_NUMBER_SYMBOL_MSG, appCompatActivity);
-                            password.getFocusable();
-                            return;
-                        }
-
-                        if (!Utility.isPasswordHavingLowerCase(password.getText().toString().trim())){
-
-                            // show a message that password does not contain an upper case
-                            Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE, Utility.INVALID_PASSWORD_LOWERCASE_MSG, appCompatActivity);
-                            password.getFocusable();
-                            return;
-                        }
-
-                        if (!Utility.isPasswordHavingUpperCase(password.getText().toString().trim())) {
-
-                            // show a message that password does not contain a lower case
-                            Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE, Utility.INVALID_PASSWORD_UPPERCASE_MSG, appCompatActivity);
-                            password.getFocusable();
-                            return;
-                        }
                     }
                 }
             }
@@ -241,10 +224,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
             && data != null && data.getData() != null){
 
             // set the image uri or path
-            Log.d("URI_MAIN", data.getData().toString());
             imageUri = data.getData();
-
-            Log.d("URI_MAIN2", imageUri.toString());
 
             // show image into the imageView using Picasso or direct into the image view
             Picasso.get().load(this.imageUri).into(profileImage);

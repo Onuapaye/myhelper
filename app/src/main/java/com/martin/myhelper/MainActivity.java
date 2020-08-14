@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.martin.myhelper.model.GenericModel;
-import com.martin.myhelper.views.CreateVolunteerProfileActivity;
-import com.martin.myhelper.views.ElderlyViewProvidedServiceActivity;
 import com.martin.myhelper.views.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -59,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // onClick event for volunteer login button
-        administratorButton = (Button) findViewById(R.id.iAmAnAdminButton);
+        /*administratorButton = (Button) findViewById(R.id.iAmAnAdminButton);
         administratorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 //i.putExtra("userType", GenericModel.USER_TYPE_ADMIN);
                 //startActivity(i);
             }
-        });
+        });*/
     }
 
 }

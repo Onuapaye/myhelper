@@ -45,12 +45,13 @@ public class Utility extends Activity {
 
     public static final String PASSWORD_RESET_TITLE = "PASSWORD RESET";
     public static final String INVALID_EMAIL_TITLE = "INVALID E-MAIL";
-    public static final String INVALID_EMAIL_MSG = "Invalid e-mail address entered. Please try again";
+    public static final String INVALID_EMAIL_MSG = "Invalid e-mail address entered. The e-mail should be Gmail,  Yahoo, Hotmail, or Outlook";
     public static final String INVALID_PASSWORD_TITLE = "INVALID PASSWORD";
     public static final String INVALID_PASSWORD_LENGTH_MSG = "Password must be greater or equals to " + MIN_PASSWORD_LENGTH_VALUE + " characters long";
     public static final String INVALID_PASSWORD_UPPERCASE_MSG = "Password must contain at least one UPPERCASE character.";
     public static final String INVALID_PASSWORD_LOWERCASE_MSG = "Password must contain at least one LOWERCASE character.";
     public static final String INVALID_PASSWORD_NUMBER_SYMBOL_MSG = "Password must contain at least one NUMERIC and SYMBOL character.";
+    public static final String INVALID_PASSWORD_ALL_MSG = "Password should at least " + MIN_PASSWORD_LENGTH_VALUE + " and must contain at least one UPPERCASE, LOWERCASE, NUMBER, and a SYMBOL";
 
     public static final int MODEL_ARRAY_LENGTH = 5;
     public static final int REQUEST_CODE = 1000;
