@@ -15,6 +15,7 @@ public class GenericModel {
     public static final String VOLUNTEERS = "volunteers";
     public static final String ADMINISTRATORS = "administrators";
     public static int GLOBAL_USERTYPE;
+    public static final int PICK_IMAGE_REQUEST = 1;
 
     private EditText firstNameTextEdit, lastNameTextEdit, emailTextEdit, mobileNumberTextEdit, passwordTextEdit, retypePasswordTextEdit;
 

@@ -31,23 +31,92 @@
     <string name="alreadyHaveAccount">Already have an account?</string>
     <string name="loginHere">Login Here</string>
     <string name="registrationTitle">Registration Screen</string>
-    <string name="viewListOfVolunteerService">View List \n Of Volunteers\' \nServices</string>
-    <string name="provideVolunteerFeedbackRatings">Provide Feedback &amp; Rating for Service Obtained</string>
+    <string name="viewListOfVolunteerService">View List Of \nVolunteers\' Services</string>
+    <string name="provideVolunteerFeedbackRatings">Provide Feedback &amp; \nRating for Service Obtained</string>
     <string name="homeScreenTitle">Home Screen</string>
     <string name="profileImage">Profile Image</string>
     <string name="logout">Logout</string>
     <string name="createPreferredServiceProfile">Create a Preferred Service Profile</string>
-    <string name="createServiceProfile">Create Service Profile</string>
+    <string name="createServiceProfile">Create Service \nProfile</string>
+    <string name="serviceProfileDetails">Service Profile Details</string>
     <string name="editServiceProfile">Edit Service Profile</string>
     <string name="viewElderlyPersonRequest">View Elderly Request for Service</string>
     <string name="viewFeedback">View Feedback &amp; Rating</string>
-    <string name="viewProvidedServices">View Provided Service</string>
+    <string name="viewProvidedServices">View Provided\nService</string>
     <string name="volunteerName">Volunteer Name</string>
     <string name="volunteerMobile">+353243155255</string>
     <string name="briefServiceDescription">Brief Service Description</string>
-    <string name="availableServices">Available Services</string>
-    <string name="provideFeedbackForVolunteer">Provided Feedback &amp; Rating</string>
+    <string name="availableServices">Select Available Services</string>
+    <string name="provideFeedbackForVolunteer">Provided \nFeedback &amp; Rating</string>
     <string name="emailMsgTitle">An e-mail with a link for Password Reset will be sent to your inbox</string>
     <string name="resetPassword">Reset Password</string>
     <string name="confirmReset">Confirm Reset</string>
+    <string name="i_am_an_admin">I am an administrator</string>
+    <string name="adminTitle">Administrator</string>
+    <string name="description">Description</string>
+    <string name="serviceTypeName">Service Type Name</string>
+    <string name="serviceTypeTitle">Service Type</string>
+    <string name="createServiceType">Create Service</string>
+    <string name="newServiceTypeTitle">Add New</string>
+    <string-array name="volunteerImage">Volunteer Photo</string-array>
+    <string-array name="availableDays">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+    <string-array name="volunteers">
+        <item>Bismark Atta</item>
+        <item>Adu Addo</item>
+        <item>Abena Serwaah</item>
+        <item>Nana Akua</item>
+        <item>Margaret Maggie</item>
+        <item>Kofi Owusu</item>
+        <item>Diana Domfeh Frimpong</item>
+    </string-array>
+    <string-array name="descriptions">
+        <item>Walking a dog to the park</item>
+        <item>Cleaning the house and clearing the bins</item>
+        <item>Wednesday is wednesday</item>
+        <item>Thursday is thurs</item>
+        <item>Friday is friday</item>
+        <item>Saturday is saturday</item>
+        <item>Sunday is sunday</item>
+    </string-array>
+    <string-array name="mobileNumbers">
+        <item>0244692697</item>
+        <item>0242969697</item>
+        <item>+33771727909</item>
+        <item>0243861079</item>
+        <item>+33752562130</item>
+        <item>0201234567</item>
+        <item>0244123145</item>
+    </string-array>
+    <string-array name="serviceTypeId">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+    <string-array name="serviceTypes">
+        <item></item>
+        <item>To teach you how to use a mobile phone/tablet/laptop</item>
+        <item>To teach you how to use mobile/web applications</item>
+        <item>To walk with you in a park/provide lift to social event</item>
+        <item>To assist you with house cleaning</item>
+        <item>To assist you with house maintenance (if certified in a trade (painting, electrical, plumbing, carpentry, etc.))</item>
+        <item>To assist you with gardening</item>
+        <item>To assist you with errands</item>
+        <item>To do grocery shopping for you/provide lift to shops</item>
+        <item>To take care of your pet(s) (walking dogs outside, etc.)</item>
+    </string-array>
 </resources>
