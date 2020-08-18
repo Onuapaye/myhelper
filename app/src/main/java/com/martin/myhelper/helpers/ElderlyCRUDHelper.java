@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 import com.martin.myhelper.model.GenericModel;
+import com.martin.myhelper.model.ServiceTypeModel;
 import com.martin.myhelper.views.ElderlyRegistrationActivity;
 import com.martin.myhelper.views.LoginActivity;
 
@@ -32,6 +33,7 @@ import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_FAILED_MSG;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_FAILED_TITLE;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_MSG;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_TITLE;
+import static com.martin.myhelper.helpers.Utility.CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG;
 
 public class ElderlyCRUDHelper extends Activity {
 
@@ -59,7 +61,7 @@ public class ElderlyCRUDHelper extends Activity {
                     // create a hash map of the object to be stored
                     Map<String, Object> modelMap = new HashMap<>();
 
-                    modelMap.put("userID", firebaseUser.getUid());
+                    modelMap.put("id", firebaseUser.getUid());
                     modelMap.put("firstName", _modelArray[0]);
                     modelMap.put("lastName", _modelArray[1]);
                     modelMap.put("email", _modelArray[2]);
@@ -92,17 +94,46 @@ public class ElderlyCRUDHelper extends Activity {
 
                     Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE, CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG, appCompatActivity);
 
-                    Intent intent = new Intent(appCompatActivity, LoginActivity.class);
-                    intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG);
-                    intent.putExtra("loginPageHeaderTitle", "ELDERLY PERSON");
-                    startActivity(intent);
-
                 } else {
                     Utility.showInformationDialog("ERROR!", task.getException().getMessage(), appCompatActivity);
                     return;
                 }
             }
         });
+    }
+
+    public void createVolunteerServiceProfile(final AppCompatActivity appCompatActivity, final ServiceTypeModel serviceTypeModel){
+
+        // create the elderly record after the user account is created
+        firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        // create an instance of the DocumentReference class of FirebaseStore
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+
+        // create a hash map of the object to be stored
+        Map<String, Object> modelMap = new HashMap<>();
+        modelMap.put("id", Utility.getUUID());
+        modelMap.put("volunteerId", firebaseUser.getUid());
+        modelMap.put("serviceTypeName", serviceTypeModel.getServiceTypeName());
+        modelMap.put("serviceTypeDescription", serviceTypeModel.getServiceTypeDescription());
+        modelMap.put("createdAt", FieldValue.serverTimestamp().toString());
+        modelMap.put("updatedAt", FieldValue.serverTimestamp().toString());
+
+        DocumentReference documentReference = firebaseFirestore.collection("service_types").document(serviceTypeModel.getId());
+        documentReference.set(modelMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE, CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG, appCompatActivity);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE, CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
+                return;
+            }
+        });
+
     }
 
 }

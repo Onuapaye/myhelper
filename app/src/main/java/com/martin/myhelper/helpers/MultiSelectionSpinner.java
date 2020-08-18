@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import com.martin.myhelper.R;
@@ -15,7 +14,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MultiSelectionSpinner extends Spinner implements OnMultiChoiceClickListener {
+public class MultiSelectionSpinner extends androidx.appcompat.widget.AppCompatSpinner implements OnMultiChoiceClickListener {
     String[] _items = null;
     boolean[] mSelection = null;
 
@@ -33,7 +32,7 @@ public class MultiSelectionSpinner extends Spinner implements OnMultiChoiceClick
         super(context, attrs);
 
         String [] days = getResources().getStringArray(R.array.availableDays);
-        simple_adapter = new ArrayAdapter<String>(context, R.layout.activity_create_volunteer_profile, R.id.mySpinner1, days );
+        simple_adapter = new ArrayAdapter<String>(context, R.layout.activity_volunteer_create_profile, R.id.spnServiceType, days );
         super.setAdapter(simple_adapter);
     }
 
@@ -118,11 +117,11 @@ public class MultiSelectionSpinner extends Spinner implements OnMultiChoiceClick
         simple_adapter.add(buildSelectedItemString());
     }
 
-    public void setSelection(int[] selectedIndicies) {
+    public void setSelection(int[] selectedIndices) {
         for (int i = 0; i < mSelection.length; i++) {
             mSelection[i] = false;
         }
-        for (int index : selectedIndicies) {
+        for (int index : selectedIndices) {
             if (index >= 0 && index < mSelection.length) {
                 mSelection[index] = true;
             } else {
@@ -144,7 +143,7 @@ public class MultiSelectionSpinner extends Spinner implements OnMultiChoiceClick
         return selection;
     }
 
-    public List<Integer> getSelectedIndicies() {
+    public List<Integer> getSelectedIndices() {
         List<Integer> selection = new LinkedList<Integer>();
         for (int i = 0; i < _items.length; ++i) {
             if (mSelection[i]) {

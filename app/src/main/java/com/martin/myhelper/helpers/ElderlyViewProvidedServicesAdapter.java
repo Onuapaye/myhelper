@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.martin.myhelper.R;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -67,8 +68,10 @@ public class ElderlyViewProvidedServicesAdapter extends RecyclerView.Adapter<Eld
 
             volunteerName = itemView.findViewById(R.id.volunteerName);
             volunteerMobile = itemView.findViewById(R.id.volunteerMobile);
-            serviceDescription = itemView.findViewById(R.id.serviceDescription);
+            //serviceDescription = itemView.findViewById(R.id.serviceDescription);
             volunteerImage = (CircularImageView) itemView.findViewById(R.id.volunteerImage);
         }
     }
+
+
 }

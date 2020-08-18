@@ -135,10 +135,10 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                    crudHelper.createVolunteerUserRecord(appCompatActivity, modelArray, imageUri);
 
                     // redirect to login activity
-                    /*intent = new Intent(context, LoginActivity.class);
+                    intent = new Intent(context, LoginActivity.class);
                     intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG);
                     intent.putExtra("loginPageHeaderTitle", "VOLUNTEER");
-                    startActivity(intent);*/
+                    startActivity(intent);
 
                 }
             }
