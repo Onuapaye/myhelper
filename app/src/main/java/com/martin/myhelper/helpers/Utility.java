@@ -30,18 +30,21 @@ import static com.martin.myhelper.model.GenericModel.PICK_IMAGE_REQUEST;
 
 public class Utility extends Activity {
 
-    private static final String REQUIRED_FIELD_TITLE = "Required Field Empty";
+    public static final String REQUIRED_FIELD_TITLE = "REQUIRED FIELD";
     private static final String MIN_PASSWORD_INVALID = "Minimum Required Length";
     private static final  int MIN_PASSWORD_LENGTH_VALUE = 8;
 
     public static final String NULL_OBJECT_DETECTED = "Null Object Detected";
     public static final String NULL_FIELD_MESSAGE = "Field validation failed. The passed model is null";
     public static final String CREATE_RECORD_SUCCESS_TITLE = "RECORD CREATED";
+    public static final String UPDATE_RECORD_SUCCESS_TITLE = "RECORD UPDATED";
     public static final String CREATE_RECORD_SUCCESS_MSG = "Record created successfully!";
+    public static final String UPDATE_RECORD_SUCCESS_MSG = "Record updated successfully!";
     public static final String CREATE_RECORD_FAILED_TITLE = "RECORD CREATION FAILED";
     public static final String CREATE_RECORD_FAILED_MSG = "Record NOT created successfully!";
     public static final String CREATE_RECORD_EMAIL_SUCCESS_MSG = "An email is sent to your inbox for verification";
     public static final String CREATE_RECORD_EMAIL_FAILURE_MSG = "We could not send you a verification link. You can request for verification later.";
+    public static final String CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG = "You have added Service Type successfully to your profile.";
 
     public static final String PASSWORD_RESET_TITLE = "PASSWORD RESET";
     public static final String INVALID_EMAIL_TITLE = "INVALID E-MAIL";
@@ -51,7 +54,24 @@ public class Utility extends Activity {
     public static final String INVALID_PASSWORD_UPPERCASE_MSG = "Password must contain at least one UPPERCASE character.";
     public static final String INVALID_PASSWORD_LOWERCASE_MSG = "Password must contain at least one LOWERCASE character.";
     public static final String INVALID_PASSWORD_NUMBER_SYMBOL_MSG = "Password must contain at least one NUMERIC and SYMBOL character.";
-    public static final String INVALID_PASSWORD_ALL_MSG = "Password should at least " + MIN_PASSWORD_LENGTH_VALUE + " and must contain at least one UPPERCASE, LOWERCASE, NUMBER, and a SYMBOL";
+    public static final String INVALID_PASSWORD_ALL_MSG = "Password should at least " + MIN_PASSWORD_LENGTH_VALUE + " characters and must contain at least one UPPERCASE, LOWERCASE, NUMBER, and a SYMBOL";
+    public static final String SELECT_SERVICE_TYPE = "Select a service type to offer";
+    public static final String SELECT_DAYS_FOR_SERVICE_MSG = "Please select at least one or more DAYS FOR SERVICE PROVISION from the list";
+    public static final String SELECT_TIMES_FOR_SERVICE_MSG = "Please select at least one or more TIME ON DAYS FOR SERVICE PROVISION from the list";
+    public static final String SELECT_TIMES_FOR_CALLS_MSG = "Please select at least one or more TIME OF DAYS FOR CALLS from the list";
+    public static final String SELECT_SERVICE_TYPE_MSG = "Please select a SERVICE TYPE from the list.";
+
+    public static final String TEACH_USAGE_MOBILE_DEVICES = "To teach you how to use a mobile phone/tablet/laptop";
+    public static final String TEACH_USAGE_WEB_APPS = "To teach you how to use mobile/web applications";
+    public static final String WALK_WITH_U = "To walk with you in a park";
+    public static final String PROVIDE_LIFT_TO_SOCIAL = "To provide lift to social event";
+    public static final String ASSIST_WITH_HOUSE_CLEANING = "To assist you with house cleaning";
+    public static final String ASSIST_WITH_HOUSE_MAINTENANCE = "To assist you with house maintenance (if certified in a trade (painting, electrical, plumbing, carpentry, etc.))";
+    public static final String ASSIST_WITH_GARDENING = "To assist you with gardening";
+    public static final String ASSIST_WITH_ERRANDS = "To assist you with errands";
+    public static final String ASSIST_WITH_GROCERY_SHOPPING = "To do grocery shopping for you";
+    public static final String PROVIDE_LIFT_TO_SHOP = "To provide lift to shops";
+    public static final String TAKE_CARE_OF_PETS = "To take care of your pet(s) (walking dogs outside)";
 
     public static final int MODEL_ARRAY_LENGTH = 5;
     public static final int REQUEST_CODE = 1000;

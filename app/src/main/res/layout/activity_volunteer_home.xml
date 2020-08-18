@@ -90,7 +90,7 @@
                 tools:ignore="MissingConstraints,VectorDrawableCompat" />
 
             <TextView
-                android:id="@+id/viewListOfVolunteerServiceTextView"
+                android:id="@+id/createProfileTextView"
                 android:layout_width="232dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -102,6 +102,7 @@
                 android:textColor="#222831"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                android:pointerIcon="hand"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -155,6 +156,7 @@
                 android:focusable="true"
                 android:gravity="center_horizontal"
                 android:text="@string/editServiceProfile"
+                android:pointerIcon="hand"
                 android:textColor="#222831"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -190,14 +192,14 @@
                 android:layout_height="50dp"
                 android:contentDescription="@string/viewListOfVolunteerService"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/viewElderTextView"
+                app:layout_constraintEnd_toStartOf="@+id/viewElderlyRequestsTextView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@android:drawable/ic_menu_view"
                 tools:ignore="MissingConstraints,VectorDrawableCompat" />
 
             <TextView
-                android:id="@+id/viewElderTextView"
+                android:id="@+id/viewElderlyRequestsTextView"
                 android:layout_width="232dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -209,6 +211,7 @@
                 android:gravity="center_horizontal"
                 android:text="@string/viewElderlyPersonRequest"
                 android:textColor="#222831"
+                android:pointerIcon="hand"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -268,6 +271,7 @@
                 android:text="@string/viewFeedback"
                 android:textColor="#222831"
                 android:textSize="24sp"
+                android:pointerIcon="hand"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

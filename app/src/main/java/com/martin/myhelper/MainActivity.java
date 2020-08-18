@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.martin.myhelper.model.GenericModel;
 import com.martin.myhelper.views.LoginActivity;
+import com.martin.myhelper.views.VolunteerProfileCreateActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,17 +58,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // onClick event for volunteer login button
-        /*administratorButton = (Button) findViewById(R.id.iAmAnAdminButton);
+        administratorButton = (Button) findViewById(R.id.iAmAnAdminButton);
         administratorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                //Intent i = new Intent(MainActivity.this, ElderlyViewProvidedServiceActivity.class);
-                //i.putExtra("loginPageHeaderTitle", "VOLUNTEER");
-                //i.putExtra("userType", GenericModel.USER_TYPE_ADMIN);
-                //startActivity(i);
+                Intent i = new Intent(MainActivity.this, VolunteerProfileCreateActivity.class);
+                i.putExtra("loginPageHeaderTitle", "VOLUNTEER");
+                i.putExtra("userType", GenericModel.USER_TYPE_ADMIN);
+                startActivity(i);
             }
-        });*/
+        });
     }
 
 }

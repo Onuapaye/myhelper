@@ -1,12 +1,13 @@
 package com.martin.myhelper.helpers;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,13 +20,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.martin.myhelper.model.VolunteerModel;
 import com.martin.myhelper.views.LoginActivity;
+import com.martin.myhelper.views.VolunteerProfileActivity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_EMAIL_SUCCESS_MSG;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_FAILED_MSG;
@@ -40,7 +45,6 @@ public class VolunteerCRUDHelper extends Activity {
     private FirebaseFirestore firebaseFirestore;
     private StorageReference storageReference;
 
-    private Utility utility;
 
     public void createVolunteerUserRecord(final AppCompatActivity appCompatActivity, final String[] _modelArray, final Uri profileImageUri){
 
@@ -74,7 +78,7 @@ public class VolunteerCRUDHelper extends Activity {
                             // create a hash map of the object to be stored
                             Map<String, Object> modelMap = new HashMap<>();
 
-                            modelMap.put("userID", firebaseUser.getUid());
+                            modelMap.put("id", firebaseUser.getUid());
                             modelMap.put("firstName", _modelArray[0]);
                             modelMap.put("lastName", _modelArray[1]);
                             modelMap.put("email", _modelArray[2]);
@@ -102,12 +106,13 @@ public class VolunteerCRUDHelper extends Activity {
                                     }).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
+
                                             Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE, CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG, appCompatActivity);
 
-                                            Intent intent = new Intent(appCompatActivity, LoginActivity.class);
+                                            /*Intent intent = new Intent(appCompatActivity, LoginActivity.class);
                                             intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG);
                                             intent.putExtra("loginPageHeaderTitle", "VOLUNTEER");
-                                            startActivity(intent);
+                                            startActivity(intent);*/
                                         }
                                     });
                                 }
@@ -144,4 +149,117 @@ public class VolunteerCRUDHelper extends Activity {
         });
     }
 
+
+    public void createVolunteerServiceProfile(final AppCompatActivity appCompatActivity, final VolunteerModel volunteerModel){
+
+            // create an instance of the DocumentReference class of FirebaseStore
+            firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+            firebaseUser = firebaseAuth.getCurrentUser();
+            firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+
+            final String profileID = generateProfileId();
+
+            // create a hash map of the object to be stored
+            Map<String, Object> modelMap = new HashMap<>();
+            modelMap.put("id", profileID);
+            modelMap.put("volunteerId", volunteerModel.getId());
+            modelMap.put("serviceTypeId", volunteerModel.getServiceTypeId());
+            modelMap.put("daysForService", volunteerModel.getDaysForService());
+            modelMap.put("timesForService", volunteerModel.getTimesForService());
+            modelMap.put("timesForCalls", volunteerModel.getTimesForCalls());
+            modelMap.put("description", volunteerModel.getDescriptionOfService());
+            modelMap.put("createdAt", FieldValue.serverTimestamp());
+            modelMap.put("updatedAt", FieldValue.serverTimestamp());
+
+            DocumentReference documentReference = firebaseFirestore.collection("volunteer_profiles")
+                                                  .document(firebaseAuth.getCurrentUser().getUid()).collection("profiles").document(profileID);
+
+            documentReference.set(modelMap).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE, CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
+                    return;
+                }
+            });
+
+    }
+
+    public void updateVolunteerServiceProfile(final AppCompatActivity appCompatActivity, final VolunteerModel volunteerModel){
+
+        // create an instance of the DocumentReference class of FirebaseStore
+        firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+
+        // create a hash map of the object to be stored
+        Map<String, Object> modelMap = new HashMap<>();
+        modelMap.put("serviceTypeId", volunteerModel.getServiceTypeId());
+        modelMap.put("daysForService", volunteerModel.getDaysForService());
+        modelMap.put("timesForService", volunteerModel.getTimesForService());
+        modelMap.put("timesForCalls", volunteerModel.getTimesForCalls());
+        modelMap.put("description", volunteerModel.getDescriptionOfService());
+        modelMap.put("updatedAt", FieldValue.serverTimestamp());
+
+        DocumentReference documentReference = firebaseFirestore.collection("volunteer_profiles")
+                                                               .document(firebaseAuth.getCurrentUser().getUid()).collection("profiles")
+                                                               .document(volunteerModel.getProfileId());
+
+        // documentReference.set(modelMap, SetOptions.merge());
+        documentReference.update(modelMap).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE, CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
+                return;
+            }
+        });
+
+    }
+
+    public void deleteVolunteerServiceProfile(final AppCompatActivity appCompatActivity, final String profileID){
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(appCompatActivity);
+        alertDialogBuilder.setTitle("DELETE RECORD?");
+        alertDialogBuilder.setMessage("Are you sure to DELETE the record?");
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                // create an instance of the DocumentReference class of FirebaseStore
+                firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+                firebaseUser = firebaseAuth.getCurrentUser();
+                firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+
+                DocumentReference documentReference = firebaseFirestore.collection("volunteer_profiles")
+                        .document(firebaseAuth.getCurrentUser().getUid()).collection("profiles")
+                        .document(profileID);
+
+                // documentReference.set(modelMap, SetOptions.merge());
+                documentReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Utility.showInformationDialog("RECORD DELETED", "You have successfully deleted a record from your profile", appCompatActivity);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE, CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
+                        return;
+                    }
+                });
+            }
+        }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Utility.showInformationDialog("RECORD NOT DELETED", "You have cancelled the record DELETE action successfully", appCompatActivity);
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private String generateProfileId(){
+        return UUID.randomUUID().toString();
+    }
 }

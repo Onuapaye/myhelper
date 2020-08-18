@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -31,7 +30,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ServerTimestamp;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.martin.myhelper.R;
@@ -39,9 +37,6 @@ import com.martin.myhelper.model.ElderlyModel;
 import com.martin.myhelper.model.GenericModel;
 import com.martin.myhelper.model.VolunteerModel;
 import com.martin.myhelper.views.ElderlyHomeActivity;
-import com.martin.myhelper.views.LoginActivity;
-import com.martin.myhelper.views.VolunteerHomeActivity;
-import com.martin.myhelper.views.VolunteerRegistrationActivity;
 import com.squareup.picasso.Picasso;
 
 import java.sql.Date;
@@ -283,7 +278,7 @@ public class ElderlyVolunteerCRUDHelper extends Activity {
 
         } else {
 
-            volunteerModel.setVolunteerID(extraIntentData.getStringExtra("volunteerId"));
+            volunteerModel.setId(extraIntentData.getStringExtra("volunteerId"));
             volunteerModel.setFirstName(extraIntentData.getStringExtra("firstName"));
             volunteerModel.setLastName(extraIntentData.getStringExtra("lastName"));
             volunteerModel.setEmail(extraIntentData.getStringExtra("email"));
@@ -481,7 +476,7 @@ public class ElderlyVolunteerCRUDHelper extends Activity {
                    // create an instance of the volunteer model class
                    VolunteerModel volunteerModel = new VolunteerModel();
 
-                   volunteerModel.setVolunteerID(value.getId());
+                   volunteerModel.setId(value.getId());
                    volunteerModel.setFirstName(value.getString("firstName"));
                    volunteerModel.setLastName(value.getString("lastName"));
                    volunteerModel.setEmail(value.getString("email"));

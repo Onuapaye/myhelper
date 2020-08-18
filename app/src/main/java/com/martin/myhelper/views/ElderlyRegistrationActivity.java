@@ -109,11 +109,10 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                     crudHelper.createElderlyUserRecord(ElderlyRegistrationActivity.this, modelArray);
 
                     // redirect to login activity
-                    /*intent = new Intent(context, LoginActivity.class);
+                    intent = new Intent(context, LoginActivity.class);
                     intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG);
                     intent.putExtra("loginPageHeaderTitle", "ELDERLY PERSON");
-                    startActivity(intent);*/
-
+                    startActivity(intent);
                 }
             }
         });

@@ -46,7 +46,7 @@
     <string name="volunteerName">Volunteer Name</string>
     <string name="volunteerMobile">+353243155255</string>
     <string name="briefServiceDescription">Brief Service Description</string>
-    <string name="availableServices">Select Available Services</string>
+    <string name="availableServices">Select Available Service</string>
     <string name="provideFeedbackForVolunteer">Provided \nFeedback &amp; Rating</string>
     <string name="emailMsgTitle">An e-mail with a link for Password Reset will be sent to your inbox</string>
     <string name="resetPassword">Reset Password</string>
@@ -58,7 +58,39 @@
     <string name="serviceTypeTitle">Service Type</string>
     <string name="createServiceType">Create Service</string>
     <string name="newServiceTypeTitle">Add New</string>
-    <string-array name="volunteerImage">Volunteer Photo</string-array>
+    <string name="deleteServiceProfile">Delete Profile</string>
+    <string name="deleteProfileButtonText">Delete</string>
+    <string name="volunteerImage">Volunteer Photo</string>
+    <string name="updateButtonText">Update</string>
+    <string name="availableElderlyRequests">Available Elderly Requests</string>
+    <string name="sendNotification">Send Notification</string>
+    <string name="availableDays">Available days to provide service</string>
+    <string name="timeOfDay">Time of days to provide service</string>
+    <string name="availableTimeOfDays">Available time of days to take mobile calls</string>
+    <string name="letterIcon">SA</string>
+    <string name="elderlyDetails">Elderly Details</string>
+    <string name="notificationToElderly">Send Notification to Elderly</string>
+    <string name="request_details">Request Details</string>
+    <string name="service_details">Service Details</string>
+    <string name="notification_details">Notification Details</string>
+    <string name="select_your_available_times">Select your available times</string>
+    <string name="select_your_available_days">Select your available days</string>
+    <string name="select_time_on_days_for_service_provision">Select time on days for service provision</string>
+    <string name="select_days_for_service_provision">Select days for service provision</string>
+    <string name="select_available_times_of_days_for_calls">Select available times of days for calls</string>
+
+    <array name="materialColors">
+        <item>#1509ed</item>
+        <item>#32a852</item>
+        <item>#f51d05</item>
+        <item>#e807b4</item>
+        <item>#c90450</item>
+        <item>#8704c9</item>
+        <item>#04c99b</item>
+        <item>#1ec904</item>
+        <item>#c96a04</item>
+        <item>#0679b8</item>
+    </array>
     <string-array name="availableDays">
         <item>Monday</item>
         <item>Tuesday</item>
@@ -67,6 +99,26 @@
         <item>Friday</item>
         <item>Saturday</item>
         <item>Sunday</item>
+    </string-array>
+    <string-array name="availableTimes">
+        <item>09h00</item>
+        <item>09h30</item>
+        <item>10h00</item>
+        <item>10h30</item>
+        <item>11h00</item>
+        <item>11h30</item>
+        <item>12h00</item>
+        <item>12h30</item>
+        <item>13h00</item>
+        <item>13h30</item>
+        <item>14h00</item>
+        <item>14h30</item>
+        <item>15h00</item>
+        <item>15h30</item>
+        <item>16h00</item>
+        <item>16h30</item>
+        <item>17h00</item>
+        <item>17h30</item>
     </string-array>
     <string-array name="volunteers">
         <item>Bismark Atta</item>
@@ -95,28 +147,30 @@
         <item>0201234567</item>
         <item>0244123145</item>
     </string-array>
-    <string-array name="serviceTypeId">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
+    <string-array name="serviceTypeIDs">
+        <item>100</item>
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+        <item>600</item>
+        <item>700</item>
+        <item>800</item>
+        <item>900</item>
+        <item>1000</item>
+        <item>1100</item>
     </string-array>
     <string-array name="serviceTypes">
-        <item></item>
         <item>To teach you how to use a mobile phone/tablet/laptop</item>
         <item>To teach you how to use mobile/web applications</item>
-        <item>To walk with you in a park/provide lift to social event</item>
+        <item>To walk with you in a park</item>
+        <item>To provide lift to social event</item>
         <item>To assist you with house cleaning</item>
         <item>To assist you with house maintenance (if certified in a trade (painting, electrical, plumbing, carpentry, etc.))</item>
         <item>To assist you with gardening</item>
         <item>To assist you with errands</item>
-        <item>To do grocery shopping for you/provide lift to shops</item>
-        <item>To take care of your pet(s) (walking dogs outside, etc.)</item>
+        <item>To do grocery shopping for you</item>
+        <item>To provide lift to shops</item>
+        <item>To take care of your pet(s) (walking dogs outside)</item>
     </string-array>
 </resources>

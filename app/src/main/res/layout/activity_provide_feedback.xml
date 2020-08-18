@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/availableServicesTitle" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/elderlyProvidedServicesCardView"
+        android:id="@+id/volunteerProvidedServicesCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -98,7 +98,7 @@
 
 
             <TextView
-                android:id="@+id/serviceDescription"
+                android:id="@+id/tvProfileServiceDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -111,7 +111,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/volunteerName" />
 
             <TextView
-                android:id="@+id/volunteerName"
+                android:id="@+id/tvProfileServiceType"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
