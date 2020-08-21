@@ -90,7 +90,8 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                 setFieldValues();
 
                 //  validate fields
-                boolean validationSucceeded = Utility.validateInputsOnCreate(ElderlyRegistrationActivity.this, firstName, lastName, email, mobileNumber, password, retypePassword);
+                boolean validationSucceeded = Utility.validateInputsOnCreate(ElderlyRegistrationActivity.this,
+                        firstName, lastName, email, mobileNumber, password, retypePassword);
 
                 if ( !validationSucceeded ) {
                     return;
@@ -119,7 +120,6 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
     }
 
     private void validateEmailOnEditTextChange(){
-
         email = findViewById(R.id.email);
         email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -127,7 +127,8 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
             if (!hasFocus){
 
                 if (!Utility.isEmailAddressValid(email.getText().toString().trim())){
-                    Utility.showInformationDialog(Utility.INVALID_EMAIL_TITLE, Utility.INVALID_EMAIL_MSG, appCompatActivity);
+                    Utility.showInformationDialog(Utility.INVALID_EMAIL_TITLE,
+                            Utility.INVALID_EMAIL_MSG, appCompatActivity);
                     //email.getFocusable();
                     email.setFocusable(true);
                     return;
@@ -138,9 +139,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
     }
 
     private void validatePasswordOnEditTextChange(){
-
         password = findViewById(R.id.password);
-
         password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -153,7 +152,8 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                             || !Utility.isPasswordHavingLowerCase(password.getText().toString().trim())
                             || !Utility.isPasswordHavingUpperCase(password.getText().toString().trim()) ){
 
-                        Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE, Utility.INVALID_PASSWORD_ALL_MSG, appCompatActivity);
+                        Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE,
+                                Utility.INVALID_PASSWORD_ALL_MSG, appCompatActivity);
                         return;
                     }
                 }

@@ -177,9 +177,12 @@ public class ElderlyViewVolunteerServicesActivity extends AppCompatActivity {
                     final String docPath = snapshot.getDocuments().get(i).getId();
 
                     // STEP 2 : Get the collections and documents from the volunteer profiles
-                    CollectionReference profileReference = firebaseFirestore.collection("volunteer_profiles").document(docPath).collection("profiles");
+                    CollectionReference profileReference = firebaseFirestore.collection("volunteer_profiles")
+                            .document(docPath).collection("profiles");
 
-                    profileReference.whereEqualTo("serviceTypeId", serviceTypeID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    profileReference.whereEqualTo("serviceTypeId", serviceTypeID)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
@@ -206,9 +209,13 @@ public class ElderlyViewVolunteerServicesActivity extends AppCompatActivity {
                         }
                         RecyclerView viewVolunteerServices = findViewById(R.id.rcvViewProvidedServices);
 
-                        ElderlyViewVolunteerServicesAdapter viewVolunteerServicesAdapter = new ElderlyViewVolunteerServicesAdapter(ElderlyViewVolunteerServicesActivity.this, volunteerProfilesLists);
-                        viewVolunteerServices.setAdapter(viewVolunteerServicesAdapter);
-                        viewVolunteerServices.setLayoutManager(new LinearLayoutManager(ElderlyViewVolunteerServicesActivity.this));
+                        ElderlyViewVolunteerServicesAdapter
+                                viewVolunteerServicesAdapter = new ElderlyViewVolunteerServicesAdapter(
+                                        ElderlyViewVolunteerServicesActivity.this, volunteerProfilesLists);
+                        viewVolunteerServices.
+                                setAdapter(viewVolunteerServicesAdapter);
+                        viewVolunteerServices.
+                                setLayoutManager(new LinearLayoutManager(ElderlyViewVolunteerServicesActivity.this));
                         }
                     });
                 }

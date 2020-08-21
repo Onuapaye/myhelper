@@ -124,7 +124,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-            boolean isValidationSuccessful = Utility.validateInputsOnUserLogin(LoginActivity.this, email.getText().toString().trim(), password.getText().toString().trim());
+            boolean isValidationSuccessful = Utility.validateInputsOnUserLogin(LoginActivity.this,
+                    email.getText().toString().trim(), password.getText().toString().trim());
 
             if (!isValidationSuccessful){
                 return;
@@ -139,9 +140,11 @@ public class LoginActivity extends AppCompatActivity {
             crudHelper = new ElderlyVolunteerCRUDHelper();
 
             if(userType == GenericModel.USER_TYPE_ELDER){
-                loginFireStoreUser(LoginActivity.this, ElderlyHomeActivity.class, LoginActivity.this, _emailPassword , "elders");
+                loginFireStoreUser(LoginActivity.this, ElderlyHomeActivity.class,
+                        LoginActivity.this, _emailPassword , "elders");
             } else {
-                loginFireStoreUser(LoginActivity.this, VolunteerHomeActivity.class, LoginActivity.this, _emailPassword , "volunteers");
+                loginFireStoreUser(LoginActivity.this, VolunteerHomeActivity.class,
+                        LoginActivity.this, _emailPassword , "volunteers");
             }
             }
         });
@@ -189,7 +192,8 @@ public class LoginActivity extends AppCompatActivity {
      * @param sourceActivity
      * @param _emailPassword
      */
-    private void loginFireStoreUser(final Context sourceActivity, final Class destinationActivity, final AppCompatActivity appCompatActivity, final String[] _emailPassword, final String  modelTableAsCollection){
+    private void loginFireStoreUser(final Context sourceActivity, final Class destinationActivity, final AppCompatActivity appCompatActivity,
+                                    final String[] _emailPassword, final String  modelTableAsCollection){
         crudHelper = new ElderlyVolunteerCRUDHelper();
 
         firebaseAuth = Utility.getFirebaseAuthenticationInstance();

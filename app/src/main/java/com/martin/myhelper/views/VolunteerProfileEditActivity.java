@@ -160,9 +160,9 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tvServiceDescriptionMultiLine);
         spnServiceType = findViewById(R.id.spnServiceType);
 
-        tvTimesOfDays = findViewById(R.id.tvSelectedTimeOnDays);
-        tvDaysForService = findViewById(R.id.tvSelectedDaysForService);
-        tvTimesForCalls = findViewById(R.id.tvSelectAvailableTimesForCalls);
+        tvTimesOfDays = findViewById(R.id.tvTimeOnDays);
+        tvDaysForService = findViewById(R.id.tvDaysForService);
+        tvTimesForCalls = findViewById(R.id.tvTimesForCalls);
 
         tvDescription.setText(_editProfileList.get(2));
         tvDaysForService.setText(_editProfileList.get(3).replaceAll("(^\\[|\\]$)", ""));
@@ -321,7 +321,7 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
     private void selectDaysForServiceProvision(){
 
         btnSelectDaysForService = (Button) findViewById(R.id.btnDaysForService);
-        tvDaysForService = (TextView) findViewById(R.id.tvSelectedDaysForService);
+        tvDaysForService = (TextView) findViewById(R.id.tvDaysForService);
 
         availableDays = getResources().getStringArray(R.array.availableDays);
         checkedDaysItemBoxes = new boolean[availableDays.length];
@@ -396,7 +396,7 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
     private void selectTimesOnDaysForServiceProvision(){
 
         btnSelectTimesOnDaysForService = (Button) findViewById(R.id.btnTimesForeService);
-        tvTimesOfDays = (TextView) findViewById(R.id.tvSelectedTimeOnDays);
+        tvTimesOfDays = (TextView) findViewById(R.id.tvTimeOnDays);
 
         availableTimesOnDay = getResources().getStringArray(R.array.availableTimes);
         checkedTimesItemBoxes = new boolean[availableTimesOnDay.length];
@@ -470,7 +470,7 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
     private void selectAvailableTimesOfDaysForCalls(){
 
         btnSelectAvailableDaysForCalls = (Button) findViewById(R.id.btnTimesForeCalls);
-        tvTimesForCalls = (TextView) findViewById(R.id.tvSelectAvailableTimesForCalls);
+        tvTimesForCalls = (TextView) findViewById(R.id.tvTimesForCalls);
 
         availableTimesForCalls = getResources().getStringArray(R.array.availableTimes);
         checkedCallsItemBoxes = new boolean[availableTimesForCalls.length];

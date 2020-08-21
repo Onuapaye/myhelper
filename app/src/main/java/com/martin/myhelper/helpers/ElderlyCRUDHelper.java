@@ -42,36 +42,27 @@ import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_FAILED_MSG;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_FAILED_TITLE;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_MSG;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_TITLE;
-import static com.martin.myhelper.helpers.Utility.CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG;
 
 public class ElderlyCRUDHelper extends Activity {
-
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firebaseFirestore;
-
     private Intent intent;
-
     public void createElderlyUserRecord(final AppCompatActivity appCompatActivity, final String[] _modelArray){
-
         // create the elderly record after the user account is created
         firebaseAuth = Utility.getFirebaseAuthenticationInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-
-        // create the user account via firebase auth if not null
-        firebaseAuth.createUserWithEmailAndPassword(_modelArray[2], _modelArray[4]).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-
+        firebaseAuth.createUserWithEmailAndPassword(_modelArray[2], _modelArray[4])
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-
                     // create an instance of the DocumentReference class of FirebaseStore
                     firebaseFirestore = Utility.getFirebaseFireStoreInstance();
                     DocumentReference documentReference = firebaseFirestore.collection("elders").document(firebaseUser.getUid());
 
                     // create a hash map of the object to be stored
                     Map<String, Object> modelMap = new HashMap<>();
-
                     modelMap.put("id", firebaseUser.getUid());
                     modelMap.put("firstName", _modelArray[0]);
                     modelMap.put("lastName", _modelArray[1]);
@@ -80,11 +71,9 @@ public class ElderlyCRUDHelper extends Activity {
                     modelMap.put("userType", _modelArray[5]);
                     modelMap.put("createdAt", FieldValue.serverTimestamp());
                     modelMap.put("updatedAt", FieldValue.serverTimestamp());
-
                     documentReference.set(modelMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-
                             // send an e-mail for verification
                             firebaseUser.sendEmailVerification().addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -93,18 +82,17 @@ public class ElderlyCRUDHelper extends Activity {
                                            Utility.CREATE_RECORD_EMAIL_FAILURE_MSG, appCompatActivity);
                                 }
                             });
-
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE, CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
+                            Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE,
+                                    CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
                             return;
                         }
                     });
-
-                    Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE, CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG, appCompatActivity);
-
+                    Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE,
+                            CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG, appCompatActivity);
                 } else {
                     Utility.showInformationDialog("ERROR!", task.getException().getMessage(), appCompatActivity);
                     return;
