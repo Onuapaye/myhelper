@@ -2,7 +2,6 @@ package com.martin.myhelper.helpers;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 
@@ -20,13 +19,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.martin.myhelper.model.VolunteerModel;
-import com.martin.myhelper.views.LoginActivity;
-import com.martin.myhelper.views.VolunteerProfileActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -84,6 +80,7 @@ public class VolunteerCRUDHelper extends Activity {
                             modelMap.put("email", _modelArray[2]);
                             modelMap.put("mobileNumber", _modelArray[3]);
                             modelMap.put("userType", _modelArray[5]);
+                            modelMap.put("imageType", _modelArray[6]);
                             modelMap.put("createdAt", FieldValue.serverTimestamp());
                             modelMap.put("updatedAt", FieldValue.serverTimestamp());
                             modelMap.put("profilePhotoUrl", taskSnapshot.getUploadSessionUri().toString());// set the image path from the taskSnapshot

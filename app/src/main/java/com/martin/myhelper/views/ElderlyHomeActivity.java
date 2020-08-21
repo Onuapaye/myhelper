@@ -6,9 +6,13 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.martin.myhelper.R;
-import com.martin.myhelper.helpers.OpenActivity;
+import com.martin.myhelper.helpers.Utility;
+
+import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_TITLE;
+import static com.martin.myhelper.helpers.Utility.CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG;
 
 public class ElderlyHomeActivity extends AppCompatActivity {
     CardView cardViewViewServices, cardViewProvideFeedback;
@@ -21,6 +25,10 @@ public class ElderlyHomeActivity extends AppCompatActivity {
 
         // handle onclick of card view for view volunteer services
         this.handleViewVolunteerServicesCardViewOnClick();
+        this.handleViewListOnClick();
+        this.handleProvideFeedBackButtonClick();
+
+        this.showFeedBackSuccessMessage();
     }
 
     private void handleViewVolunteerServicesCardViewOnClick(){
@@ -29,9 +37,43 @@ public class ElderlyHomeActivity extends AppCompatActivity {
         cardViewViewServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(ElderlyHomeActivity.this, ElderlyViewProvidedServiceActivity.class);
+                intent = new Intent(ElderlyHomeActivity.this, ElderlyViewVolunteerServicesActivity.class);
                 startActivity(intent);
             }
         });
+    }
+
+    private void handleViewListOnClick(){
+        TextView textView = findViewById(R.id.viewListOfVolunteerServiceTextView);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(ElderlyHomeActivity.this, ElderlyViewVolunteerServicesActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void handleProvideFeedBackButtonClick(){
+
+        cardViewProvideFeedback = findViewById(R.id.provideFeedBackCardView);
+        cardViewProvideFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(ElderlyHomeActivity.this, ElderlyProvideFeedBackActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private  void showFeedBackSuccessMessage(){
+        Intent intent = getIntent();
+        intent.getExtras();
+
+        if (intent.hasExtra("feedBackProvided")){
+            // show a message for successful record recreation
+            Utility.showInformationDialog("FEEDBACK SUCCESS",
+                    intent.getStringExtra("feedBackProvided") , this);
+        }
     }
 }

@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/btnCreateProfileConfirm"
+                    android:id="@+id/btnSendServiceRequest"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="100dp"
@@ -152,7 +152,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:id="@+id/tvServiceDescriptionMultiLine"
+                    android:id="@+id/etElderlyRequestMessage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -190,7 +190,7 @@
                         android:layout_height="match_parent">
 
                         <Button
-                            android:id="@+id/btnDaysForService"
+                            android:id="@+id/btnElderlyDays"
                             android:layout_width="match_parent"
                             android:layout_height="37dp"
                             android:layout_marginStart="8dp"
@@ -240,7 +240,7 @@
                         android:layout_height="match_parent">
 
                         <Button
-                            android:id="@+id/btnTimesForeService"
+                            android:id="@+id/btnElderlyTimes"
                             android:layout_width="match_parent"
                             android:layout_height="37dp"
                             android:layout_marginStart="8dp"

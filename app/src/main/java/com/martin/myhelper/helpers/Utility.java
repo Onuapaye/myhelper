@@ -45,6 +45,7 @@ public class Utility extends Activity {
     public static final String CREATE_RECORD_EMAIL_SUCCESS_MSG = "An email is sent to your inbox for verification";
     public static final String CREATE_RECORD_EMAIL_FAILURE_MSG = "We could not send you a verification link. You can request for verification later.";
     public static final String CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG = "You have added Service Type successfully to your profile.";
+    public static final String CREATE_ELDERLY_REQUEST_SUCCESS_MSG = "You have successfully requested for a Service from a Volunteer.";
 
     public static final String PASSWORD_RESET_TITLE = "PASSWORD RESET";
     public static final String INVALID_EMAIL_TITLE = "INVALID E-MAIL";

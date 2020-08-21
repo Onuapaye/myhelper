@@ -29,8 +29,6 @@ import static com.martin.myhelper.helpers.Utility.ASSIST_WITH_GARDENING;
 import static com.martin.myhelper.helpers.Utility.ASSIST_WITH_GROCERY_SHOPPING;
 import static com.martin.myhelper.helpers.Utility.ASSIST_WITH_HOUSE_CLEANING;
 import static com.martin.myhelper.helpers.Utility.ASSIST_WITH_HOUSE_MAINTENANCE;
-import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_MSG;
-import static com.martin.myhelper.helpers.Utility.CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG;
 import static com.martin.myhelper.helpers.Utility.PROVIDE_LIFT_TO_SHOP;
 import static com.martin.myhelper.helpers.Utility.PROVIDE_LIFT_TO_SOCIAL;
 import static com.martin.myhelper.helpers.Utility.REQUIRED_FIELD_TITLE;
@@ -39,7 +37,6 @@ import static com.martin.myhelper.helpers.Utility.SELECT_SERVICE_TYPE;
 import static com.martin.myhelper.helpers.Utility.SELECT_SERVICE_TYPE_MSG;
 import static com.martin.myhelper.helpers.Utility.SELECT_TIMES_FOR_CALLS_MSG;
 import static com.martin.myhelper.helpers.Utility.SELECT_TIMES_FOR_SERVICE_MSG;
-import static com.martin.myhelper.helpers.Utility.TAKE_CARE_OF_PETS;
 import static com.martin.myhelper.helpers.Utility.TEACH_USAGE_MOBILE_DEVICES;
 import static com.martin.myhelper.helpers.Utility.TEACH_USAGE_WEB_APPS;
 import static com.martin.myhelper.helpers.Utility.UPDATE_RECORD_SUCCESS_MSG;
@@ -142,7 +139,8 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
         volunteerCRUDHelper.updateVolunteerServiceProfile(VolunteerProfileEditActivity.this, volunteerModel);
 
         // redirect to login activity
-        intent = new Intent(VolunteerProfileEditActivity.this, VolunteerProfileActivity.class);
+        //intent = new Intent(VolunteerProfileEditActivity.this, VolunteerProfilesActivity.class);
+        intent = new Intent(VolunteerProfileEditActivity.this, VolunteerHomeActivity.class);
         intent.putExtra("recordUpdated", UPDATE_RECORD_SUCCESS_MSG );
         startActivity(intent);
     }

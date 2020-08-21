@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.martin.myhelper.R;
 
-public class ElderlySelectedVolunteerServiceActivity extends AppCompatActivity {
+public class ElderlyEditRequestActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_elderly_selected_volunteer_service);
+        setContentView(R.layout.activity_elderly_edit_request);
     }
 }

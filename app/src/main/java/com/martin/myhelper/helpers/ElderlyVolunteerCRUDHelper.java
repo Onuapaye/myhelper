@@ -269,7 +269,7 @@ public class ElderlyVolunteerCRUDHelper extends Activity {
 
         if(GenericModel.GLOBAL_USERTYPE == GenericModel.USER_TYPE_ELDER){
 
-            elderlyModel.setElderlyId(extraIntentData.getStringExtra("elderlyId"));
+            elderlyModel.setId(extraIntentData.getStringExtra("elderlyId"));
             elderlyModel.setFirstName(extraIntentData.getStringExtra("firstName"));
             elderlyModel.setLastName(extraIntentData.getStringExtra("lastName"));
             elderlyModel.setEmail(extraIntentData.getStringExtra("email"));
@@ -463,7 +463,7 @@ public class ElderlyVolunteerCRUDHelper extends Activity {
                    // create an instance of the elderly model class
                    ElderlyModel elderlyModel = new ElderlyModel();
 
-                   elderlyModel.setElderlyId(value.getId());
+                   elderlyModel.setId(value.getId());
                    elderlyModel.setFirstName(value.getString("firstName"));
                    elderlyModel.setLastName(value.getString("lastName"));
                    elderlyModel.setEmail(value.getString("email"));

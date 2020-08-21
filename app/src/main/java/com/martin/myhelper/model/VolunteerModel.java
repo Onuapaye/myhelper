@@ -12,9 +12,10 @@ public class VolunteerModel extends GenericModel {
     private ImageView profileImage;
     private String descriptionOfService;
     private String serviceTypeId;
-    private String serviceDayId;
+    private String imageType;
+    /*private String serviceDayId;
     private String serviceTimeId;
-    private String serviceCallId;
+    private String serviceCallId;*/
     private ArrayList<String> daysForService;
     private ArrayList<String> timesForService;
     private ArrayList<String> timesForCalls;
@@ -23,7 +24,7 @@ public class VolunteerModel extends GenericModel {
     }
 
     public VolunteerModel(String firstName, String lastName, String email, String mobileNumber, String password,
-                          String retypePassword, String volunteerID, String volunteerKey, ImageView profileImage, int userType) {
+                          String retypePassword, String volunteerID, ImageView profileImage, int userType) {
         this.id = volunteerID;
         this.setFirstName(firstName);
         this.setLastName(lastName);
@@ -67,7 +68,14 @@ public class VolunteerModel extends GenericModel {
         this.serviceTypeId = serviceTypeId;
     }
 
-    public String getServiceDayId() {
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
+/*public String getServiceDayId() {
         return serviceDayId;
     }
 
@@ -89,7 +97,7 @@ public class VolunteerModel extends GenericModel {
 
     public void setServiceCallId(String serviceCallId) {
         this.serviceCallId = serviceCallId;
-    }
+    }*/
 
     public ArrayList<String> getDaysForService() {
         return daysForService;
@@ -121,11 +129,9 @@ public class VolunteerModel extends GenericModel {
         return "VolunteerModel{" +
                 "id='" + id + '\'' +
                 ", profileId='" + profileId + '\'' +
+                ", profileImage=" + profileImage +
                 ", descriptionOfService='" + descriptionOfService + '\'' +
                 ", serviceTypeId='" + serviceTypeId + '\'' +
-                ", serviceDayId='" + serviceDayId + '\'' +
-                ", serviceTimeId='" + serviceTimeId + '\'' +
-                ", serviceCallId='" + serviceCallId + '\'' +
                 ", daysForService=" + daysForService +
                 ", timesForService=" + timesForService +
                 ", timesForCalls=" + timesForCalls +

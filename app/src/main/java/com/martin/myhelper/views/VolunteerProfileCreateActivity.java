@@ -6,13 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -116,9 +114,9 @@ public class VolunteerProfileCreateActivity extends AppCompatActivity {
 
         volunteerCRUDHelper.createVolunteerServiceProfile(VolunteerProfileCreateActivity.this, volunteerModel);
 
-
         // redirect to login activity
-        intent = new Intent(VolunteerProfileCreateActivity.this, VolunteerProfileActivity.class);
+        //intent = new Intent(VolunteerProfileCreateActivity.this, VolunteerProfilesActivity.class);
+        intent = new Intent(VolunteerProfileCreateActivity.this, VolunteerHomeActivity.class);
         intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG);
         startActivity(intent);
     }
@@ -172,7 +170,6 @@ public class VolunteerProfileCreateActivity extends AppCompatActivity {
                             serviceTypeID = serviceTypeIDs[10];
                             break;
                     }
-
                 }
             }
 
@@ -267,7 +264,6 @@ public class VolunteerProfileCreateActivity extends AppCompatActivity {
                             tvDaysForService.setText(item);
                             actualPickedItemsForDays.add(availableDays[userSelectedDaysItems.get(j)]);
                         }
-                        Log.i("DAYS", actualPickedItemsForDays.toString());
                     }
                 });
 
