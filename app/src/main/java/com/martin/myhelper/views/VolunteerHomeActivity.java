@@ -8,6 +8,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.martin.myhelper.R;
+import com.martin.myhelper.helpers.Utility;
+
+import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_TITLE;
+import static com.martin.myhelper.helpers.Utility.CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG;
+import static com.martin.myhelper.helpers.Utility.UPDATE_RECORD_SUCCESS_MSG;
+import static com.martin.myhelper.helpers.Utility.UPDATE_RECORD_SUCCESS_TITLE;
 
 public class VolunteerHomeActivity extends AppCompatActivity {
 
@@ -20,6 +26,8 @@ public class VolunteerHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_volunteer_home);
 
         this.setOnClicks();
+        this.showCreateSuccessMessage();
+        this.showUpdateSuccessMessage();
     }
 
     private void  setOnClicks(){
@@ -42,9 +50,29 @@ public class VolunteerHomeActivity extends AppCompatActivity {
         editServiceProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(VolunteerHomeActivity.this, VolunteerProfileActivity.class);
+                intent = new Intent(VolunteerHomeActivity.this, VolunteerProfilesActivity.class);
                 startActivity(intent);
             }
         });
+    }
+
+    private  void showCreateSuccessMessage(){
+        Intent intent = getIntent();
+        intent.getExtras();
+
+        if (intent.hasExtra("recordCreated")){
+            // show a message for successful record recreation
+            Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE,
+                    CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG , this);
+        }
+    }
+
+    private void showUpdateSuccessMessage(){
+        Intent intent = getIntent();
+        intent.getExtras();
+
+        if (intent.hasExtra("recordUpdate")){
+            Utility.showInformationDialog(UPDATE_RECORD_SUCCESS_TITLE, UPDATE_RECORD_SUCCESS_MSG, this);
+        }
     }
 }

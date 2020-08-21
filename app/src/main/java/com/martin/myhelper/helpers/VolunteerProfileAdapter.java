@@ -2,7 +2,6 @@ package com.martin.myhelper.helpers;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.martin.myhelper.R;
-import com.martin.myhelper.views.VolunteerProfileActivity;
 import com.martin.myhelper.views.VolunteerProfileEditActivity;
 
 import java.util.ArrayList;
 
 import static com.martin.myhelper.helpers.Utility.*;
-import static java.lang.String.*;
 
 public class VolunteerProfileAdapter extends RecyclerView.Adapter<VolunteerProfileAdapter.VolunteerProfileViewHolder> {
 
@@ -29,9 +26,6 @@ public class VolunteerProfileAdapter extends RecyclerView.Adapter<VolunteerProfi
     int _collectionCount;
 
     public VolunteerProfileAdapter(Context context, ArrayList<ArrayList<String>> profileList, int collectionCount ) {
-        Log.d("INSIDE_ADAPTER", valueOf(profileList.size()));
-        Log.d("INSIDE_ADAPTER2", String.valueOf(profileList.toArray().length));
-
         _context = context;
         _profileList = profileList;
         _collectionCount = collectionCount;
@@ -45,7 +39,7 @@ public class VolunteerProfileAdapter extends RecyclerView.Adapter<VolunteerProfi
         LayoutInflater layoutInflater = LayoutInflater.from(_context);
 
         // set the layout inflater into a view
-        View view = layoutInflater.inflate(R.layout.volunteer_profile_row, parent, false);
+        View view = layoutInflater.inflate(R.layout.volunteer_profiles_row, parent, false);
 
         // return the view using the view holder
         return new VolunteerProfileAdapter.VolunteerProfileViewHolder(view);

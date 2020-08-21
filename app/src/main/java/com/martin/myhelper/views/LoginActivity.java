@@ -1,17 +1,15 @@
 package com.martin.myhelper.views;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,7 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 import com.martin.myhelper.R;
 import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
 import com.martin.myhelper.helpers.OpenActivity;
@@ -39,10 +36,9 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
-    private TextView registerLinkTextView;
+    private TextView registerLinkTextView, resetPasswordTextView;
     private EditText email, password;
     private Button _loginButton;
-    private OpenActivity openActivity;
 
     private ElderlyVolunteerCRUDHelper crudHelper;
 
@@ -62,12 +58,17 @@ public class LoginActivity extends AppCompatActivity {
 
         // check the onChange event of the email field
         this.validateEmailOnEditTextChange();
+
+        this.showPasswordResetSuccessMessage();
+
+        this.handlePasswordResetLinkOnClick();
     }
 
     /**
      * Open the elderly registration screen when clicked
      */
     private void openRegistrationScreen(){
+
         Intent intent = getIntent();
         intent.getExtras();
 
@@ -77,13 +78,38 @@ public class LoginActivity extends AppCompatActivity {
         registerLinkTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            if(userType == GenericModel.USER_TYPE_ELDER){
+                Intent intent = new Intent(LoginActivity.this, ElderlyRegistrationActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(LoginActivity.this, VolunteerRegistrationActivity.class);
+                startActivity(intent);
+            }
+            }
+        });
+    }
+
+    private void handlePasswordResetLinkOnClick(){
+
+        Intent intent = getIntent();
+        intent.getExtras();
+
+        final int userType = intent.getIntExtra("userType",0);
+
+        resetPasswordTextView = findViewById(R.id.resetPasswordLink);
+        resetPasswordTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(LoginActivity.this, PasswordResetActivity.class);
+
                 if(userType == GenericModel.USER_TYPE_ELDER){
-                    Intent intent = new Intent(LoginActivity.this, ElderlyRegistrationActivity.class);
-                    startActivity(intent);
+                    intent.putExtra("userType", GenericModel.USER_TYPE_ELDER);
                 } else {
-                    Intent intent = new Intent(LoginActivity.this, VolunteerRegistrationActivity.class);
-                    startActivity(intent);
+                    intent.putExtra("userType", GenericModel.USER_TYPE_VOLUNTEER);
                 }
+
+                startActivity(intent);
             }
         });
     }
@@ -98,25 +124,25 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                boolean isValidationSuccessful = Utility.validateInputsOnUserLogin(LoginActivity.this, email.getText().toString().trim(), password.getText().toString().trim());
+            boolean isValidationSuccessful = Utility.validateInputsOnUserLogin(LoginActivity.this, email.getText().toString().trim(), password.getText().toString().trim());
 
-                if (!isValidationSuccessful){
-                    return;
-                }
+            if (!isValidationSuccessful){
+                return;
+            }
 
-                Intent intent = getIntent();
-                intent.getExtras();
+            Intent intent = getIntent();
+            intent.getExtras();
 
-                final int userType = intent.getIntExtra("userType",0);
+            final int userType = intent.getIntExtra("userType",0);
 
-                String[] _emailPassword = { email.getText().toString(), password.getText().toString() };
-                crudHelper = new ElderlyVolunteerCRUDHelper();
+            String[] _emailPassword = { email.getText().toString(), password.getText().toString() };
+            crudHelper = new ElderlyVolunteerCRUDHelper();
 
-                if(userType == GenericModel.USER_TYPE_ELDER){
-                    loginFireStoreUser(LoginActivity.this, ElderlyHomeActivity.class, LoginActivity.this, _emailPassword , "elders");
-                } else {
-                    loginFireStoreUser(LoginActivity.this, VolunteerHomeActivity.class, LoginActivity.this, _emailPassword , "volunteers");
-                }
+            if(userType == GenericModel.USER_TYPE_ELDER){
+                loginFireStoreUser(LoginActivity.this, ElderlyHomeActivity.class, LoginActivity.this, _emailPassword , "elders");
+            } else {
+                loginFireStoreUser(LoginActivity.this, VolunteerHomeActivity.class, LoginActivity.this, _emailPassword , "volunteers");
+            }
             }
         });
     }
@@ -186,10 +212,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 String ut = documentSnapshot.getString("userType");
 
-                                openActivity = new OpenActivity();
                                 if (Integer.parseInt(ut) == GenericModel.USER_TYPE_ELDER){
-                                    Log.i("ACT", crudHelper.getCurrentUserID());
-                                    //openActivity.openAnActivityScreen(sourceActivity, destinationActivity);
 
                                     Intent intent = new Intent(LoginActivity.this, ElderlyHomeActivity.class);
                                     startActivity(intent);
@@ -210,5 +233,16 @@ public class LoginActivity extends AppCompatActivity {
                 Utility.showInformationDialog("LOGIN ERROR", e.getMessage(), appCompatActivity);
             }
         });
+    }
+
+    private  void showPasswordResetSuccessMessage(){
+        Intent intent = getIntent();
+        intent.getExtras();
+
+        if (intent.hasExtra("passwordResetSuccess")){
+            // show a message for successful record recreation
+            Utility.showInformationDialog("PASSWORD RESET LINK SENT",
+                    intent.getStringExtra("passwordResetSuccess") , this);
+        }
     }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#774F8A8B"
-    tools:context=".views.VolunteerNotifyElderlyForServiceActivity">
+    tools:context=".views.ElderlyCreateRequestActivity">
 
     <TextView
         android:id="@+id/createProfileLogOutButton"
@@ -30,12 +30,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:fontFamily="@font/aclonica"
         android:gravity="center"
-        android:text="@string/notificationToElderly"
+        android:text="Service Request"
         android:textAllCaps="true"
         android:textColor="#4F8A8B"
         android:textSize="24sp"
@@ -50,8 +50,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/elderlyDetails"
+        android:layout_marginTop="8dp"
+        android:text="Volunteer Details"
         android:textColor="#222831"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -78,16 +78,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.github.ivbaranov.mli.MaterialLetterIcon
+            <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/civSelectedVolunteer"
-                android:layout_width="63dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_width="59dp"
+                android:layout_height="47dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/letterIcon"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/no_photo"
+                android:visibility="visible"
+                app:civ_border_color="#3f51b5"
+                app:civ_border_width="0dp"
+                app:civ_shadow="false"
+                app:civ_shadow_color="#3f51b5"
+                app:civ_shadow_radius="0dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:mli_shape_type="circle" />
@@ -103,9 +107,24 @@
                 android:layout_marginRight="8dp"
                 android:text="TextView"
                 android:textColor="#222831"
-                app:layout_constraintEnd_toStartOf="@+id/volunteerElderlyDetailsMobile"
-                app:layout_constraintStart_toEndOf="@+id/volunteerElderlyDetailsLetterIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/civSelectedVolunteer"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvSelectedVolunteerMobile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:fontFamily="sans-serif"
+                android:text="TextView"
+                android:textColor="#222831"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvSelectedVolunteer"
+                app:layout_constraintTop_toBottomOf="@+id/tvSelectedVolunteer" />
 
             <TextView
                 android:id="@+id/tvSelectedServiceDescription"
@@ -113,27 +132,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="TextView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/volunteerElderlyDetailsLetterIcon"
-                app:layout_constraintTop_toBottomOf="@+id/volunteerElderlyDetailsName" />
-
-            <TextView
-                android:id="@+id/tvSelectedVolunteerMobile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="TextView"
-                android:textColor="#222831"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSelectedVolunteerMobile" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -156,11 +163,27 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp">
+            android:padding="5dp"
+            android:scrollbarStyle="outsideOverlay">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvSelectedServiceName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="TextView"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/requestDetails" />
 
                 <TextView
                     android:id="@+id/requestDetails2"
@@ -168,14 +191,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/notification_details"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/request_details"
                     android:textColor="#222831"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/volunteerElderlyDetailsTimesForCalls" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvSelectedVolunteerCalls" />
 
                 <TextView
                     android:id="@+id/requestDetails"
@@ -185,7 +210,7 @@
                     android:layout_marginLeft="9dp"
                     android:layout_marginTop="8dp"
                     android:gravity="center_horizontal"
-                    android:text="@string/request_details"
+                    android:text="Service Details"
                     android:textColor="#222831"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -200,14 +225,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="84dp"
                     android:layout_marginLeft="84dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="84dp"
                     android:layout_marginRight="84dp"
+                    android:layout_marginBottom="8dp"
                     android:background="#774F8A8B"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="@string/sendNotification"
+                    android:text="@string/send_request"
                     android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/timesOnDaysForCallsCardView" />
@@ -218,27 +245,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="9dp"
                     android:layout_marginLeft="9dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:text="@string/timeOfDay"
                     android:textColor="#222831"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/volunteerElderlyDetailsAvailableDays" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvSelectedVolunteerDays" />
 
                 <TextView
                     android:id="@+id/tvSelectedVolunteerDays"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="9dp"
-                    android:layout_marginLeft="9dp"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:gravity="start"
                     android:text="TextView"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -248,22 +277,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="9dp"
                     android:layout_marginLeft="9dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:text="@string/availableTimeOfDays"
                     android:textColor="#222831"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/volunteerElderlyDetailsTomeOfDays" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvSelectedVolunteerTimes" />
 
                 <TextView
                     android:id="@+id/tvSelectedVolunteerTimes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="9dp"
-                    android:layout_marginLeft="9dp"
-                    android:layout_marginTop="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:text="TextView"
@@ -277,21 +307,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="9dp"
                     android:layout_marginLeft="9dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:text="@string/availableDays"
                     android:textColor="#222831"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/requestDetails" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvSelectedServiceName" />
 
                 <TextView
                     android:id="@+id/tvSelectedVolunteerCalls"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="9dp"
-                    android:layout_marginLeft="9dp"
-                    android:layout_marginTop="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:text="TextView"
@@ -308,11 +341,11 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:autofillHints="@string/briefServiceDescription"
+                    android:autofillHints="Request message/description"
                     android:ems="10"
                     android:focusable="auto"
                     android:gravity="start|top"
-                    android:hint="@string/briefServiceDescription"
+                    android:hint="Request message/description"
                     android:inputType="textMultiLine"
                     android:maxLines="7"
                     android:minLines="4"
@@ -334,7 +367,7 @@
                     app:cardBackgroundColor="#48FFFFFF"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvServiceDescriptionMultiLine">
+                    app:layout_constraintTop_toBottomOf="@+id/etElderlyRequestMessage">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -349,11 +382,25 @@
                             android:layout_marginTop="2dp"
                             android:layout_marginEnd="3dp"
                             android:layout_marginRight="3dp"
-                            android:text="@string/select_your_available_days"
-                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:text="Select your preferred days"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvElderlyDays"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginLeft="3dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="3dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/btnElderlyDays" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -384,29 +431,27 @@
                             android:layout_marginTop="2dp"
                             android:layout_marginEnd="3dp"
                             android:layout_marginRight="3dp"
-                            android:text="@string/select_your_available_times"
-                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:text="Select your preferred times"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvElderlyTimes"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginLeft="3dp"
+                            android:layout_marginEnd="3dp"
+                            android:layout_marginRight="3dp"
+                            android:layout_marginBottom="3dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/btnElderlyTimes" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:id="@+id/tvTestBismark"
-                    android:layout_width="0dp"
-                    android:layout_height="14dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnCreateProfileConfirm" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

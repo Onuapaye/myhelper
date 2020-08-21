@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Elderly Assistant</string>
+    <string name="app_name">Assistance For Elderly</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -78,6 +78,7 @@
     <string name="select_time_on_days_for_service_provision">Select time on days for service provision</string>
     <string name="select_days_for_service_provision">Select days for service provision</string>
     <string name="select_available_times_of_days_for_calls">Select available times of days for calls</string>
+    <string name="send_request">Send Request</string>
 
     <array name="materialColors">
         <item>#1509ed</item>

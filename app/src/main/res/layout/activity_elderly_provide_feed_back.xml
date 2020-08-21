@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#774F8A8B"
-    tools:context=".views.ElderlyViewVolunteerServicesActivity">
+    tools:context=".views.ElderlyProvideFeedBackActivity">
+
 
     <TextView
         android:id="@+id/pageHeaderTitle"
@@ -18,7 +19,7 @@
         android:layout_marginRight="32dp"
         android:fontFamily="@font/aclonica"
         android:gravity="center"
-        android:text="Available Volunteers' Services"
+        android:text="Provide Feedback &amp; Ratings"
         android:textAllCaps="false"
         android:textColor="#4F8A8B"
         android:textSize="24sp"
@@ -108,6 +109,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/scrollView2" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

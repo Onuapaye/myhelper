@@ -27,6 +27,14 @@ public class GenericModel {
     private String retypePassword;
     private int userType;
 
+    private String feedBackId;
+    private String feedBackMessage;
+    private int feedBackRating;
+    private String feedBackVolunteerId;
+    private String feedBackElderlyId;
+    private String feedBackRequestId;
+    private String feedBackServiceTypeId;
+
     public String getFirstName() {
         return firstName;
     }
@@ -83,16 +91,85 @@ public class GenericModel {
         this.userType = userType;
     }
 
+    public String getFeedBackId() {
+        return feedBackId;
+    }
+
+    public void setFeedBackId(String feedBackId) {
+        this.feedBackId = feedBackId;
+    }
+
+    public String getFeedBackMessage() {
+        return feedBackMessage;
+    }
+
+    public void setFeedBackMessage(String feedBackMessage) {
+        this.feedBackMessage = feedBackMessage;
+    }
+
+    public int getFeedBackRating() {
+        return feedBackRating;
+    }
+
+    public void setFeedBackRating(int feedBackRating) {
+        this.feedBackRating = feedBackRating;
+    }
+
+    public String getFeedBackVolunteerId() {
+        return feedBackVolunteerId;
+    }
+
+    public void setFeedBackVolunteerId(String feedBackVolunteerId) {
+        this.feedBackVolunteerId = feedBackVolunteerId;
+    }
+
+    public String getFeedBackElderlyId() {
+        return feedBackElderlyId;
+    }
+
+    public void setFeedBackElderlyId(String feedBackElderlyId) {
+        this.feedBackElderlyId = feedBackElderlyId;
+    }
+
+    public String getFeedBackRequestId() {
+        return feedBackRequestId;
+    }
+
+    public void setFeedBackRequestId(String feedBackRequestId) {
+        this.feedBackRequestId = feedBackRequestId;
+    }
+
+    public String getFeedBackServiceTypeId() {
+        return feedBackServiceTypeId;
+    }
+
+    public void setFeedBackServiceTypeId(String feedBackServiceTypeId) {
+        this.feedBackServiceTypeId = feedBackServiceTypeId;
+    }
+
     @Override
     public String toString() {
         return "GenericModel{" +
-                "firstName='" + firstName + '\'' +
+                "firstNameTextEdit=" + firstNameTextEdit +
+                ", lastNameTextEdit=" + lastNameTextEdit +
+                ", emailTextEdit=" + emailTextEdit +
+                ", mobileNumberTextEdit=" + mobileNumberTextEdit +
+                ", passwordTextEdit=" + passwordTextEdit +
+                ", retypePasswordTextEdit=" + retypePasswordTextEdit +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", mobileNumber='" + mobileNumber + '\'' +
                 ", password='" + password + '\'' +
                 ", retypePassword='" + retypePassword + '\'' +
                 ", userType=" + userType +
+                ", feedBackId='" + feedBackId + '\'' +
+                ", feedBackMessage='" + feedBackMessage + '\'' +
+                ", feedBackRating=" + feedBackRating +
+                ", feedBackVolunteerId='" + feedBackVolunteerId + '\'' +
+                ", feedBackElderlyId='" + feedBackElderlyId + '\'' +
+                ", feedBackRequestId='" + feedBackRequestId + '\'' +
+                ", feedBackServiceTypeId='" + feedBackServiceTypeId + '\'' +
                 '}';
     }
 
