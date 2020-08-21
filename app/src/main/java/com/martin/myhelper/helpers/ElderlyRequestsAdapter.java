@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.martin.myhelper.R;
 import com.martin.myhelper.views.ElderlyCreateRequestActivity;
 import com.martin.myhelper.views.ElderlyEditRequestActivity;
+import com.martin.myhelper.views.ElderlyHomeActivity;
 import com.martin.myhelper.views.VolunteerProfileEditActivity;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -147,7 +148,7 @@ public class ElderlyRequestsAdapter extends RecyclerView.Adapter<ElderlyRequests
         holder.btnSendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Intent intent = new Intent(_context, ElderlyCreateRequestActivity.class);
+            Intent intent = new Intent(_context, ElderlyHomeActivity.class);
             intent.putExtra("createRequest", _requestsList.get(position));
             _context.startActivity(intent);
             }

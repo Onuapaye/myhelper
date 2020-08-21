@@ -37,7 +37,8 @@ public class ElderlyHomeActivity extends AppCompatActivity {
         cardViewViewServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(ElderlyHomeActivity.this, ElderlyViewVolunteerServicesActivity.class);
+                intent = new Intent(ElderlyHomeActivity.this,
+                        ElderlyViewVolunteerServicesActivity.class);
                 startActivity(intent);
             }
         });
@@ -48,7 +49,8 @@ public class ElderlyHomeActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(ElderlyHomeActivity.this, ElderlyViewVolunteerServicesActivity.class);
+                intent = new Intent(ElderlyHomeActivity.this,
+                        ElderlyViewVolunteerServicesActivity.class);
                 startActivity(intent);
             }
         });
@@ -60,7 +62,8 @@ public class ElderlyHomeActivity extends AppCompatActivity {
         cardViewProvideFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(ElderlyHomeActivity.this, ElderlyProvideFeedBackActivity.class);
+                intent = new Intent(ElderlyHomeActivity.this,
+                        ElderlyProvideFeedBackActivity.class);
                 startActivity(intent);
             }
         });

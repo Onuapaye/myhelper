@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/btnSendServiceRequest"
+                    android:id="@+id/btnCreateProfileConfirm"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="100dp"
@@ -152,7 +152,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:id="@+id/etElderlyRequestMessage"
+                    android:id="@+id/tvServiceDescriptionMultiLine"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -190,7 +190,7 @@
                         android:layout_height="match_parent">
 
                         <Button
-                            android:id="@+id/btnElderlyDays"
+                            android:id="@+id/btnDaysForService"
                             android:layout_width="match_parent"
                             android:layout_height="37dp"
                             android:layout_marginStart="8dp"
@@ -204,7 +204,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tvSelectedDaysForService"
+                            android:id="@+id/tvDaysForService"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -240,7 +240,7 @@
                         android:layout_height="match_parent">
 
                         <Button
-                            android:id="@+id/btnElderlyTimes"
+                            android:id="@+id/btnTimesForeService"
                             android:layout_width="match_parent"
                             android:layout_height="37dp"
                             android:layout_marginStart="8dp"
@@ -254,7 +254,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tvSelectedTimeOnDays"
+                            android:id="@+id/tvTimeOnDays"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -305,7 +305,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tvSelectAvailableTimesForCalls"
+                            android:id="@+id/tvTimesForCalls"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
