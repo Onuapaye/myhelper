@@ -251,12 +251,10 @@ modelMap.put("id", elderlyModel.getServiceRequestId());
                             _tempList1.add(qDoc.getString("requestMessage"));
 
                             elderlyRequestsList.add(_tempList1);
-                            Log.e("E_REQUEST", String.valueOf(elderlyRequestsList));
                         }
                     }
                 }
-                //Log.e("PRO_SIZE", String.valueOf(volunteerProfilesLists.size()));
-                Log.e("ELD_SIZE", String.valueOf(elderlyRequestsList.size()));
+
                 RecyclerView viewVolunteerServices = findViewById(R.id.rcvViewProvidedServices);
 
                 ElderlyProvideFeedbackAdapter provideFeedbackAdapter = new ElderlyProvideFeedbackAdapter(elderlyRequestsList, ElderlyProvideFeedBackActivity.this );

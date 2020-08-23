@@ -77,8 +77,9 @@
     <string name="select_your_available_days">Select your available days</string>
     <string name="select_time_on_days_for_service_provision">Select time on days for service provision</string>
     <string name="select_days_for_service_provision">Select days for service provision</string>
-    <string name="select_available_times_of_days_for_calls">Select available times of days for calls</string>
+    <string name="select_available_times_of_days_for_calls">Select available times for calls on the days for service</string>
     <string name="send_request">Send Request</string>
+    <string name="feedback_from_elderly">Feedback From Elderly</string>
 
     <array name="materialColors">
         <item>#1509ed</item>
@@ -120,6 +121,15 @@
         <item>16h30</item>
         <item>17h00</item>
         <item>17h30</item>
+        <item>18h00</item>
+        <item>18h30</item>
+        <item>19h00</item>
+        <item>19h30</item>
+        <item>20h00</item>
+        <item>20h30</item>
+        <item>21h00</item>
+        <item>21h30</item>
+        <item>22h00</item>
     </string-array>
     <string-array name="volunteers">
         <item>Bismark Atta</item>

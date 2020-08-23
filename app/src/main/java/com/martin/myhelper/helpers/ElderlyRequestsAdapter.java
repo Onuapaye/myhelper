@@ -96,27 +96,6 @@ public class ElderlyRequestsAdapter extends RecyclerView.Adapter<ElderlyRequests
                 break;
         }
 
-        /*
-        0_tempElderlyRequestList.add(documentSnapshot.getString("id"));
-        1_tempElderlyRequestList.add(documentSnapshot.getString("elderlyId"));
-        2_tempElderlyRequestList.add(documentSnapshot.getString("requestVolunteerId"));
-        3_tempElderlyRequestList.add(documentSnapshot.getString("requestServiceTypeId"));
-        4_tempElderlyRequestList.add(documentSnapshot.getString("requestDaysForService"));
-        5_tempElderlyRequestList.add(documentSnapshot.getString("requestTimesForService"));
-        6_tempElderlyRequestList.add(documentSnapshot.getString("requestMessage"));
-
-        7_tempVolunteerProfileList.add(queryDocumentSnapshot.getString("serviceTypeId"));
-        8_tempVolunteerProfileList.add(queryDocumentSnapshot.getString("description"));
-        9_tempVolunteerProfileList.add(queryDocumentSnapshot.getString("daysForService"));
-        10_tempVolunteerProfileList.add(queryDocumentSnapshot.getString("timesForService"));
-        11_tempVolunteerProfileList.add(queryDocumentSnapshot.getString("timesForCalls"));
-
-        12_tempVolunteerList.add(snapshot.getString("firstName"));
-        13_tempVolunteerList.add(snapshot.getString("lastName"));
-        14_tempVolunteerList.add(snapshot.getString("email"));
-        15_tempVolunteerList.add(snapshot.getString("mobileNumber"));
-        16_tempVolunteerList.add(snapshot.getString("imageType"));
-     */
         holder.tvRequestDays.setText(_requestsList.get(position).get(4).replaceAll("(^\\[|\\]$)", ""));
         holder.tvRequestTimes.setText(_requestsList.get(position).get(5).replaceAll("(^\\[|\\]$)", ""));
         holder.etRequestMessage.setText(_requestsList.get(position).get(6));
@@ -130,27 +109,26 @@ public class ElderlyRequestsAdapter extends RecyclerView.Adapter<ElderlyRequests
         holder.btnEditRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Intent intent = new Intent(_context, ElderlyEditRequestActivity.class);
-            intent.putExtra("editRequest", _requestsList.get(position));
-            _context.startActivity(intent);
+                Intent intent = new Intent(_context, ElderlyEditRequestActivity.class);
+                intent.putExtra("editRequest", _requestsList.get(position));
+                _context.startActivity(intent);
             }
         });
 
         holder.btnDeleteRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            ElderlyCRUDHelper crudHelper = new ElderlyCRUDHelper();
-            crudHelper.deleteElderlyServiceRequest((AppCompatActivity)_context, _requestsList.get(position).get(0));
-            //this.notifyAll();
+                ElderlyCRUDHelper crudHelper = new ElderlyCRUDHelper();
+                crudHelper.deleteElderlyServiceRequest((AppCompatActivity)_context, _requestsList.get(position).get(0));
             }
         });
 
         holder.btnSendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Intent intent = new Intent(_context, ElderlyHomeActivity.class);
-            intent.putExtra("createRequest", _requestsList.get(position));
-            _context.startActivity(intent);
+                Intent intent = new Intent(_context, ElderlyHomeActivity.class);
+                intent.putExtra("createRequest", _requestsList.get(position));
+                _context.startActivity(intent);
             }
         });
     }

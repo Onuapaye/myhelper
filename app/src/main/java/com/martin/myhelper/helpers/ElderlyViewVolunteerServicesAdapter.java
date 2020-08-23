@@ -59,8 +59,6 @@ public class ElderlyViewVolunteerServicesAdapter extends RecyclerView.Adapter<El
 
         _volunteersAccounts = new ArrayList<>();
         // set the text view values from the data or arrays
-        //holder.volunteerName.setText(_volunteersAccounts.get(position).get(0) + ", " + _volunteersAccounts.get(position).get(1).toUpperCase());
-        //holder.volunteerMobile.setText(_volunteersAccounts.get(position).get(3));
         getVolunteerAccountDetails(_volunteersProfiles.get(position).get(2), holder);
         holder.serviceDescription.setText(_volunteersProfiles.get(position).get(3));
 
@@ -74,10 +72,6 @@ public class ElderlyViewVolunteerServicesAdapter extends RecyclerView.Adapter<El
             }
         });
 
-        /*if(_volunteersAvailable.get(position).get(11) != null || !_volunteersAvailable.get(position).get(11).isEmpty()) {
-            Picasso.get().load(_volunteersAvailable.get(position).get(11)).into(holder.volunteerImage);
-        }*/
-        //Picasso.get().load(String.valueOf(_volunteersAvailable.get(position).get(11).getBytes())).into(holder.volunteerImage);
     }
 
     @Override
@@ -127,8 +121,6 @@ public class ElderlyViewVolunteerServicesAdapter extends RecyclerView.Adapter<El
                         _tempList2.add(vSnapshot.getString("imageType"));
 
                         _volunteersAccounts.add(_tempList2);
-                        //Log.e("TEMP_2_ALL", String.valueOf(_tempList2));
-                        //Log.e("ACCOUNTS INFO", String.valueOf(_volunteersAccounts));
 
                         // load and show the profile image
                         loadProfilePhotoIntoImageView(vSnapshot.getString("id"), vSnapshot.getString("imageType"), holder);

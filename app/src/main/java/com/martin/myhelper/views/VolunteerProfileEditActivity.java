@@ -537,7 +537,6 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
                 alertDialog = mBuilder.create();
                 alertDialog.show();
             }
-
         });
     }
 

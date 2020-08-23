@@ -71,20 +71,13 @@ public class ElderlyProvideFeedbackAdapter extends RecyclerView.Adapter<ElderlyP
     public void onBindViewHolder(@NonNull final ElderlyProvideFeedbackViewHolder holder, final int position) {
 
         _volunteerAccountData = new ArrayList<>();
-        // set the text view values from the data or arrays
-        //holder.volunteerName.setText(_volunteersAccounts.get(position).get(0) + ", " + _volunteersAccounts.get(position).get(1).toUpperCase());
-        //holder.volunteerMobile.setText(_volunteersAccounts.get(position).get(3));
         getVolunteerAccountDetails(_elderlyRequestData.get(position).get(2), holder);
         getVolunteerProfileDetails(_elderlyRequestData.get(position).get(2), _elderlyRequestData.get(position).get(3), holder);
-        //holder.serviceDescription.setText(_volunteerProfileData.get(position).get(3));
 
         holder.btnSendConfirmation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            /*Intent intent = new Intent(_context, ElderlyCreateRequestActivity.class);
-            intent.putExtra("profileRecordForRequest", _volunteerAccountData.get(position));
-            intent.putExtra("accountRecordForRequest", _volunteerAccountData.get(position));
-            _context.startActivity(intent);*/
+
             if (holder.etFeedbackMessage.getText().toString() == "" || holder.etFeedbackMessage.getText().toString().isEmpty() || holder.etFeedbackMessage.getText().toString().trim().length() <= 0){
                 Utility.showInformationDialog(Utility.REQUIRED_FIELD_TITLE, "Please enter your message for this feedback", (AppCompatActivity) _context);
                 return;
@@ -196,7 +189,6 @@ public class ElderlyProvideFeedbackAdapter extends RecyclerView.Adapter<ElderlyP
                                     _tempList2.add(String.valueOf(docSnapshot.get("timesForCalls")));
 
                                     _volunteerProfileData.add(_tempList2);
-                                    Log.e("V_PROFILES", String.valueOf(_volunteerProfileData));
                                 }
                             }
                         }
@@ -230,8 +222,6 @@ public class ElderlyProvideFeedbackAdapter extends RecyclerView.Adapter<ElderlyP
                         _tempList2.add(vSnapshot.getString("imageType"));
 
                         _volunteerAccountData.add(_tempList2);
-                        //Log.e("TEMP_2_ALL", String.valueOf(_tempList2));
-                        //Log.e("ACCOUNTS INFO", String.valueOf(_volunteersAccounts));
 
                         // load and show the profile image
                         loadProfilePhotoIntoImageView(vSnapshot.getString("id"), vSnapshot.getString("imageType"), holder);

@@ -28,11 +28,14 @@ public class VolunteerHomeActivity extends AppCompatActivity {
         this.setOnClicks();
         this.showCreateSuccessMessage();
         this.showUpdateSuccessMessage();
+
+        this.handleViewElderlyRequests();
     }
 
     private void  setOnClicks(){
         this.handleCreateElderlyTextViewOnClick();
         this.handleEditElderlyTextViewOnClick();
+        this.handleViewElderlyFeedBacks();
     }
     private  void handleCreateElderlyTextViewOnClick(){
         createServiceProfile = findViewById(R.id.createProfileTextView);
@@ -56,6 +59,29 @@ public class VolunteerHomeActivity extends AppCompatActivity {
         });
     }
 
+    private void handleViewElderlyRequests(){
+        viewElderlyRequests = findViewById(R.id.viewElderlyRequestsTextView);
+        viewElderlyRequests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(VolunteerHomeActivity.this, VolunteerViewElderlyRequestsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void handleViewElderlyFeedBacks(){
+        viewFeedback = findViewById(R.id.provideFeedBackTextView);
+        viewFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(VolunteerHomeActivity.this, VolunteerViewElderlyFeedbackActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    //
     private  void showCreateSuccessMessage(){
         Intent intent = getIntent();
         intent.getExtras();
