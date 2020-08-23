@@ -42,7 +42,7 @@ public class VolunteerNotifyElderlyForServiceActivity extends AppCompatActivity 
     private void selectDaysForServiceProvision(){
 
         btnConfirmCreateProfile = (Button) findViewById(R.id.btnCreateProfileConfirm);
-        tvSelectedItems = (TextView) findViewById(R.id.tvTestBismark);
+        //tvSelectedItems = (TextView) findViewById(R.id.tvTestBismark);
 
         availableDays = getResources().getStringArray(R.array.availableDays);
         checkedItemBoxes = new boolean[availableDays.length];
@@ -115,7 +115,7 @@ public class VolunteerNotifyElderlyForServiceActivity extends AppCompatActivity 
         TextView textView = findViewById(R.id.availableServicesTitle);
         mMaterialColors = getResources().getIntArray(R.array.materialColors);
 
-        materialLetterIcon = (MaterialLetterIcon) findViewById(R.id.volunteerElderlyDetailsLetterIcon);
+        //materialLetterIcon = (MaterialLetterIcon) findViewById(R.id.volunteerElderlyDetailsLetterIcon);
         materialLetterIcon.setInitials(true);
         materialLetterIcon.setInitialsNumber(2);
         materialLetterIcon.setLetterSize(25);

@@ -27,7 +27,9 @@ import com.martin.myhelper.model.ElderlyModel;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.martin.myhelper.helpers.Utility.ASSIST_WITH_ERRANDS;
 import static com.martin.myhelper.helpers.Utility.ASSIST_WITH_GARDENING;
@@ -85,6 +87,8 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firebaseFirestore;
 
+    private String[] _tempElderlyDAYS, _tempElderlyTIMES, _tempElderlyCALLS;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +97,6 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
         this.getData();
         this.setData();
 
-        this.selectDaysForServiceRequest();
-        this.selectTimesOnDaysForServiceRequest();
 
         this.handleSendRequestButtonOnClick();
     }
@@ -119,7 +121,6 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
 
         _etElderlyRequestMessage = findViewById(R.id.etElderlyRequestMessage);
 
-        Log.e("ELDERLY_ID", firebaseUser.getUid());
         elderlyId = firebaseUser.getUid();
 
         // do validation first
@@ -167,10 +168,6 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
        _tvServiceCalls = findViewById(R.id.tvSelectedVolunteerCalls);
        _tvServiceVolunteerName = findViewById(R.id.tvSelectedVolunteer);
        _tvServiceVolunteerMobile = findViewById(R.id.tvSelectedVolunteerMobile);
-       //_etElderlyRequestMessage = findViewById(R.id.etElderlyRequestMessage);
-       //_btnRequestService = findViewById(R.id.btnSendServiceRequest);
-       //_btnElderlyRequestDays = findViewById(R.id.btnElderlyDays);
-       //_btnElderlyRequestTimes = findViewById(R.id.btnElderlyTimes);
        _tvSelectedServiceName = findViewById(R.id.tvSelectedServiceName);
 
        // profile details
@@ -190,47 +187,71 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
         serviceTypeIDs = getResources().getStringArray(R.array.serviceTypeIDs);
 
         String serviceTypeCode = _requestedVolunteerProfileData.get(1);
-        Log.e("SERVICE_TYPE_CODE", serviceTypeIDs[0]);
 
         if (serviceTypeCode == serviceTypeIDs[0]){
             serviceType = TEACH_USAGE_MOBILE_DEVICES;
-            //return;
         } else if (serviceTypeCode == serviceTypeIDs[1]){
             serviceType = TEACH_USAGE_WEB_APPS;
-            //return;
         } else if (serviceTypeCode == serviceTypeIDs[2]){
-            //serviceType = WALK_WITH_U;
-            //return;
         } else if (serviceTypeCode == serviceTypeIDs[3]){
-            //serviceType = ASSIST_WITH_HOUSE_CLEANING;
         } else if (serviceTypeCode == serviceTypeIDs[5]) {
-            //serviceType = ASSIST_WITH_HOUSE_MAINTENANCE;
-            //return;
         } else if(serviceTypeCode == serviceTypeIDs[6]) {
             serviceType = ASSIST_WITH_GARDENING;
-            //return;
         } else if (serviceTypeCode == serviceTypeIDs[7]) {
             serviceType = ASSIST_WITH_ERRANDS;
         } else if ( serviceTypeCode == serviceTypeIDs[8]) {
             serviceType = ASSIST_WITH_GROCERY_SHOPPING;
-            //return;
         } else if(serviceTypeCode == serviceTypeIDs[9]) {
             serviceType = PROVIDE_LIFT_TO_SHOP;
-            //return;
         } else {
             serviceType = TAKE_CARE_OF_PETS;
-            //return;
         }
-        Log.e("SERVICE_NAME", serviceType);
+
         _tvSelectedServiceName.setText(serviceType);
+
+        // START
+        // 1. GET THE DAYS SET BY THE VOLUNTEER IN HIS/PROFILES FOR THE SPINNER
+        List<String> volDays = new ArrayList<>();
+        List<String> callsList;
+        String[] d = _requestedVolunteerProfileData.get(4).split("\\s*,\\s*");
+        for(int i = 0; i < d.length; i++){
+            callsList = new ArrayList<>();
+            callsList.add(d[i].replaceAll("(^\\[|\\]$)", ""));
+            volDays.add(callsList.toString().replaceAll("(^\\[|\\]$)", ""));
+        }
+
+        // convert the list into a normal array
+        _tempElderlyDAYS = new String[volDays.size()];
+        volDays.toArray(_tempElderlyDAYS);
+
+        this.selectDaysForServiceRequest(_tempElderlyDAYS);
+        // END
+
+        // START
+        // 2. GET THE TIMES FOR SERVICE SET BY THE VOLUNTEER IN HIS/PROFILES FOR THE SPINNER
+        List<String> volTimes = new ArrayList<>();
+        List<String> timesList;
+        String[] t = _requestedVolunteerProfileData.get(5).split("\\s*,\\s*");
+        for(int i = 0; i < t.length; i++){
+            timesList = new ArrayList<>();
+            timesList.add(t[i].replaceAll("(^\\[|\\]$)", ""));
+            volTimes.add(timesList.toString().replaceAll("(^\\[|\\]$)", ""));
+        }
+
+        // convert the list into a normal array
+        _tempElderlyTIMES = new String[volTimes.size()];
+        volTimes.toArray(_tempElderlyTIMES);
+
+        this.selectTimesOnDaysForServiceRequest(_tempElderlyTIMES);
+        // END
     }
 
-    private void selectDaysForServiceRequest(){
+    private void selectDaysForServiceRequest(String[] days){
 
-        _btnElderlyRequestDays = (Button) findViewById(R.id.btnElderlyDays);
-        _tvElderlyDays = (TextView) findViewById(R.id.tvElderlyDays);
+        _btnElderlyRequestDays = findViewById(R.id.btnElderlyDays);
+        _tvElderlyDays = findViewById(R.id.tvElderlyDays);
 
-        elderlyAvailableDays = getResources().getStringArray(R.array.availableDays);
+        elderlyAvailableDays = days;// getResources().getStringArray(R.array.availableDays);
         checkedDaysItemBoxes = new boolean[elderlyAvailableDays.length];
 
         _btnElderlyRequestDays.setOnClickListener(new View.OnClickListener() {
@@ -299,12 +320,12 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
         });
     }
 
-    private void selectTimesOnDaysForServiceRequest(){
+    private void selectTimesOnDaysForServiceRequest(String[] times){
 
-        _btnElderlyRequestTimes = (Button) findViewById(R.id.btnElderlyTimes);
-        _tvElderlyTimes = (TextView) findViewById(R.id.tvElderlyTimes);
+        _btnElderlyRequestTimes = findViewById(R.id.btnElderlyTimes);
+        _tvElderlyTimes = findViewById(R.id.tvElderlyTimes);
 
-        elderlyAvailableTimesOnDay = getResources().getStringArray(R.array.availableTimes);
+        elderlyAvailableTimesOnDay = times; // getResources().getStringArray(R.array.availableTimes);
         checkedTimesItemBoxes = new boolean[elderlyAvailableTimesOnDay.length];
 
         _btnElderlyRequestTimes.setOnClickListener(new View.OnClickListener() {

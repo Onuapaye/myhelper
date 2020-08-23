@@ -166,27 +166,6 @@ public class ElderlyRequestsActivity extends AppCompatActivity {
         });
     }
 
-    /*
-       0_tempElderlyRequestList.add(documentSnapshot.getString("id"));
-       1_tempElderlyRequestList.add(documentSnapshot.getString("elderlyId"));
-       2_tempElderlyRequestList.add(documentSnapshot.getString("requestVolunteerId"));
-       3_tempElderlyRequestList.add(documentSnapshot.getString("requestServiceTypeId"));
-       4_tempElderlyRequestList.add(documentSnapshot.getString("requestDaysForService"));
-       5_tempElderlyRequestList.add(documentSnapshot.getString("requestTimesForService"));
-       6_tempElderlyRequestList.add(documentSnapshot.getString("requestMessage"));
-
-       7_tempVolunteerProfileList.add(queryDocumentSnapshot.getString("serviceTypeId"));
-       8_tempVolunteerProfileList.add(queryDocumentSnapshot.getString("description"));
-       9_tempVolunteerProfileList.add(queryDocumentSnapshot.getString("daysForService"));
-       10_tempVolunteerProfileList.add(queryDocumentSnapshot.getString("timesForService"));
-       11_tempVolunteerProfileList.add(queryDocumentSnapshot.getString("timesForCalls"));
-
-       12_tempVolunteerList.add(snapshot.getString("firstName"));
-       13_tempVolunteerList.add(snapshot.getString("lastName"));
-       14_tempVolunteerList.add(snapshot.getString("email"));
-       15_tempVolunteerList.add(snapshot.getString("mobileNumber"));
-       16_tempVolunteerList.add(snapshot.getString("imageType"));
-    */
     private void loadProfilePhotoIntoImageView(String imageName, String imageExtension) {
 
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
