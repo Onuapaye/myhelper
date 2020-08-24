@@ -372,6 +372,17 @@ public class ElderlyVolunteerCRUDHelper extends Activity {
         });
     }
 
+    public static void signOutUser(Context source, Class destination){
+        FirebaseAuth firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser != null){
+            firebaseAuth.signOut();
+        }
+
+        Intent intent = new Intent(source, destination);
+        source.startActivity(intent);
+    }
+
     public void requestPasswordReset(final String _email, final AppCompatActivity appCompatActivity, final Class destinationActivity){
 
         Utility.promptUserBeforePasswordResetLinkIsSent(_email, appCompatActivity, destinationActivity);

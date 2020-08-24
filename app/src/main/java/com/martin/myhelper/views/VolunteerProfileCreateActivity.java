@@ -16,7 +16,9 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.martin.myhelper.MainActivity;
 import com.martin.myhelper.R;
+import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
 import com.martin.myhelper.helpers.Utility;
 import com.martin.myhelper.helpers.VolunteerCRUDHelper;
 import com.martin.myhelper.model.VolunteerModel;
@@ -77,6 +79,18 @@ public class VolunteerProfileCreateActivity extends AppCompatActivity {
 
         this.handleConfirmButtonOnClick();
         this.handleServiceTypeSpinnerOnItemSelected();
+
+        this.handleSignOutOnClick();
+    }
+
+    private void handleSignOutOnClick(){
+        TextView signOut = findViewById(R.id.createProfileLogOutButton);
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ElderlyVolunteerCRUDHelper.signOutUser(VolunteerProfileCreateActivity.this, MainActivity.class);
+            }
+        });
     }
 
     private void handleConfirmButtonOnClick(){

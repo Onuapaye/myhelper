@@ -53,8 +53,7 @@ public class ElderlyRequestsActivity extends AppCompatActivity {
 
         this.getElderlyRequestDetails();
 
-        this.showCreateSuccessMessage();
-        this.showUpdateSuccessMessage();
+        //this.showUpdateSuccessMessage();
     }
 
     private void getElderlyRequestDetails(){
@@ -174,26 +173,15 @@ public class ElderlyRequestsActivity extends AppCompatActivity {
         storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
-            if (task.isSuccessful()){
+                if (task.isSuccessful()){
 
-                Uri uri = task.getResult();
+                    Uri uri = task.getResult();
 
-                CircularImageView imageView = findViewById(R.id.imgRequestVolunteerPhoto);
-                Picasso.get().load(uri).into(imageView);
-            }
+                    CircularImageView imageView = findViewById(R.id.imgRequestVolunteerPhoto);
+                    Picasso.get().load(uri).into(imageView);
+                }
             }
         });
-    }
-
-    private  void showCreateSuccessMessage(){
-        Intent intent = getIntent();
-        intent.getExtras();
-
-        if (intent.hasExtra("recordCreated")){
-            // show a message for successful record recreation
-            Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE,
-                    CREATE_ELDERLY_REQUEST_SUCCESS_MSG , ElderlyRequestsActivity.this);
-        }
     }
 
     private void showUpdateSuccessMessage(){

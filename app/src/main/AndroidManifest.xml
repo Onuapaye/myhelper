@@ -13,12 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".views.VolunteerViewElderlyFeedbackActivity"></activity>
-        <activity android:name=".views.ElderlyProvideFeedBackActivity" />
+        <activity android:name=".views.ElderlyProvideFeedBackActivity"
+            android:parentActivityName=".views.VolunteerHomeActivity"
+            android:label="View Feedback"/>
         <activity android:name=".views.ElderlyEditRequestActivity" />
         <activity android:name=".views.ElderlyRequestsActivity" />
         <activity android:name=".views.VolunteerProfilesActivity" />
         <activity android:name=".views.VolunteerNotifyElderlyForServiceActivity" />
-        <activity android:name=".views.VolunteerViewElderlyRequestsActivity" />
+        <activity android:name=".views.VolunteerViewElderlyRequestsActivity"
+            android:parentActivityName=".views.VolunteerHomeActivity"
+            android:label="View Request" />
         <activity
             android:name=".views.VolunteerProfileEditActivity"
             android:label="Edit Profile"
@@ -29,7 +33,9 @@
         <activity android:name=".views.ServiceTypeActivity" />
         <activity android:name=".views.PasswordResetActivity" />
         <activity android:name=".views.ProvideFeedbackActivity" />
-        <activity android:name=".views.ElderlyViewVolunteerServicesActivity" />
+        <activity android:name=".views.ElderlyViewVolunteerServicesActivity"
+            android:parentActivityName=".views.ElderlyHomeActivity"
+            android:label="View Requests"/>
         <activity android:name=".views.VolunteerHomeActivity" />
         <activity android:name=".views.VolunteerRegistrationActivity" />
         <activity android:name=".views.ElderlyHomeActivity" />

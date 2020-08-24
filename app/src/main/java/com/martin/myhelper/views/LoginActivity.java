@@ -53,13 +53,8 @@ public class LoginActivity extends AppCompatActivity {
         // login to elderly homepage
         this.loginUserToFireStore();
 
-        // show message for user record creation
-        this.checkAndShowUserCreationSuccessMessage();
-
         // check the onChange event of the email field
         this.validateEmailOnEditTextChange();
-
-        this.showPasswordResetSuccessMessage();
 
         this.handlePasswordResetLinkOnClick();
     }
@@ -150,22 +145,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void checkAndShowUserCreationSuccessMessage(){
 
-        Intent intent = getIntent();
-        intent.getExtras();
-
-        if (intent.hasExtra("recordCreated")){
-            // show a message for successful record recreation
-            Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE,
-                    CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG, LoginActivity.this);
-        }
-
-        if (intent.hasExtra("loginPageHeaderTitle")){
-            TextView textView = findViewById(R.id.pageHeaderTitle);
-            textView.setText(intent.getStringExtra("loginPageHeaderTitle"));
-        }
-    }
 
     private void validateEmailOnEditTextChange(){
 
@@ -239,14 +219,5 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private  void showPasswordResetSuccessMessage(){
-        Intent intent = getIntent();
-        intent.getExtras();
 
-        if (intent.hasExtra("passwordResetSuccess")){
-            // show a message for successful record recreation
-            Utility.showInformationDialog("PASSWORD RESET LINK SENT",
-                    intent.getStringExtra("passwordResetSuccess") , this);
-        }
-    }
 }

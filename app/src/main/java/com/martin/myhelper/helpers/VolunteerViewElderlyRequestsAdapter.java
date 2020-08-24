@@ -67,6 +67,8 @@ public class VolunteerViewElderlyRequestsAdapter extends RecyclerView.Adapter<Vo
     public void onBindViewHolder(@NonNull VolunteerViewElderlyRequestViewHolder holder, int position) {
 
         // STEP 1. get list of all elders by passing `listOfElders` as a parameter argument to the constructor;
+        holder.tvDays.setText(_listOfElders.get(position).get(4));
+        holder.tvTimes.setText(_listOfElders.get(position).get(5));
         holder.requestedServiceDescription.setText(_listOfElders.get(position).get(6));
         setRequestServiceTypeName(holder, position);
 
@@ -82,7 +84,7 @@ public class VolunteerViewElderlyRequestsAdapter extends RecyclerView.Adapter<Vo
 
     public class VolunteerViewElderlyRequestViewHolder extends RecyclerView.ViewHolder {
 
-        TextView elderlyName, elderlyMobileNumber, requestedServiceDescription, serviceTypeName;
+        TextView elderlyName, elderlyMobileNumber, requestedServiceDescription, serviceTypeName, tvDays, tvTimes;
         MaterialLetterIcon materialLetterIcon;
         Button btnGoToNotificationPage;
 
@@ -93,6 +95,8 @@ public class VolunteerViewElderlyRequestsAdapter extends RecyclerView.Adapter<Vo
             elderlyMobileNumber = itemView.findViewById(R.id.tvRequestedElderlyMobile);
             requestedServiceDescription = itemView.findViewById(R.id.tvRequestedServiceDescription);
             serviceTypeName = itemView.findViewById(R.id.tvServiceTypeName);
+            tvDays = itemView.findViewById(R.id.tvDays);
+            tvTimes = itemView.findViewById(R.id.tvTimes);
             materialLetterIcon = itemView.findViewById(R.id.elderlyMaterialLetterIcon);
 
             btnGoToNotificationPage = itemView.findViewById(R.id.btnGoToNotificationPage);

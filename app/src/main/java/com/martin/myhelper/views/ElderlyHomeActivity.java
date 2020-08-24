@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.martin.myhelper.R;
 import com.martin.myhelper.helpers.Utility;
 
+import static com.martin.myhelper.helpers.Utility.CREATE_ELDERLY_REQUEST_SUCCESS_MSG;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_TITLE;
 import static com.martin.myhelper.helpers.Utility.CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG;
 
@@ -29,6 +30,7 @@ public class ElderlyHomeActivity extends AppCompatActivity {
         this.handleProvideFeedBackButtonClick();
 
         this.showFeedBackSuccessMessage();
+        this.showCreateRequestSuccessMessage();
     }
 
     private void handleViewVolunteerServicesCardViewOnClick(){
@@ -77,6 +79,17 @@ public class ElderlyHomeActivity extends AppCompatActivity {
             // show a message for successful record recreation
             Utility.showInformationDialog("FEEDBACK SUCCESS",
                     intent.getStringExtra("feedBackProvided") , this);
+        }
+    }
+
+    private  void showCreateRequestSuccessMessage(){
+        Intent intent = getIntent();
+        intent.getExtras();
+
+        if (intent.hasExtra("recordCreated")){
+            // show a message for successful record recreation
+            Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE,
+                    CREATE_ELDERLY_REQUEST_SUCCESS_MSG , this);
         }
     }
 }

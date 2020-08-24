@@ -21,11 +21,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.martin.myhelper.MainActivity;
 import com.martin.myhelper.R;
 import com.martin.myhelper.helpers.ElderlyCRUDHelper;
+import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
 import com.martin.myhelper.model.ElderlyModel;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -100,6 +104,17 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
 
 
         this.handleSendRequestButtonOnClick();
+        this.handleSignOutOnClick();
+    }
+
+    private void handleSignOutOnClick(){
+        TextView signOut = findViewById(R.id.createProfileLogOutButton);
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ElderlyVolunteerCRUDHelper.signOutUser(ElderlyCreateRequestActivity.this, MainActivity.class);
+            }
+        });
     }
 
     private void handleSendRequestButtonOnClick(){
@@ -113,6 +128,7 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
     }
 
     private void createProfile(){
+
         // create instance of objects
         elderlyCRUDHelper = new ElderlyCRUDHelper();
         elderlyModel = new ElderlyModel();
@@ -141,7 +157,7 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
         elderlyCRUDHelper.createElderlyServiceRequest(ElderlyCreateRequestActivity.this, elderlyModel);
 
         // redirect to login activity
-        intent = new Intent(ElderlyCreateRequestActivity.this, VolunteerProfilesActivity.class);
+        intent = new Intent(ElderlyCreateRequestActivity.this, ElderlyHomeActivity.class);
         intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG);
         startActivity(intent);
     }

@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.martin.myhelper.MainActivity;
 import com.martin.myhelper.R;
+import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
 import com.martin.myhelper.helpers.Utility;
 
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_TITLE;
@@ -30,6 +32,17 @@ public class VolunteerHomeActivity extends AppCompatActivity {
         this.showUpdateSuccessMessage();
 
         this.handleViewElderlyRequests();
+        this.handleSignOutOnClick();
+    }
+
+    private void handleSignOutOnClick(){
+        TextView signOut = findViewById(R.id.logOutButton);
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ElderlyVolunteerCRUDHelper.signOutUser(VolunteerHomeActivity.this, MainActivity.class);
+            }
+        });
     }
 
     private void  setOnClicks(){
