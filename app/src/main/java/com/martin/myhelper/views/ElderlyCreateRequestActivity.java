@@ -39,6 +39,7 @@ import static com.martin.myhelper.helpers.Utility.ASSIST_WITH_HOUSE_MAINTENANCE;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_MSG;
 import static com.martin.myhelper.helpers.Utility.CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG;
 import static com.martin.myhelper.helpers.Utility.PROVIDE_LIFT_TO_SHOP;
+import static com.martin.myhelper.helpers.Utility.PROVIDE_LIFT_TO_SOCIAL;
 import static com.martin.myhelper.helpers.Utility.REQUIRED_FIELD_TITLE;
 import static com.martin.myhelper.helpers.Utility.SELECT_DAYS_FOR_SERVICE_MSG;
 import static com.martin.myhelper.helpers.Utility.SELECT_TIMES_FOR_SERVICE_MSG;
@@ -193,8 +194,13 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
         } else if (serviceTypeCode == serviceTypeIDs[1]){
             serviceType = TEACH_USAGE_WEB_APPS;
         } else if (serviceTypeCode == serviceTypeIDs[2]){
+            serviceType = WALK_WITH_U;
         } else if (serviceTypeCode == serviceTypeIDs[3]){
+            serviceType = PROVIDE_LIFT_TO_SOCIAL;
+        } else if (serviceTypeCode == serviceTypeIDs[4]){
+            serviceType = ASSIST_WITH_HOUSE_CLEANING;
         } else if (serviceTypeCode == serviceTypeIDs[5]) {
+            serviceType = ASSIST_WITH_HOUSE_MAINTENANCE;
         } else if(serviceTypeCode == serviceTypeIDs[6]) {
             serviceType = ASSIST_WITH_GARDENING;
         } else if (serviceTypeCode == serviceTypeIDs[7]) {
