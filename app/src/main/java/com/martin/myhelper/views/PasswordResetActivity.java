@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.martin.myhelper.MainActivity;
 import com.martin.myhelper.R;
 import com.martin.myhelper.helpers.Utility;
 
@@ -65,10 +66,11 @@ public class PasswordResetActivity extends AppCompatActivity {
                         }
 
                         // redirect user to login
-                        Intent intent = new Intent(PasswordResetActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(PasswordResetActivity.this, MainActivity.class);
                         intent.putExtra("userType", userType);
                         intent.putExtra("passwordResetSuccess", "You have successfully requested for a Password Reset.\n Please check your inbox for the RESET LINK");
                         startActivity(intent);
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

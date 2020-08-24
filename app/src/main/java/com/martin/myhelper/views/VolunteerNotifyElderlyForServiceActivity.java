@@ -11,7 +11,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.ivbaranov.mli.MaterialLetterIcon;
+import com.martin.myhelper.MainActivity;
 import com.martin.myhelper.R;
+import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -37,8 +39,19 @@ public class VolunteerNotifyElderlyForServiceActivity extends AppCompatActivity 
 
         selectDaysForServiceProvision();
         this.setMaterialLetterIcon();
+
+        this.handleSignOutOnClick();
     }
 
+    private void handleSignOutOnClick(){
+        TextView signOut = findViewById(R.id.btnLogOut);
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ElderlyVolunteerCRUDHelper.signOutUser(VolunteerNotifyElderlyForServiceActivity.this, MainActivity.class);
+            }
+        });
+    }
     private void selectDaysForServiceProvision(){
 
         btnConfirmCreateProfile = (Button) findViewById(R.id.btnCreateProfileConfirm);
@@ -122,4 +135,6 @@ public class VolunteerNotifyElderlyForServiceActivity extends AppCompatActivity 
         materialLetterIcon.setShapeColor(mMaterialColors[new Random().nextInt(mMaterialColors.length)]);
         materialLetterIcon.setLetter(textView.getText().toString());
     }
+
+
 }

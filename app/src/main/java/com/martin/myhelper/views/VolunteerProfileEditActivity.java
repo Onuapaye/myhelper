@@ -17,7 +17,9 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.martin.myhelper.MainActivity;
 import com.martin.myhelper.R;
+import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
 import com.martin.myhelper.helpers.Utility;
 import com.martin.myhelper.helpers.VolunteerCRUDHelper;
 import com.martin.myhelper.model.VolunteerModel;
@@ -101,6 +103,8 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
 
         this.handleUpdateButtonOnClick();
         this.handleServiceTypeSpinnerOnItemSelected();
+
+        this.handleSignOutOnClick();
     }
 
     private void handleUpdateButtonOnClick(){
@@ -109,6 +113,16 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 updateProfile();
+            }
+        });
+    }
+
+    private void handleSignOutOnClick(){
+        TextView signOut = findViewById(R.id.createProfileLogOutButton);
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ElderlyVolunteerCRUDHelper.signOutUser(VolunteerProfileEditActivity.this, MainActivity.class);
             }
         });
     }

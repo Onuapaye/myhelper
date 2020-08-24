@@ -6,10 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
+import com.martin.myhelper.helpers.Utility;
 import com.martin.myhelper.model.GenericModel;
+import com.martin.myhelper.views.ElderlyCreateRequestActivity;
 import com.martin.myhelper.views.LoginActivity;
 import com.martin.myhelper.views.VolunteerProfileCreateActivity;
+
+import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_EMAIL_SUCCESS_MSG;
+import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_MSG;
+import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_TITLE;
 
 public class MainActivity extends AppCompatActivity {
     // a variable of type button
@@ -22,7 +30,23 @@ public class MainActivity extends AppCompatActivity {
 
         // open the login screen
         this.openLoginScreen();
+
+        // show message for user record creation
+        this.checkAndShowUserCreationSuccessMessage();
+        this.showPasswordResetSuccessMessage();
+
+//        this.handleSignOutOnClick();
     }
+
+//    private void handleSignOutOnClick(){
+//        TextView signOut = findViewById(R.id.createProfileLogOutButton);
+//        signOut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ElderlyVolunteerCRUDHelper.signOutUser(MainActivity.this, MainActivity.class);
+//            }
+//        });
+//    }
 
     /**
      * Opens the `Login` screen when the button of
@@ -52,6 +76,34 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void checkAndShowUserCreationSuccessMessage(){
+
+        Intent intent = getIntent();
+        intent.getExtras();
+
+        if (intent.hasExtra("recordCreated")){
+            // show a message for successful record recreation
+            Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE,
+                    CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG, this);
+        }
+
+        if (intent.hasExtra("loginPageHeaderTitle")){
+            TextView textView = findViewById(R.id.pageHeaderTitle);
+            textView.setText(intent.getStringExtra("loginPageHeaderTitle"));
+        }
+    }
+
+    private  void showPasswordResetSuccessMessage(){
+        Intent intent = getIntent();
+        intent.getExtras();
+
+        if (intent.hasExtra("passwordResetSuccess")){
+            // show a message for successful record recreation
+            Utility.showInformationDialog("PASSWORD RESET LINK SENT",
+                    intent.getStringExtra("passwordResetSuccess") , this);
+        }
     }
 }
 
