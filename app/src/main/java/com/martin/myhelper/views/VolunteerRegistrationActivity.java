@@ -1,28 +1,26 @@
 package com.martin.myhelper.views;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.martin.myhelper.MainActivity;
 import com.martin.myhelper.R;
-import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
 import com.martin.myhelper.helpers.OpenActivity;
 import com.martin.myhelper.helpers.Utility;
 import com.martin.myhelper.helpers.VolunteerCRUDHelper;
@@ -138,7 +136,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                    crudHelper.createVolunteerUserRecord(appCompatActivity, modelArray, imageUri);
 
                     // redirect to login activity
-                    intent = new Intent(context, LoginActivity.class);
+                    intent = new Intent(context, MainActivity.class);
                     intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG);
                     intent.putExtra("loginPageHeaderTitle", "VOLUNTEER");
                     startActivity(intent);
@@ -211,7 +209,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
         lastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus) {
+                if(!hasFocus) {
                     if (lastName.getText() == null || lastName.getText().toString().isEmpty()) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your last name.", appCompatActivity);
                         //lastName.requestFocus();
