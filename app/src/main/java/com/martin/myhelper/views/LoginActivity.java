@@ -58,6 +58,8 @@ public class LoginActivity extends AppCompatActivity {
         this.validateEmailOnEditTextChange();
 
         this.handlePasswordResetLinkOnClick();
+
+        this.showPageHeaderTitleText();
     }
 
     /**
@@ -74,15 +76,25 @@ public class LoginActivity extends AppCompatActivity {
         registerLinkTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if(userType == GenericModel.USER_TYPE_ELDER){
-                Intent intent = new Intent(LoginActivity.this, ElderlyRegistrationActivity.class);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(LoginActivity.this, VolunteerRegistrationActivity.class);
-                startActivity(intent);
-            }
+                if(userType == GenericModel.USER_TYPE_ELDER){
+                    Intent intent = new Intent(LoginActivity.this, ElderlyRegistrationActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(LoginActivity.this, VolunteerRegistrationActivity.class);
+                    startActivity(intent);
+                }
             }
         });
+    }
+
+    private void showPageHeaderTitleText(){
+        Intent intent = getIntent();
+        intent.getExtras();
+
+        if (intent.hasExtra("loginPageHeaderTitle")){
+            TextView _pageTitleView = findViewById(R.id.pageHeaderTitle);
+            _pageTitleView.setText(intent.getStringExtra("loginPageHeaderTitle"));
+        }
     }
 
     private void handlePasswordResetLinkOnClick(){

@@ -49,7 +49,7 @@ public class Utility extends Activity {
 
     public static final String PASSWORD_RESET_TITLE = "PASSWORD RESET";
     public static final String INVALID_EMAIL_TITLE = "INVALID E-MAIL";
-    public static final String INVALID_EMAIL_MSG = "Invalid e-mail address entered. The e-mail should be Gmail,  Yahoo, Hotmail, or Outlook";
+    public static final String INVALID_EMAIL_MSG = "Invalid e-mail address entered. The e-mail should be Gmail,  Yahoo, Hotmail, or Outlook and @ character";
     public static final String INVALID_PASSWORD_TITLE = "INVALID PASSWORD";
     public static final String INVALID_PASSWORD_LENGTH_MSG = "Password must be greater or equals to " + MIN_PASSWORD_LENGTH_VALUE + " characters long";
     public static final String INVALID_PASSWORD_UPPERCASE_MSG = "Password must contain at least one UPPERCASE character.";
