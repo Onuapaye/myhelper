@@ -3,6 +3,7 @@ package com.martin.myhelper.views;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -111,41 +112,76 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUserToFireStore(){
 
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-
         _loginButton = findViewById(R.id.loginButton);
-        _loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+       _loginButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
 
-            boolean isValidationSuccessful = Utility.validateInputsOnUserLogin(LoginActivity.this,
-                    email.getText().toString().trim(), password.getText().toString().trim());
+               email = findViewById(R.id.email);
+               password = findViewById(R.id.password);
 
-            if (!isValidationSuccessful){
-                return;
-            }
+               String _email = email.getText().toString();
+               String _password = password.getText().toString();
 
-            Intent intent = getIntent();
-            intent.getExtras();
+               crudHelper = new ElderlyVolunteerCRUDHelper();
 
-            final int userType = intent.getIntExtra("userType",0);
+               boolean isValidationSuccessful = Utility.validateInputsOnUserLogin(LoginActivity.this, _email, _password);
 
-            String[] _emailPassword = { email.getText().toString(), password.getText().toString() };
-            crudHelper = new ElderlyVolunteerCRUDHelper();
+               if (!isValidationSuccessful){
+                   return;
+               }
 
-            if(userType == GenericModel.USER_TYPE_ELDER){
-                loginFireStoreUser(LoginActivity.this, ElderlyHomeActivity.class,
-                        LoginActivity.this, _emailPassword , "elders");
-            } else {
-                loginFireStoreUser(LoginActivity.this, VolunteerHomeActivity.class,
-                        LoginActivity.this, _emailPassword , "volunteers");
-            }
-            }
-        });
+               Intent intent = getIntent();
+               intent.getExtras();
+
+               int userType = intent.getIntExtra("userType",0);
+
+               if(userType == GenericModel.USER_TYPE_ELDER){
+                   loginFireStoreUser(LoginActivity.this, _email, _password, userType);
+               } else if (userType == GenericModel.USER_TYPE_VOLUNTEER) {
+                   loginFireStoreUser(LoginActivity.this,  _email, _password , userType);
+               }
+           }
+       });
     }
 
 
+    /***
+     * Logs-in a user into the application after a successful authentication using FirebaseAuth. It opens
+     * a new activity or screen if successful else remains on the same page
+     * @param appCompatActivity
+     * @param _email
+     * @param _password
+     */
+    private void loginFireStoreUser(final AppCompatActivity appCompatActivity, final String _email, String _password, final int userTYPE){
+
+        crudHelper = new ElderlyVolunteerCRUDHelper();
+
+        firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+        firebaseAuth.signInWithEmailAndPassword(_email, _password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+
+                Intent intent;
+
+                if (userTYPE == GenericModel.USER_TYPE_ELDER){
+
+                    intent = new Intent(LoginActivity.this, ElderlyHomeActivity.class);
+                    startActivity(intent);
+
+                } else if (userTYPE == GenericModel.USER_TYPE_VOLUNTEER){
+                    intent = new Intent(LoginActivity.this, VolunteerHomeActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Utility.showInformationDialog("LOGIN ERROR", e.getMessage(), appCompatActivity);
+            }
+        });
+    }
 
     private void validateEmailOnEditTextChange(){
 
@@ -165,59 +201,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-    /***
-     * Logs-in a user into the application after a successful authentication using FirebaseAuth. It opens
-     * a new activity or screen if successful else remains on the same page
-     * @param sourceActivity
-     * @param _emailPassword
-     */
-    private void loginFireStoreUser(final Context sourceActivity, final Class destinationActivity, final AppCompatActivity appCompatActivity,
-                                    final String[] _emailPassword, final String  modelTableAsCollection){
-        crudHelper = new ElderlyVolunteerCRUDHelper();
-
-        firebaseAuth = Utility.getFirebaseAuthenticationInstance();
-        firebaseAuth.signInWithEmailAndPassword(_emailPassword[0], _emailPassword[1]).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-
-                // get and set user type and redirect to the correct page or screen
-                firebaseFirestore = Utility.getFirebaseFireStoreInstance();
-                final DocumentReference documentReference = firebaseFirestore.collection(modelTableAsCollection).document(crudHelper.getCurrentUserID());
-                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            DocumentSnapshot documentSnapshot = task.getResult();
-
-                            if (documentSnapshot.exists()){
-
-                                String ut = documentSnapshot.getString("userType");
-
-                                if (Integer.parseInt(ut) == GenericModel.USER_TYPE_ELDER){
-
-                                    Intent intent = new Intent(LoginActivity.this, ElderlyHomeActivity.class);
-                                    startActivity(intent);
-
-                                } if (Integer.parseInt(ut) == GenericModel.USER_TYPE_VOLUNTEER){
-                                    Intent intent = new Intent(LoginActivity.this, VolunteerHomeActivity.class);
-                                    startActivity(intent);
-                                }
-                            }
-                        }
-                    }
-                });
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Utility.showInformationDialog("LOGIN ERROR", e.getMessage(), appCompatActivity);
-            }
-        });
-    }
-
 
 }

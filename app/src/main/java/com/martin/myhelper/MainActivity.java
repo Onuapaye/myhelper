@@ -89,10 +89,10 @@ public class MainActivity extends AppCompatActivity {
                     CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG, this);
         }
 
-        if (intent.hasExtra("loginPageHeaderTitle")){
+        /*if (intent.hasExtra("loginPageHeaderTitle")){
             TextView textView = findViewById(R.id.pageHeaderTitle);
             textView.setText(intent.getStringExtra("loginPageHeaderTitle"));
-        }
+        }*/
     }
 
     private  void showPasswordResetSuccessMessage(){

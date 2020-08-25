@@ -56,6 +56,7 @@ public class Utility extends Activity {
     public static final String INVALID_PASSWORD_LOWERCASE_MSG = "Password must contain at least one LOWERCASE character.";
     public static final String INVALID_PASSWORD_NUMBER_SYMBOL_MSG = "Password must contain at least one NUMERIC and SYMBOL character.";
     public static final String INVALID_PASSWORD_ALL_MSG = "Password should be at least " + MIN_PASSWORD_LENGTH_VALUE + " characters and must contain at least one UPPERCASE, LOWERCASE, NUMBER, and a SPECIAL CHARACTER";
+    public static final String INVALID_REPASSWORD_ALL_MSG = "Re-type Password should be at least " + MIN_PASSWORD_LENGTH_VALUE + " characters and must contain at least one UPPERCASE, LOWERCASE, NUMBER, and a SPECIAL CHARACTER";
     public static final String SELECT_SERVICE_TYPE = "Select a service type to offer";
     public static final String SELECT_DAYS_FOR_SERVICE_MSG = "Please select at least one or more DAYS FOR SERVICE PROVISION from the list";
     public static final String SELECT_TIMES_FOR_SERVICE_MSG = "Please select at least one or more TIME ON DAYS FOR SERVICE PROVISION from the list";
