@@ -100,18 +100,10 @@ public class VolunteerCRUDHelper extends Activity {
                                             Utility.showInformationDialog("E-MAIL NOT DELIVERED",
                                                     Utility.CREATE_RECORD_EMAIL_FAILURE_MSG, appCompatActivity);
                                         }
-                                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-
-                                            Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE, CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG, appCompatActivity);
-
-                                            /*Intent intent = new Intent(appCompatActivity, LoginActivity.class);
-                                            intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG);
-                                            intent.putExtra("loginPageHeaderTitle", "VOLUNTEER");
-                                            startActivity(intent);*/
-                                        }
                                     });
+
+                                    Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE,
+                                            CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG, appCompatActivity);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
