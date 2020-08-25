@@ -32,6 +32,7 @@ import com.squareup.picasso.Picasso;
 
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_EMAIL_SUCCESS_MSG;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_MSG;
+import static com.martin.myhelper.helpers.Utility.REQUIRED_FIELD_TITLE;
 import static com.martin.myhelper.model.GenericModel.PICK_IMAGE_REQUEST;
 
 public class VolunteerRegistrationActivity extends AppCompatActivity {
@@ -77,6 +78,8 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
 
         // imageViewOnClick event
         this.monitorOnClickEventForImageView();
+
+        this.validateOtherInputsOnEditTextChange();
     }
 
     /***
@@ -184,6 +187,78 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
 
                     }
                 }
+            }
+        });
+    }
+
+    private void validateOtherInputsOnEditTextChange(){
+        this.setFieldValues();
+
+        // first name
+        firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    if (firstName.getText() == null || firstName.getText().toString().isEmpty()) {
+                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your first name.", appCompatActivity);
+                        return;
+                    }
+                }
+            }
+        });
+
+        // last name
+        lastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus) {
+                    if (lastName.getText() == null || lastName.getText().toString().isEmpty()) {
+                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your last name.", appCompatActivity);
+                        return;
+                    }
+                }
+            }
+        });
+
+        // email
+
+        // mobile number
+        mobileNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    if (mobileNumber.getText() == null || mobileNumber.getText().toString().isEmpty()) {
+                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your mobile number.", appCompatActivity);
+                        return;
+                    }
+
+                    if (mobileNumber.getText().toString().trim().length() != 10) {
+                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter a mobile number NOT less/greater than 10 characters", appCompatActivity);
+                        return;
+                    }
+                }
+            }
+        });
+
+        // password
+        retypePassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus){
+                    if (Integer.parseInt(String.valueOf(retypePassword.getText().toString().trim().length())) > 0){
+
+                        if (!Utility.isPasswordLengthValid(retypePassword.getText().toString().trim())
+                                || !Utility.isPasswordHavingNumberAndSymbol(retypePassword.getText().toString().trim())
+                                || !Utility.isPasswordHavingLowerCase(retypePassword.getText().toString().trim())
+                                || !Utility.isPasswordHavingUpperCase(retypePassword.getText().toString().trim()) ){
+
+                            Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE,
+                                    Utility.INVALID_REPASSWORD_ALL_MSG, appCompatActivity);
+                            return;
+                        }
+                    }
+                }
+
             }
         });
     }

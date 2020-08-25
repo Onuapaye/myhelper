@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.martin.myhelper.MainActivity;
 import com.martin.myhelper.R;
+import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
 import com.martin.myhelper.helpers.Utility;
 
 import static com.martin.myhelper.helpers.Utility.CREATE_ELDERLY_REQUEST_SUCCESS_MSG;
@@ -31,6 +33,18 @@ public class ElderlyHomeActivity extends AppCompatActivity {
 
         this.showFeedBackSuccessMessage();
         this.showCreateRequestSuccessMessage();
+
+        this.handleLogOutButtonClick();
+    }
+
+    private void handleLogOutButtonClick(){
+        TextView logOut = findViewById(R.id.logOutButton);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ElderlyVolunteerCRUDHelper.signOutUser(ElderlyHomeActivity.this, MainActivity.class);
+            }
+        });
     }
 
     private void handleViewVolunteerServicesCardViewOnClick(){

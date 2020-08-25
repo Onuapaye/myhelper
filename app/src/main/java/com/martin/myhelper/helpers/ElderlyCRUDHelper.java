@@ -48,32 +48,38 @@ public class ElderlyCRUDHelper extends Activity {
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firebaseFirestore;
     private Intent intent;
-    public void createElderlyUserRecord(final AppCompatActivity appCompatActivity, final String[] _modelArray){
+
+    public void createElderlyUserRecord(final AppCompatActivity appCompatActivity, final ElderlyModel elderlyModel){
+
         // create the elderly record after the user account is created
         firebaseAuth = Utility.getFirebaseAuthenticationInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseAuth.createUserWithEmailAndPassword(_modelArray[2], _modelArray[4])
+        elderlyModel.setId(firebaseUser.getUid());
+
+        firebaseAuth.createUserWithEmailAndPassword(elderlyModel.getEmail(), elderlyModel.getPassword())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     // create an instance of the DocumentReference class of FirebaseStore
                     firebaseFirestore = Utility.getFirebaseFireStoreInstance();
-                    DocumentReference documentReference = firebaseFirestore.collection("elders").document(firebaseUser.getUid());
+                    DocumentReference documentReference = firebaseFirestore.collection("elders").document(elderlyModel.getId());
 
                     // create a hash map of the object to be stored
                     Map<String, Object> modelMap = new HashMap<>();
-                    modelMap.put("id", firebaseUser.getUid());
-                    modelMap.put("firstName", _modelArray[0]);
-                    modelMap.put("lastName", _modelArray[1]);
-                    modelMap.put("email", _modelArray[2]);
-                    modelMap.put("mobileNumber", _modelArray[3]);
-                    modelMap.put("userType", _modelArray[5]);
+                    modelMap.put("id", elderlyModel.getId());
+                    modelMap.put("firstName", elderlyModel.getFirstName());
+                    modelMap.put("lastName", elderlyModel.getLastName());
+                    modelMap.put("email", elderlyModel.getEmail());
+                    modelMap.put("mobileNumber", elderlyModel.getMobileNumber());
+                    modelMap.put("userType", elderlyModel.getUserType());
                     modelMap.put("createdAt", FieldValue.serverTimestamp());
                     modelMap.put("updatedAt", FieldValue.serverTimestamp());
+
                     documentReference.set(modelMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+
                             // send an e-mail for verification
                             firebaseUser.sendEmailVerification().addOnFailureListener(new OnFailureListener() {
                                 @Override
