@@ -53,14 +53,17 @@ public class ElderlyCRUDHelper extends Activity {
 
         // create the elderly record after the user account is created
         firebaseAuth = Utility.getFirebaseAuthenticationInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        elderlyModel.setId(firebaseUser.getUid());
 
         firebaseAuth.createUserWithEmailAndPassword(elderlyModel.getEmail(), elderlyModel.getPassword())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
                 if (task.isSuccessful()) {
+
+                    firebaseUser = firebaseAuth.getCurrentUser();
+                    elderlyModel.setId(firebaseAuth.getCurrentUser().getUid());
+
                     // create an instance of the DocumentReference class of FirebaseStore
                     firebaseFirestore = Utility.getFirebaseFireStoreInstance();
                     DocumentReference documentReference = firebaseFirestore.collection("elders").document(elderlyModel.getId());
@@ -88,7 +91,11 @@ public class ElderlyCRUDHelper extends Activity {
                                            Utility.CREATE_RECORD_EMAIL_FAILURE_MSG, appCompatActivity);
                                 }
                             });
+
+                            Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE,
+                                    CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG, appCompatActivity);
                         }
+
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
@@ -97,8 +104,6 @@ public class ElderlyCRUDHelper extends Activity {
                             return;
                         }
                     });
-                    Utility.showInformationDialog(CREATE_RECORD_SUCCESS_TITLE,
-                            CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG, appCompatActivity);
                 } else {
                     Utility.showInformationDialog("ERROR!", task.getException().getMessage(), appCompatActivity);
                     return;
