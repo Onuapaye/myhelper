@@ -25,6 +25,7 @@ import com.martin.myhelper.helpers.OpenActivity;
 import com.martin.myhelper.helpers.Utility;
 import com.martin.myhelper.helpers.VolunteerCRUDHelper;
 import com.martin.myhelper.model.GenericModel;
+import com.martin.myhelper.model.VolunteerModel;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
@@ -121,19 +122,18 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 } else {
 
                     // create an array to hold the data
-                    String[] modelArray = new String[]{
-                        firstName.getText().toString(),
-                        lastName.getText().toString(),
-                        email.getText().toString(),
-                        mobileNumber.getText().toString(),
-                        password.getText().toString(),
-                        String.valueOf(userType),
-                        imageExtension = getFileExtension(imageUri)
-                    };
+                    VolunteerModel model = new VolunteerModel();
+                    model.setFirstName(firstName.getText().toString());
+                    model.setLastName(lastName.getText().toString());
+                    model.setEmail(email.getText().toString());
+                    model.setMobileNumber(mobileNumber.getText().toString());
+                    model.setPassword(password.getText().toString());
+                    model.setUserType(userType);
+                    model.setImageType(getFileExtension(imageUri));
 
                    // call method to create the record for the volunteer
                    crudHelper = new VolunteerCRUDHelper();
-                   crudHelper.createVolunteerUserRecord(appCompatActivity, modelArray, imageUri);
+                   crudHelper.createVolunteerUserRecord(appCompatActivity, model, imageUri);
 
                     // redirect to login activity
                     intent = new Intent(context, MainActivity.class);

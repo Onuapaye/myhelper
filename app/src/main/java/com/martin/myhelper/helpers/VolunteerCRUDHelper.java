@@ -42,22 +42,25 @@ public class VolunteerCRUDHelper extends Activity {
     private StorageReference storageReference;
 
 
-    public void createVolunteerUserRecord(final AppCompatActivity appCompatActivity, final String[] _modelArray, final Uri profileImageUri){
+    public void createVolunteerUserRecord(final AppCompatActivity appCompatActivity, final VolunteerModel volunteerModel, final Uri profileImageUri){
 
         // create the elderly record after the user account is created
         firebaseAuth = Utility.getFirebaseAuthenticationInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
 
         // 1. create the user account via firebase auth if not null
-        firebaseAuth.createUserWithEmailAndPassword(_modelArray[2], _modelArray[4]).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.createUserWithEmailAndPassword(volunteerModel.getEmail(), volunteerModel.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
+                    // set the model user id
+                    firebaseUser = firebaseAuth.getCurrentUser();
+                    volunteerModel.setId(firebaseUser.getUid());
+
                     // 2. create the image record for the volunteer
                     storageReference = FirebaseStorage.getInstance().getReference("images");
-                    StorageReference fileReference = storageReference.child(firebaseUser.getUid() + "." + _modelArray[6]);
+                    StorageReference fileReference = storageReference.child(firebaseUser.getUid() + "." + volunteerModel.getImageType());
 
                     // upload the image file into FireStorage
                     fileReference.putFile(profileImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -74,13 +77,13 @@ public class VolunteerCRUDHelper extends Activity {
                             // create a hash map of the object to be stored
                             Map<String, Object> modelMap = new HashMap<>();
 
-                            modelMap.put("id", firebaseUser.getUid());
-                            modelMap.put("firstName", _modelArray[0]);
-                            modelMap.put("lastName", _modelArray[1]);
-                            modelMap.put("email", _modelArray[2]);
-                            modelMap.put("mobileNumber", _modelArray[3]);
-                            modelMap.put("userType", _modelArray[5]);
-                            modelMap.put("imageType", _modelArray[6]);
+                            modelMap.put("id", volunteerModel.getId());
+                            modelMap.put("firstName",volunteerModel.getFirstName());
+                            modelMap.put("lastName", volunteerModel.getLastName());
+                            modelMap.put("email", volunteerModel.getEmail());
+                            modelMap.put("mobileNumber", volunteerModel.getMobileNumber());
+                            modelMap.put("userType",volunteerModel.getUserType());
+                            modelMap.put("imageType", volunteerModel.getImageType());
                             modelMap.put("createdAt", FieldValue.serverTimestamp());
                             modelMap.put("updatedAt", FieldValue.serverTimestamp());
                             modelMap.put("profilePhotoUrl", taskSnapshot.getUploadSessionUri().toString());// set the image path from the taskSnapshot
@@ -89,6 +92,7 @@ public class VolunteerCRUDHelper extends Activity {
                             // create an instance of the DocumentReference class of FirebaseStore
                             firebaseFirestore = Utility.getFirebaseFireStoreInstance();
                             DocumentReference documentReference = firebaseFirestore.collection("volunteers").document(firebaseUser.getUid());
+
                             documentReference.set(modelMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
