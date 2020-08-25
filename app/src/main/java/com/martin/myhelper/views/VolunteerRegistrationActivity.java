@@ -157,8 +157,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 if (!hasFocus){
                     if (!Utility.isEmailAddressValid(email.getText().toString().trim())){
                         Utility.showInformationDialog(Utility.INVALID_EMAIL_TITLE, Utility.INVALID_EMAIL_MSG, appCompatActivity);
-                        //email.getFocusable();
-                        email.setFocusable(true);
+                        email.requestFocus();
                         return;
                     }
                 }
@@ -198,9 +197,10 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
         firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
+                if (!hasFocus) {
                     if (firstName.getText() == null || firstName.getText().toString().isEmpty()) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your first name.", appCompatActivity);
+                        firstName.requestFocus();
                         return;
                     }
                 }
@@ -214,6 +214,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 if(hasFocus) {
                     if (lastName.getText() == null || lastName.getText().toString().isEmpty()) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your last name.", appCompatActivity);
+                        lastName.requestFocus();
                         return;
                     }
                 }
@@ -226,14 +227,16 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
         mobileNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
+                if (!hasFocus) {
                     if (mobileNumber.getText() == null || mobileNumber.getText().toString().isEmpty()) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your mobile number.", appCompatActivity);
+                        mobileNumber.requestFocus();
                         return;
                     }
 
                     if (mobileNumber.getText().toString().trim().length() != 10) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter a mobile number NOT less/greater than 10 characters", appCompatActivity);
+                        mobileNumber.requestFocus();
                         return;
                     }
                 }
@@ -254,6 +257,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
 
                             Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE,
                                     Utility.INVALID_REPASSWORD_ALL_MSG, appCompatActivity);
+                            retypePassword.requestFocus();
                             return;
                         }
                     }
