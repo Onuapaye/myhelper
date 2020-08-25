@@ -157,7 +157,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 if (!hasFocus){
                     if (!Utility.isEmailAddressValid(email.getText().toString().trim())){
                         Utility.showInformationDialog(Utility.INVALID_EMAIL_TITLE, Utility.INVALID_EMAIL_MSG, appCompatActivity);
-                        email.requestFocus();
+                        //email.requestFocus();
                         return;
                     }
                 }
@@ -200,7 +200,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 if (!hasFocus) {
                     if (firstName.getText() == null || firstName.getText().toString().isEmpty()) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your first name.", appCompatActivity);
-                        firstName.requestFocus();
+                        //firstName.requestFocus();
                         return;
                     }
                 }
@@ -214,7 +214,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 if(hasFocus) {
                     if (lastName.getText() == null || lastName.getText().toString().isEmpty()) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your last name.", appCompatActivity);
-                        lastName.requestFocus();
+                        //lastName.requestFocus();
                         return;
                     }
                 }
@@ -230,13 +230,13 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 if (!hasFocus) {
                     if (mobileNumber.getText() == null || mobileNumber.getText().toString().isEmpty()) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your mobile number.", appCompatActivity);
-                        mobileNumber.requestFocus();
+                        //mobileNumber.requestFocus();
                         return;
                     }
 
                     if (mobileNumber.getText().toString().trim().length() != 10) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter a mobile number NOT less/greater than 10 characters", appCompatActivity);
-                        mobileNumber.requestFocus();
+                        //mobileNumber.requestFocus();
                         return;
                     }
                 }
@@ -257,7 +257,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
 
                             Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE,
                                     Utility.INVALID_REPASSWORD_ALL_MSG, appCompatActivity);
-                            retypePassword.requestFocus();
+                            //retypePassword.requestFocus();
                             return;
                         }
                     }
@@ -285,7 +285,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
     //private val selectedImageUri: Uri? = null;
     private void monitorOnClickEventForImageView(){
 
-        profileImage = (CircularImageView) findViewById(R.id.profileImage);
+        profileImage = findViewById(R.id.profileImage);
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -315,14 +315,14 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
     // Get values from some EditTexts and assign or sets their values to
     // other variables
     private void setFieldValues(){
-        firstName = (EditText) findViewById(R.id.firstName);
-        lastName = (EditText) findViewById(R.id.lastName);
-        email = (EditText) findViewById(R.id.email);
-        mobileNumber = (EditText) findViewById(R.id.mobileNumber);
-        password = (EditText) findViewById(R.id.password);
-        retypePassword = (EditText) findViewById(R.id.retypePassword);
+        firstName = findViewById(R.id.firstName);
+        lastName = findViewById(R.id.lastName);
+        email = findViewById(R.id.email);
+        mobileNumber = findViewById(R.id.mobileNumber);
+        password = findViewById(R.id.password);
+        retypePassword = findViewById(R.id.retypePassword);
         userType = GenericModel.USER_TYPE_VOLUNTEER;
-        profileImage = (CircularImageView) findViewById(R.id.profileImage);
+        profileImage = findViewById(R.id.profileImage);
     }
 
 }
