@@ -150,7 +150,8 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
         volunteerModel.setTimesForService(actualPickedItemsForTimesForService);
         volunteerModel.setTimesForCalls(actualPickedItemsForTimesForCalls);
 
-        volunteerCRUDHelper.updateVolunteerServiceProfile(VolunteerProfileEditActivity.this, volunteerModel);
+        volunteerCRUDHelper.updateVolunteerServiceProfile(VolunteerProfileEditActivity.this,
+                volunteerModel);
 
         // redirect to login activity
         //intent = new Intent(VolunteerProfileEditActivity.this, VolunteerProfilesActivity.class);

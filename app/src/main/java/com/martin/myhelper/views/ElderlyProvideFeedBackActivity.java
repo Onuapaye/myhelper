@@ -77,7 +77,8 @@ public class ElderlyProvideFeedBackActivity extends AppCompatActivity {
         serviceTypeIDs = getResources().getStringArray(R.array.serviceTypeIDs);
 
         serviceTypes = new ArrayList<>();
-        final CollectionReference elderlyCollection = firebaseFirestore.collection("elderly_requests").document(firebaseAuth.getCurrentUser().getUid()).collection("requests");
+        final CollectionReference elderlyCollection = firebaseFirestore.collection("elderly_requests")
+                .document(firebaseAuth.getCurrentUser().getUid()).collection("requests");
         elderlyCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
               @Override
               public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -128,7 +129,8 @@ public class ElderlyProvideFeedBackActivity extends AppCompatActivity {
 
                               //serviceTypes.add(String.valueOf());
 
-                              arrayAdapter = new ArrayAdapter<String>(ElderlyProvideFeedBackActivity.this, support_simple_spinner_dropdown_item, serviceTypes);
+                              arrayAdapter = new ArrayAdapter<String>(ElderlyProvideFeedBackActivity.this,
+                                      support_simple_spinner_dropdown_item, serviceTypes);
                               arrayAdapter.setDropDownViewResource(support_simple_spinner_dropdown_item);
                               spnServiceTypes.setAdapter(arrayAdapter);
                           }
@@ -136,8 +138,6 @@ public class ElderlyProvideFeedBackActivity extends AppCompatActivity {
                   }
               }
         });
-
-
     }
 
     private void handleSpinnerSelectedItemChange(){
@@ -199,19 +199,6 @@ public class ElderlyProvideFeedBackActivity extends AppCompatActivity {
             }
         });
     }
-/*
-modelMap.put("id", elderlyModel.getServiceRequestId());
-        modelMap.put("elderlyId", elderlyModel.getId());
-        modelMap.put("requestVolunteerId", elderlyModel.getServiceRequestVolunteerId());
-        modelMap.put("requestServiceTypeId", elderlyModel.getServiceRequestServiceTypeId());
-        modelMap.put("requestDaysForService", elderlyModel.getDaysForService());
-        modelMap.put("requestTimesForService", elderlyModel.getTimesForService());
-        //modelMap.put("timesForCalls", elderlyModel.getTimesForCalls());
-        modelMap.put("requestMessage", elderlyModel.getServiceRequestMessage());
-        modelMap.put("createdAt", FieldValue.serverTimestamp());
-        modelMap.put("updatedAt", FieldValue.serverTimestamp());
- */
-
 
     /**
      * Loads all volunteer with their profiles based on the service type selected
@@ -228,7 +215,8 @@ modelMap.put("id", elderlyModel.getServiceRequestId());
         elderlyRequestsList = new ArrayList<>();
 
         // STEP 1. get the elderly requests;
-        final CollectionReference elderlyCollection = firebaseFirestore.collection("elderly_requests").document(firebaseAuth.getCurrentUser().getUid()).collection("requests");
+        final CollectionReference elderlyCollection = firebaseFirestore.collection("elderly_requests")
+                .document(firebaseAuth.getCurrentUser().getUid()).collection("requests");
         elderlyCollection.whereEqualTo("requestServiceTypeId", serviceTypeID)
                 .whereEqualTo("elderlyId", firebaseAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -256,8 +244,8 @@ modelMap.put("id", elderlyModel.getServiceRequestId());
                 }
 
                 RecyclerView viewVolunteerServices = findViewById(R.id.rcvViewProvidedServices);
-
-                ElderlyProvideFeedbackAdapter provideFeedbackAdapter = new ElderlyProvideFeedbackAdapter(elderlyRequestsList, ElderlyProvideFeedBackActivity.this );
+                ElderlyProvideFeedbackAdapter provideFeedbackAdapter = new ElderlyProvideFeedbackAdapter(elderlyRequestsList,
+                        ElderlyProvideFeedBackActivity.this );
                 viewVolunteerServices.setAdapter(provideFeedbackAdapter);
                 viewVolunteerServices.setLayoutManager(new LinearLayoutManager(ElderlyProvideFeedBackActivity.this));
 

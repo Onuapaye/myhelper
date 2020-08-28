@@ -145,7 +145,7 @@ public class VolunteerProfileCreateActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-                String bis = spnServiceType.getSelectedItem().toString();
+                //String bis = spnServiceType.getSelectedItem().toString();
 
                 if (!(spnServiceType.getSelectedItem().toString().trim() == "")){
 

@@ -97,9 +97,13 @@ public class VolunteerViewElderlyRequestsActivity extends AppCompatActivity {
 
                                     RecyclerView rcvViewElderlyRequest = findViewById(R.id.rcvProvidedServices);
 
-                                    VolunteerViewElderlyRequestsAdapter viewElderlyRequestsAdapter = new VolunteerViewElderlyRequestsAdapter(VolunteerViewElderlyRequestsActivity.this, listOfElders);
+                                    VolunteerViewElderlyRequestsAdapter viewElderlyRequestsAdapter =
+                                            new VolunteerViewElderlyRequestsAdapter(
+                                            VolunteerViewElderlyRequestsActivity.this, listOfElders);
+
                                     rcvViewElderlyRequest.setAdapter(viewElderlyRequestsAdapter);
-                                    rcvViewElderlyRequest.setLayoutManager(new LinearLayoutManager(VolunteerViewElderlyRequestsActivity.this));
+                                    rcvViewElderlyRequest.setLayoutManager(new LinearLayoutManager(
+                                            VolunteerViewElderlyRequestsActivity.this));
                                 }
                             });
                     }

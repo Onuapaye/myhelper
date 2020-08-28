@@ -60,6 +60,17 @@ public class ElderlyHomeActivity extends AppCompatActivity {
         });
     }
 
+    private  void showFeedBackSuccessMessage(){
+        Intent intent = getIntent();
+        intent.getExtras();
+
+        if (intent.hasExtra("feedBackProvided")){
+            // show a message for successful record recreation
+            Utility.showInformationDialog("FEEDBACK SUCCESS",
+                    intent.getStringExtra("feedBackProvided") , this);
+        }
+    }
+
     private void handleViewListOnClick(){
         TextView textView = findViewById(R.id.viewListOfVolunteerServiceTextView);
         textView.setOnClickListener(new View.OnClickListener() {
@@ -83,17 +94,6 @@ public class ElderlyHomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    private  void showFeedBackSuccessMessage(){
-        Intent intent = getIntent();
-        intent.getExtras();
-
-        if (intent.hasExtra("feedBackProvided")){
-            // show a message for successful record recreation
-            Utility.showInformationDialog("FEEDBACK SUCCESS",
-                    intent.getStringExtra("feedBackProvided") , this);
-        }
     }
 
     private  void showCreateRequestSuccessMessage(){

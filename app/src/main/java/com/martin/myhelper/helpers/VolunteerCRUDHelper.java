@@ -48,7 +48,8 @@ public class VolunteerCRUDHelper extends Activity {
         firebaseAuth = Utility.getFirebaseAuthenticationInstance();
 
         // 1. create the user account via firebase auth if not null
-        firebaseAuth.createUserWithEmailAndPassword(volunteerModel.getEmail(), volunteerModel.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.createUserWithEmailAndPassword(volunteerModel.getEmail(), volunteerModel.getPassword())
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -60,7 +61,8 @@ public class VolunteerCRUDHelper extends Activity {
 
                     // 2. create the image record for the volunteer
                     storageReference = FirebaseStorage.getInstance().getReference("images");
-                    StorageReference fileReference = storageReference.child(firebaseUser.getUid() + "." + volunteerModel.getImageType());
+                    StorageReference fileReference = storageReference
+                            .child(firebaseUser.getUid() + "." + volunteerModel.getImageType());
 
                     // upload the image file into FireStorage
                     fileReference.putFile(profileImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -91,7 +93,8 @@ public class VolunteerCRUDHelper extends Activity {
                             // 3. create the volunteer record including adding the profileUrl after saving the image
                             // create an instance of the DocumentReference class of FirebaseStore
                             firebaseFirestore = Utility.getFirebaseFireStoreInstance();
-                            DocumentReference documentReference = firebaseFirestore.collection("volunteers").document(firebaseUser.getUid());
+                            DocumentReference documentReference = firebaseFirestore.collection("volunteers")
+                                    .document(firebaseUser.getUid());
 
                             documentReference.set(modelMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -143,7 +146,8 @@ public class VolunteerCRUDHelper extends Activity {
     }
 
 
-    public void createVolunteerServiceProfile(final AppCompatActivity appCompatActivity, final VolunteerModel volunteerModel){
+    public void createVolunteerServiceProfile(final AppCompatActivity appCompatActivity,
+                                              final VolunteerModel volunteerModel){
 
             // create an instance of the DocumentReference class of FirebaseStore
             firebaseAuth = Utility.getFirebaseAuthenticationInstance();
@@ -165,19 +169,22 @@ public class VolunteerCRUDHelper extends Activity {
             modelMap.put("updatedAt", FieldValue.serverTimestamp());
 
             DocumentReference documentReference = firebaseFirestore.collection("volunteer_profiles")
-                                                  .document(firebaseAuth.getCurrentUser().getUid()).collection("profiles").document(profileID);
+                                                  .document(firebaseAuth.getCurrentUser().getUid())
+                    .collection("profiles").document(profileID);
 
             documentReference.set(modelMap).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE, CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
+                    Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE,
+                            CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
                     return;
                 }
             });
 
     }
 
-    public void updateVolunteerServiceProfile(final AppCompatActivity appCompatActivity, final VolunteerModel volunteerModel){
+    public void updateVolunteerServiceProfile(final AppCompatActivity appCompatActivity,
+                                              final VolunteerModel volunteerModel){
 
         // create an instance of the DocumentReference class of FirebaseStore
         firebaseAuth = Utility.getFirebaseAuthenticationInstance();
@@ -193,15 +200,17 @@ public class VolunteerCRUDHelper extends Activity {
         modelMap.put("description", volunteerModel.getDescriptionOfService());
         modelMap.put("updatedAt", FieldValue.serverTimestamp());
 
-        DocumentReference documentReference = firebaseFirestore.collection("volunteer_profiles")
-                                                               .document(firebaseAuth.getCurrentUser().getUid()).collection("profiles")
-                                                               .document(volunteerModel.getProfileId());
+        DocumentReference documentReference = firebaseFirestore
+                .collection("volunteer_profiles")
+                .document(firebaseAuth.getCurrentUser().getUid()).collection("profiles")
+                .document(volunteerModel.getProfileId());
 
         // documentReference.set(modelMap, SetOptions.merge());
         documentReference.update(modelMap).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE, CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
+                Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE,
+                        CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
                 return;
             }
         });
