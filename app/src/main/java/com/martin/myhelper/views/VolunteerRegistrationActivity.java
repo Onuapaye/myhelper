@@ -112,13 +112,11 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 boolean validationSucceeded = Utility.validateInputsOnCreate(appCompatActivity, firstName,
                         lastName, email, mobileNumber, password, retypePassword);
 
-                if (imageUri == null){
+                if ( !validationSucceeded ) {
+                    return;
+                } else if (imageUri == null){
                     Utility.showInformationDialog("IMAGE VALIDATION FAILED",
                             "Please upload your image", appCompatActivity);
-                    return;
-                }
-
-                if ( !validationSucceeded ) {
                     return;
                 } else {
 
@@ -132,16 +130,15 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                     model.setUserType(userType);
                     model.setImageType(getFileExtension(imageUri));
 
-                   // call method to create the record for the volunteer
-                   crudHelper = new VolunteerCRUDHelper();
-                   crudHelper.createVolunteerUserRecord(appCompatActivity, model, imageUri);
+                    // call method to create the record for the volunteer
+                    crudHelper = new VolunteerCRUDHelper();
+                    crudHelper.createVolunteerUserRecord(appCompatActivity, model, imageUri);
 
                     // redirect to login activity
                     intent = new Intent(context, MainActivity.class);
                     intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG);
                     intent.putExtra("loginPageHeaderTitle", "VOLUNTEER");
                     startActivity(intent);
-
                 }
             }
         });

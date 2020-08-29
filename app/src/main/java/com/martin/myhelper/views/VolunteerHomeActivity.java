@@ -114,7 +114,7 @@ public class VolunteerHomeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         intent.getExtras();
 
-        if (intent.hasExtra("recordUpdate")){
+        if (intent.hasExtra("recordUpdated")){
             Utility.showInformationDialog(UPDATE_RECORD_SUCCESS_TITLE, UPDATE_RECORD_SUCCESS_MSG, this);
         }
     }
