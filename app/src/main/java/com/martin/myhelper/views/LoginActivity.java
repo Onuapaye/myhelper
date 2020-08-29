@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         intent.getExtras();
 
         final int userType = intent.getIntExtra("userType",0);
+        Log.e("USER TYPE", String.valueOf(userType));
 
         registerLinkTextView = findViewById(R.id.registerLink);
         registerLinkTextView.setOnClickListener(new View.OnClickListener() {
@@ -174,18 +175,21 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(AuthResult authResult) {
 
-                Intent intent;
+                firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+                DocumentReference documentReference = firebaseFirestore.collection("elders").document(firebaseAuth.getCurrentUser().getUid());
+                documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot snapshot) {
+                        Intent intent;
 
-                if (userTYPE == GenericModel.USER_TYPE_ELDER){
-
-                    intent = new Intent(LoginActivity.this, ElderlyHomeActivity.class);
-                    startActivity(intent);
-
-                } else if (userTYPE == GenericModel.USER_TYPE_VOLUNTEER){
-                    intent = new Intent(LoginActivity.this, VolunteerHomeActivity.class);
-                    startActivity(intent);
-                }
-
+                        if (snapshot.exists()){
+                            intent = new Intent(LoginActivity.this, ElderlyHomeActivity.class);
+                        } else {
+                            intent = new Intent(LoginActivity.this, VolunteerHomeActivity.class);
+                        }
+                        startActivity(intent);
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

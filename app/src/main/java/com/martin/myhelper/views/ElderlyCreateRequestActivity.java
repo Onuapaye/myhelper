@@ -75,8 +75,8 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
     private ArrayList<String> actualPickedItemsForTimesForService = new ArrayList<>();
     //private ArrayList<String> actualPickedItemsForTimesForCalls = new ArrayList<>();
 
-    private AlertDialog.Builder mBuilder;
-    private AlertDialog alertDialog;
+    private AlertDialog.Builder daysAlertBuilder, timesAlertBuilder, callsAlertBuilder;
+    private AlertDialog daysAlertDialog, timesAlertDialog, callAlertDialog;
 
     private TextView _tvServiceDescription, _tvServiceDays, _tvServiceTimes, _tvServiceCalls, _tvServiceVolunteerName, _tvServiceVolunteerMobile, _tvSelectedServiceName;
     private TextView _tvElderlyDays, _tvElderlyTimes;
@@ -295,9 +295,9 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                mBuilder = new AlertDialog.Builder(ElderlyCreateRequestActivity.this);
-                mBuilder.setTitle("Available Days For Service");
-                mBuilder.setMultiChoiceItems(elderlyAvailableDays, checkedDaysItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
+                daysAlertBuilder = new AlertDialog.Builder(ElderlyCreateRequestActivity.this);
+                daysAlertBuilder.setTitle("Days for Service");
+                daysAlertBuilder.setMultiChoiceItems(elderlyAvailableDays, checkedDaysItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int position, boolean isItemChecked) {
 
@@ -309,11 +309,13 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
                     }
                 });
 
-                mBuilder.setCancelable(false);
-                mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                daysAlertBuilder.setCancelable(false);
+                daysAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String item = "";
+                        actualPickedItemsForDays.clear();
+
                         for (int j = 0; j < userSelectedDaysItems.size(); j++){
                             item += elderlyAvailableDays[userSelectedDaysItems.get(j)];
 
@@ -330,14 +332,14 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
                     }
                 });
 
-                mBuilder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+                daysAlertBuilder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                     }
                 });
 
-                mBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+                daysAlertBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         for (int k = 0; k < checkedDaysItemBoxes.length; k++){
@@ -350,8 +352,8 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
                     }
                 });
 
-                alertDialog = mBuilder.create();
-                alertDialog.show();
+                daysAlertDialog = daysAlertBuilder.create();
+                daysAlertDialog.show();
             }
 
         });
@@ -369,9 +371,9 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                mBuilder = new AlertDialog.Builder(ElderlyCreateRequestActivity.this);
-                mBuilder.setTitle("Time On Days For Service");
-                mBuilder.setMultiChoiceItems(elderlyAvailableTimesOnDay, checkedTimesItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
+                timesAlertBuilder = new AlertDialog.Builder(ElderlyCreateRequestActivity.this);
+                timesAlertBuilder.setTitle("Time for Service");
+                timesAlertBuilder.setMultiChoiceItems(elderlyAvailableTimesOnDay, checkedTimesItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int position, boolean isItemChecked) {
 
@@ -383,11 +385,12 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
                     }
                 });
 
-                mBuilder.setCancelable(false);
-                mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                timesAlertBuilder.setCancelable(false);
+                timesAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String item = "";
+                        actualPickedItemsForTimesForService.clear();
                         for (int j = 0; j < userSelectedTimesItems.size(); j++){
                             item += elderlyAvailableTimesOnDay[userSelectedTimesItems.get(j)];
 
@@ -404,14 +407,14 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
                     }
                 });
 
-                mBuilder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+                timesAlertBuilder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                     }
                 });
 
-                mBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+                timesAlertBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         for (int k = 0; k < checkedTimesItemBoxes.length; k++){
@@ -424,8 +427,8 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
                     }
                 });
 
-                alertDialog = mBuilder.create();
-                alertDialog.show();
+                timesAlertDialog = timesAlertBuilder.create();
+                timesAlertDialog.show();
             }
 
         });
@@ -459,6 +462,7 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
             showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter the description for this profile", appCompatActivity);
             return false;
         }
+
         if (actualPickedItemsForDays.size() <= 0){
             showInformationDialog(REQUIRED_FIELD_TITLE, SELECT_DAYS_FOR_SERVICE_MSG, appCompatActivity);
             return false;

@@ -84,6 +84,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
 
     private void createFiresStoreUserRecord(){
 
+        final String[] irishNumberPrefixes = getResources().getStringArray(R.array.irishNumberPrefixes);
         button = findViewById(R.id.confirmButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +101,14 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
 
                 if ( !validationSucceeded ) {
                     return;
+                } else if (mobileNumber.getText() != null || mobileNumber.getText().toString().isEmpty()) {
+
+                    for (int i = 0; i < irishNumberPrefixes.length; i++){
+                        if (!mobileNumber.getText().toString().substring(0,2).contains(irishNumberPrefixes[i])){
+                            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
+                            return;
+                        }
+                    }
                 } else {
 
                     // create an array to hold the data
@@ -142,6 +151,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
 
     private void validateOtherInputsOnEditTextChange(){
         this.setFieldValues();
+        final String[] irishNumberPrefixes = getResources().getStringArray(R.array.irishNumberPrefixes);
 
         // first name
         firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -189,6 +199,17 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter a mobile number NOT less/greater than 10 characters", appCompatActivity);
                         //mobileNumber.requestFocus();
                         return;
+                    }
+
+                    if (mobileNumber.getText() != null || mobileNumber.getText().toString().isEmpty()) {
+
+                        //mobileNumber.requestFocus();
+                        for (int i = 0; i < irishNumberPrefixes.length; i++){
+                            if (!mobileNumber.getText().toString().substring(0,2).contains(irishNumberPrefixes[i])){
+                                Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
+                                return;
+                            }
+                        }
                     }
                 }
             }

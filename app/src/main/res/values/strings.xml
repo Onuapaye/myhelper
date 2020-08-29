@@ -184,4 +184,13 @@
         <item>To provide lift to shops</item>
         <item>To take care of your pet(s) (walking dogs outside)</item>
     </string-array>
+    <string-array name="irishNumberPrefixes">
+        <item>083</item>
+        <item>084</item>
+        <item>085</item>
+        <item>086</item>
+        <item>087</item>
+        <item>088</item>
+        <item>089</item>
+    </string-array>
 </resources>
