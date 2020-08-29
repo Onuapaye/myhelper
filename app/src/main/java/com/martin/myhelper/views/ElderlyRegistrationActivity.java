@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,11 +88,13 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
 
     private void createFiresStoreUserRecord(){
 
-        final String[] irishNumberPrefixes = getResources().getStringArray(R.array.irishNumberPrefixes);
         button = findViewById(R.id.confirmButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                String[] irishNumberPrefixes = getResources().getStringArray(R.array.irishNumberPrefixes);
+                List validList = Arrays.asList(irishNumberPrefixes);
 
                 // set values for validation
                 setFieldValues();
@@ -104,13 +107,10 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
 
                 if ( !validationSucceeded ) {
                     return;
-                } else if (mobileNumber.getText() != null || mobileNumber.getText().toString().isEmpty()) {
-
-                    List validList = Arrays.asList(irishNumberPrefixes);
-                    if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
+                } else if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
                         return;
-                    }
+
                 } else {
 
                     // create an array to hold the data
@@ -142,8 +142,6 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                     if (!Utility.isEmailAddressValid(email.getText().toString().trim())){
                         Utility.showInformationDialog(Utility.INVALID_EMAIL_TITLE,
                                 Utility.INVALID_EMAIL_MSG, appCompatActivity);
-                        //email.getFocusable();
-                        //email.setFocusable(true);
                         return;
                     }
                 }
@@ -162,7 +160,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                 if (!hasFocus) {
                     if (firstName.getText() == null || firstName.getText().toString().isEmpty()) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your first name.", appCompatActivity);
-                        //firstName.requestFocus();
+
                         return;
                     }
                 }
@@ -177,7 +175,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                 if(!hasFocus) {
                     if (lastName.getText() == null || lastName.getText().toString().isEmpty()) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your last name.", appCompatActivity);
-                        //lastName.requestFocus();
+
                         return;
                     }
                 }
@@ -193,24 +191,20 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                 if (!hasFocus) {
                     if (mobileNumber.getText() == null || mobileNumber.getText().toString().isEmpty()) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your mobile number.", appCompatActivity);
-                        //mobileNumber.requestFocus();
+
                         return;
                     }
 
                     if (mobileNumber.getText().toString().trim().length() != 10) {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter a mobile number NOT less/greater than 10 characters", appCompatActivity);
-                        //mobileNumber.requestFocus();
+
                         return;
                     }
 
-                    if (mobileNumber.getText() != null || mobileNumber.getText().toString().isEmpty()) {
-
-                        //mobileNumber.requestFocus();
-                        List validList = Arrays.asList(irishNumberPrefixes);
-                        if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
-                            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
-                            return;
-                        }
+                    List validList = Arrays.asList(irishNumberPrefixes);
+                    if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
+                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
+                        return;
                     }
                 }
             }
@@ -223,16 +217,16 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                 if (!hasFocus){
                     if (Integer.parseInt(String.valueOf(retypePassword.getText().toString().trim().length())) > 0){
 
-                        if (!Utility.isPasswordLengthValid(retypePassword.getText().toString().trim())
+                        /*if (!Utility.isPasswordLengthValid(retypePassword.getText().toString().trim())
                                 || !Utility.isPasswordHavingNumberAndSymbol(retypePassword.getText().toString().trim())
                                 || !Utility.isPasswordHavingLowerCase(retypePassword.getText().toString().trim())
                                 || !Utility.isPasswordHavingUpperCase(retypePassword.getText().toString().trim()) ){
 
                             Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE,
                                     Utility.INVALID_REPASSWORD_ALL_MSG, appCompatActivity);
-                            //retypePassword.requestFocus();
+
                             return;
-                        }
+                        }*/
 
                         if (!retypePassword.getText().toString().equals(password.getText().toString())){
                             Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Your password and re-type password do not match. Please try again", appCompatActivity);
@@ -261,7 +255,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
 
                             Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE,
                                     Utility.INVALID_PASSWORD_ALL_MSG, appCompatActivity);
-                            //password.requestFocus();
+
                             return;
                         }
                     }

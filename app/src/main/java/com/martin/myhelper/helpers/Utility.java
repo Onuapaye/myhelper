@@ -93,7 +93,8 @@ public class Utility extends Activity {
         EditText retypePassword = editTexts[5];
 
         if (firstNameText.getText() == null || firstNameText.getText().toString().isEmpty()){
-            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your first name.", appCompatActivity);return false;
+            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter your first name.", appCompatActivity);
+            return false;
         }
 
         if (lastNameText.getText() == null || lastNameText.getText().toString().isEmpty()){
