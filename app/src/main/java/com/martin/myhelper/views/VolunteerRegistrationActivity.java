@@ -96,11 +96,13 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
     }
 
     private void createVolunteerRegistration(){
-        final String[] irishNumberPrefixes = getResources().getStringArray(R.array.irishNumberPrefixes);
         button = findViewById(R.id.confirmButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                final String[] irishNumberPrefixes = getResources().getStringArray(R.array.irishNumberPrefixes);
+                List validList = Arrays.asList(irishNumberPrefixes);
 
                 // set values for validation
                 setFieldValues();
@@ -111,13 +113,10 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
 
                 if ( !validationSucceeded ) {
                     return;
-                } else if (mobileNumber.getText() != null || mobileNumber.getText().toString().isEmpty()) {
+                } else if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
+                    Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
+                    return;
 
-                    List validList = Arrays.asList(irishNumberPrefixes);
-                    if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
-                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
-                        return;
-                    }
                 } else if (imageUri == null) {
                     Utility.showInformationDialog("IMAGE VALIDATION FAILED",
                             "Please upload your image", appCompatActivity);
@@ -242,13 +241,10 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                         return;
                     }
 
-                    if (mobileNumber.getText() != null || mobileNumber.getText().toString().isEmpty()) {
-                        //mobileNumber.requestFocus();
-                        List validList = Arrays.asList(irishNumberPrefixes);
-                        if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
-                            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
-                            return;
-                        }
+                    List validList = Arrays.asList(irishNumberPrefixes);
+                    if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
+                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
+                        return;
                     }
                 }
             }
@@ -261,7 +257,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 if (!hasFocus){
                     if (Integer.parseInt(String.valueOf(retypePassword.getText().toString().trim().length())) > 0){
 
-                        if (!Utility.isPasswordLengthValid(retypePassword.getText().toString().trim())
+                       /* if (!Utility.isPasswordLengthValid(retypePassword.getText().toString().trim())
                                 || !Utility.isPasswordHavingNumberAndSymbol(retypePassword.getText().toString().trim())
                                 || !Utility.isPasswordHavingLowerCase(retypePassword.getText().toString().trim())
                                 || !Utility.isPasswordHavingUpperCase(retypePassword.getText().toString().trim()) ){
@@ -270,7 +266,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                                     Utility.INVALID_REPASSWORD_ALL_MSG, appCompatActivity);
                             //retypePassword.requestFocus();
                             return;
-                        }
+                        }*/
 
                         if (!retypePassword.getText().toString().equals(password.getText().toString())){
                             Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Your password and re-type password do not match. Please try again", appCompatActivity);
