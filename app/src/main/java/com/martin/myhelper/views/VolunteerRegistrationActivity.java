@@ -40,23 +40,16 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
     private EditText firstName, lastName, email, mobileNumber, password, retypePassword;
     private CircularImageView profileImage;
     private Uri imageUri;
-    private String imageExtension;
-
-    public static ProgressBar progressBar;
 
     private int userType;
     private Context context = VolunteerRegistrationActivity.this;
     private AppCompatActivity appCompatActivity = VolunteerRegistrationActivity.this;
 
     private VolunteerCRUDHelper crudHelper;
-    private StorageReference storageReference;
-    public static StorageTask storageTask;
 
     private Button button;
 
     private Intent intent;
-    private OpenActivity openActivity;
-    private Utility utility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +78,6 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
      * Open the elderly login screen when clicked
      */
     private void openLoginScreen(){
-        openActivity = new OpenActivity();
         TextView textView = (TextView) findViewById(R.id.loginHereLink);
 
         textView.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +92,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
     }
 
     private void createVolunteerRegistration(){
+        final String[] irishNumberPrefixes = getResources().getStringArray(R.array.irishNumberPrefixes);
         button = findViewById(R.id.confirmButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,10 +107,18 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
 
                 if ( !validationSucceeded ) {
                     return;
-                } else if (imageUri == null){
+                } else if (mobileNumber.getText() != null || mobileNumber.getText().toString().isEmpty()) {
+                    for (int i = 0; i < irishNumberPrefixes.length; i++){
+                        if (!mobileNumber.getText().toString().substring(0,2).contains(irishNumberPrefixes[i])){
+                            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
+                            return;
+                        }
+                    }
+                } else if (imageUri == null) {
                     Utility.showInformationDialog("IMAGE VALIDATION FAILED",
                             "Please upload your image", appCompatActivity);
                     return;
+
                 } else {
 
                     // create an array to hold the data
@@ -188,6 +189,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
 
     private void validateOtherInputsOnEditTextChange(){
         this.setFieldValues();
+        final String[] irishNumberPrefixes = getResources().getStringArray(R.array.irishNumberPrefixes);
 
         // first name
         firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -234,6 +236,17 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                         Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter a mobile number NOT less/greater than 10 characters", appCompatActivity);
                         //mobileNumber.requestFocus();
                         return;
+                    }
+
+                    if (mobileNumber.getText() != null || mobileNumber.getText().toString().isEmpty()) {
+
+                        //mobileNumber.requestFocus();
+                        for (int i = 0; i < irishNumberPrefixes.length; i++){
+                            if (!mobileNumber.getText().toString().substring(0,2).contains(irishNumberPrefixes[i])){
+                                Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
+                                return;
+                            }
+                        }
                     }
                 }
             }
