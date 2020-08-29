@@ -53,7 +53,8 @@ public class VolunteerProfilesActivity extends AppCompatActivity {
         firebaseFirestore = Utility.getFirebaseFireStoreInstance();
         firebaseAuth = Utility.getFirebaseAuthenticationInstance();
 
-        final CollectionReference profileReference = firebaseFirestore.collection("volunteer_profiles").document(firebaseAuth.getCurrentUser().getUid()).collection("profiles");
+        final CollectionReference profileReference = firebaseFirestore.collection("volunteer_profiles")
+                .document(firebaseAuth.getCurrentUser().getUid()).collection("profiles");
 
         profileReference.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -75,7 +76,8 @@ public class VolunteerProfilesActivity extends AppCompatActivity {
                 profileList.add(_tempList);
             }
 
-            volunteerProfileAdapter = new VolunteerProfileAdapter(VolunteerProfilesActivity.this, profileList, queryDocumentSnapshots.size());
+            volunteerProfileAdapter = new VolunteerProfileAdapter(VolunteerProfilesActivity.this,
+                    profileList, queryDocumentSnapshots.size());
             rcvProfile.setAdapter(volunteerProfileAdapter);
             rcvProfile.setLayoutManager(new LinearLayoutManager(VolunteerProfilesActivity.this));
             }

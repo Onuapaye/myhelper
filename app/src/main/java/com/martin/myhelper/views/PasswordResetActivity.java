@@ -37,7 +37,6 @@ public class PasswordResetActivity extends AppCompatActivity {
 
     private void handleRequestPasswordResetButtonOnClick(){
         firebaseAuth = Utility.getFirebaseAuthenticationInstance();
-
         confirmResetButton = findViewById(R.id.btnPasswordReset);
         email = findViewById(R.id.email);
 
@@ -52,32 +51,34 @@ public class PasswordResetActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (email.getText().toString() == "" || email.getText().toString().isEmpty()) {
-                    Utility.showInformationDialog(Utility.REQUIRED_FIELD_TITLE, "E-mail field cannot be empty.", PasswordResetActivity.this);
-                    return;
+            if (email.getText().toString() == "" || email.getText().toString().isEmpty()) {
+                Utility.showInformationDialog(Utility.REQUIRED_FIELD_TITLE, "E-mail field cannot be empty.",
+                        PasswordResetActivity.this);
+                return;
+            }
+
+            firebaseAuth.sendPasswordResetEmail(email.getText().toString().trim())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    // sign the user out but first check if the user has signed in or not
+                    if (firebaseAuth.getCurrentUser() != null ) {
+                        firebaseAuth.signOut();
+                    }
+                    // redirect user to login
+                    Intent intent = new Intent(PasswordResetActivity.this, MainActivity.class);
+                    intent.putExtra("userType", userType);
+                    intent.putExtra("passwordResetSuccess",
+                            "You have successfully requested for a Password Reset.\n Please check your inbox for the RESET LINK");
+                    startActivity(intent);
                 }
-
-                firebaseAuth.sendPasswordResetEmail(email.getText().toString().trim()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // sign the user out but first check if the user has signed in or not
-                        if (firebaseAuth.getCurrentUser() != null ) {
-                            firebaseAuth.signOut();
-                        }
-
-                        // redirect user to login
-                        Intent intent = new Intent(PasswordResetActivity.this, MainActivity.class);
-                        intent.putExtra("userType", userType);
-                        intent.putExtra("passwordResetSuccess", "You have successfully requested for a Password Reset.\n Please check your inbox for the RESET LINK");
-                        startActivity(intent);
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Utility.showInformationDialog("RESET PASSWORD", "Error sending PASSWORD RESET link. " + e.getMessage(), appCompatActivity);
-                    }
-                });
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Utility.showInformationDialog("RESET PASSWORD",
+                            "Error sending PASSWORD RESET link. " + e.getMessage(), appCompatActivity);
+                }
+            });
             }
         });
     }

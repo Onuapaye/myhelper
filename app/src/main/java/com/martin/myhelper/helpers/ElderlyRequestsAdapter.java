@@ -13,6 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.martin.myhelper.R;
 import com.martin.myhelper.views.ElderlyCreateRequestActivity;
 import com.martin.myhelper.views.ElderlyEditRequestActivity;
@@ -38,10 +44,12 @@ public class ElderlyRequestsAdapter extends RecyclerView.Adapter<ElderlyRequests
 
     ArrayList<ArrayList<String>> _requestsList;
     Context _context;
+    FirebaseFirestore _fireStore;
 
     public ElderlyRequestsAdapter(ArrayList<ArrayList<String>> _requestsList, Context _context) {
         this._requestsList = _requestsList;
         this._context = _context;
+        this._fireStore = Utility.getFirebaseFireStoreInstance();
     }
 
     @NonNull
@@ -60,7 +68,8 @@ public class ElderlyRequestsAdapter extends RecyclerView.Adapter<ElderlyRequests
     @Override
     public void onBindViewHolder(@NonNull ElderlyViewHolder holder, final int position) {
 
-        switch (_requestsList.get(position).get(1)) {
+        setServiceTypeName(holder, _requestsList.get(position).get(1));
+        /*switch (_requestsList.get(position).get(1)) {
             case "100":
                 holder.tvServiceType.setText(TEACH_USAGE_MOBILE_DEVICES);
                 break;
@@ -94,7 +103,7 @@ public class ElderlyRequestsAdapter extends RecyclerView.Adapter<ElderlyRequests
             default:
                 holder.tvServiceType.setText(TAKE_CARE_OF_PETS);
                 break;
-        }
+        }*/
 
         holder.tvRequestDays.setText(_requestsList.get(position).get(4).replaceAll("(^\\[|\\]$)", ""));
         holder.tvRequestTimes.setText(_requestsList.get(position).get(5).replaceAll("(^\\[|\\]$)", ""));
@@ -166,5 +175,21 @@ public class ElderlyRequestsAdapter extends RecyclerView.Adapter<ElderlyRequests
             btnSendRequest = itemView.findViewById(R.id.btnSendRequest);
             btnEditRequest = itemView.findViewById(R.id.btnEditRequest);
         }
+    }
+
+    private void setServiceTypeName(final ElderlyViewHolder holder, String serviceTypeID){
+
+        CollectionReference reference = _fireStore.collection("service_types");
+        reference
+                .whereEqualTo("id", serviceTypeID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots ) {
+                    holder.tvServiceType.setText(snapshot.getString("service_name"));
+                }
+            }
+        });
     }
 }

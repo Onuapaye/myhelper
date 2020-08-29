@@ -46,27 +46,29 @@ public class VolunteerHomeActivity extends AppCompatActivity {
     }
 
     private void  setOnClicks(){
-        this.handleCreateElderlyTextViewOnClick();
-        this.handleEditElderlyTextViewOnClick();
+        this.handleCreateProfileOnClick();
+        this.handleEditProfileOnClick();
         this.handleViewElderlyFeedBacks();
     }
-    private  void handleCreateElderlyTextViewOnClick(){
+    private  void handleCreateProfileOnClick(){
         createServiceProfile = findViewById(R.id.createProfileTextView);
         createServiceProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(VolunteerHomeActivity.this, VolunteerProfileCreateActivity.class);
+                intent = new Intent(VolunteerHomeActivity.this,
+                        VolunteerProfileCreateActivity.class);
                 startActivity(intent);
             }
         });
     }
 
-    private  void handleEditElderlyTextViewOnClick(){
+    private  void handleEditProfileOnClick(){
         editServiceProfile = findViewById(R.id.editProfileTextView);
         editServiceProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(VolunteerHomeActivity.this, VolunteerProfilesActivity.class);
+                intent = new Intent(VolunteerHomeActivity.this,
+                        VolunteerProfilesActivity.class);
                 startActivity(intent);
             }
         });
@@ -77,7 +79,8 @@ public class VolunteerHomeActivity extends AppCompatActivity {
         viewElderlyRequests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(VolunteerHomeActivity.this, VolunteerViewElderlyRequestsActivity.class);
+                intent = new Intent(VolunteerHomeActivity.this,
+                        VolunteerViewElderlyRequestsActivity.class);
                 startActivity(intent);
             }
         });
@@ -88,7 +91,8 @@ public class VolunteerHomeActivity extends AppCompatActivity {
         viewFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(VolunteerHomeActivity.this, VolunteerViewElderlyFeedbackActivity.class);
+                intent = new Intent(VolunteerHomeActivity.this,
+                        VolunteerViewElderlyFeedbackActivity.class);
                 startActivity(intent);
             }
         });

@@ -180,21 +180,16 @@ public class ElderlyViewVolunteerServicesActivity extends AppCompatActivity {
                     CollectionReference profileReference = firebaseFirestore.collection("volunteer_profiles")
                             .document(docPath).collection("profiles");
 
-                    profileReference.whereEqualTo("serviceTypeId", serviceTypeID)
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    profileReference.whereEqualTo("serviceTypeId", serviceTypeID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
                             if (task.getResult() != null){
 
                                 QuerySnapshot documentSnapshot = task.getResult();
-
                                 for (DocumentSnapshot ds1 : documentSnapshot) {
-
                                     // instantiate the temporal array list of volunteer services
                                     _tempList1 = new ArrayList<>();
-
                                     _tempList1.add(ds1.getString("id"));
                                     _tempList1.add(ds1.getString("serviceTypeId"));
                                     _tempList1.add(ds1.getString("volunteerId"));

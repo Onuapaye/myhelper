@@ -97,7 +97,8 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
                     eldersHash.put(key, snapshot.getString("id"));
 
                     _tempElderly = new ArrayList<>();
-                    _tempElderly.add(snapshot.getString("firstName") + " " + snapshot.getString("lastName").toUpperCase());
+                    _tempElderly.add(snapshot.getString("firstName") + " " +
+                            snapshot.getString("lastName").toUpperCase());
 
                     elders.add(_tempElderly.toString().replaceAll("(^\\[|\\]$)", ""));
                     key++;
@@ -110,7 +111,8 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
                 // call the callback method to set the hash results
                 callBackHashValue(eldersHash);
 
-                arrayAdapter = new ArrayAdapter<>(VolunteerViewElderlyFeedbackActivity.this, R.layout.support_simple_spinner_dropdown_item, array);
+                arrayAdapter = new ArrayAdapter<>(VolunteerViewElderlyFeedbackActivity.this,
+                        R.layout.support_simple_spinner_dropdown_item, array);
                 arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                 elderlySpinner.setAdapter(arrayAdapter);
             }
@@ -124,7 +126,6 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
     }
 
     private void getElderlyRequestsFromVolunteer(String elderlyID) {
-
         firebaseFirestore = Utility.getFirebaseFireStoreInstance();
         firebaseAuth = Utility.getFirebaseAuthenticationInstance();
         String userID = firebaseAuth.getCurrentUser().getUid();
@@ -132,7 +133,6 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
         // instantiate the array list of volunteers
         listOfElderlyFeedBacks = new ArrayList<>();
         _elderlyAccountList = new ArrayList<>();
-
         CollectionReference collectionReference = firebaseFirestore.collection("elderly_feedbacks")
                 .document(elderlyID).collection("feedbacks");
 
@@ -148,10 +148,8 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
                             QuerySnapshot documentSnapshot = task.getResult();
 
                             for (DocumentSnapshot ds : documentSnapshot) {
-
                                 // instantiate the temporal array list of volunteer services
                                 _tempListOfElders = new ArrayList<>();
-
                                 _tempListOfElders.add(ds.getString("id"));
                                 _tempListOfElders.add(ds.getString("elderlyId"));
                                 _tempListOfElders.add(ds.getString("volunteerId"));
@@ -163,12 +161,14 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
                             }
                         }
                     }
-
                     RecyclerView rcvViewElderlyFeedback = findViewById(R.id.rcvFeedbacks);
 
-                    VolunteerViewElderlyFeedbackAdapter feedbackAdapter = new VolunteerViewElderlyFeedbackAdapter(VolunteerViewElderlyFeedbackActivity.this, listOfElderlyFeedBacks);
+                    VolunteerViewElderlyFeedbackAdapter feedbackAdapter = new
+                            VolunteerViewElderlyFeedbackAdapter(VolunteerViewElderlyFeedbackActivity.this,
+                            listOfElderlyFeedBacks);
                     rcvViewElderlyFeedback.setAdapter(feedbackAdapter);
-                    rcvViewElderlyFeedback.setLayoutManager(new LinearLayoutManager(VolunteerViewElderlyFeedbackActivity.this));
+                    rcvViewElderlyFeedback.setLayoutManager(new LinearLayoutManager(
+                            VolunteerViewElderlyFeedbackActivity.this));
                 }
             });
     }

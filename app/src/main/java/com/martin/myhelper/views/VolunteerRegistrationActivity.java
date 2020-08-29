@@ -67,7 +67,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
         this.openLoginScreen();
 
         // create the volunteer record
-        this.createFiresStoreUserRecord();
+        this.createVolunteerRegistration();
 
         // monitor the text change event of the email field
         this.validateEmailOnEditTextChange();
@@ -99,8 +99,7 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private void createFiresStoreUserRecord(){
-
+    private void createVolunteerRegistration(){
         button = findViewById(R.id.confirmButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,10 +109,12 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 setFieldValues();
 
                 //  validate fields
-                boolean validationSucceeded = Utility.validateInputsOnCreate(appCompatActivity, firstName, lastName, email, mobileNumber, password, retypePassword);
+                boolean validationSucceeded = Utility.validateInputsOnCreate(appCompatActivity, firstName,
+                        lastName, email, mobileNumber, password, retypePassword);
 
                 if (imageUri == null){
-                    Utility.showInformationDialog("IMAGE VALIDATION FAILED", "Please upload your image", appCompatActivity);
+                    Utility.showInformationDialog("IMAGE VALIDATION FAILED",
+                            "Please upload your image", appCompatActivity);
                     return;
                 }
 

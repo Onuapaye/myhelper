@@ -87,12 +87,15 @@
                 android:id="@+id/imgVolunteerImage"
                 android:layout_width="63dp"
                 android:layout_height="61dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
                 android:src="@drawable/no_photo"
                 app:civ_border_color="#3f51b5"
                 app:civ_border_width="0dp"
                 app:civ_shadow="false"
-                app:civ_shadow_radius="0dp"
                 app:civ_shadow_color="#3f51b5"
+                app:civ_shadow_radius="0dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,14 +104,17 @@
                 android:id="@+id/tvRequestServiceDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="5dp"
                 android:text="@string/briefServiceDescription"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/volunteerName"
-                app:layout_constraintTop_toBottomOf="@+id/volunteerName" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvVolunteerMobile" />
 
             <TextView
                 android:id="@+id/tvRequestServiceType"
@@ -116,24 +122,27 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/volunteerName"
                 android:textColor="#222831"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/volunteerMobile"
-                app:layout_constraintStart_toEndOf="@+id/volunteerImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgVolunteerImage"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvVolunteerMobile"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/volunteerMobile"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="@+id/tvRequestServiceType"
+                app:layout_constraintTop_toBottomOf="@+id/tvRequestServiceType" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

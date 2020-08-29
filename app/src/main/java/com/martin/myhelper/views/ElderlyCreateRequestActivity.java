@@ -8,30 +8,32 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.martin.myhelper.MainActivity;
 import com.martin.myhelper.R;
 import com.martin.myhelper.helpers.ElderlyCRUDHelper;
+import com.martin.myhelper.helpers.ElderlyRequestsAdapter;
 import com.martin.myhelper.helpers.ElderlyVolunteerCRUDHelper;
+import com.martin.myhelper.helpers.Utility;
 import com.martin.myhelper.model.ElderlyModel;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,12 +124,12 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
         _btnRequestService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createProfile();
+                createRequest();
             }
         });
     }
 
-    private void createProfile(){
+    private void createRequest(){
 
         // create instance of objects
         elderlyCRUDHelper = new ElderlyCRUDHelper();
@@ -203,9 +205,22 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
 
         serviceTypeIDs = getResources().getStringArray(R.array.serviceTypeIDs);
 
-        String serviceTypeCode = _requestedVolunteerProfileData.get(1);
+        //String serviceTypeCode = _requestedVolunteerProfileData.get(1);
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+        CollectionReference reference = firebaseFirestore.collection("service_types");
+        reference
+            .whereEqualTo("id", _requestedVolunteerProfileData.get(1))
+            .get()
+            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots ) {
+                        _tvSelectedServiceName.setText(snapshot.getString("service_name"));
+                    }
+                }
+            });
 
-        if (serviceTypeCode == serviceTypeIDs[0]){
+        /*if (serviceTypeCode == serviceTypeIDs[0]){
             serviceType = TEACH_USAGE_MOBILE_DEVICES;
         } else if (serviceTypeCode == serviceTypeIDs[1]){
             serviceType = TEACH_USAGE_WEB_APPS;
@@ -229,7 +244,7 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
             serviceType = TAKE_CARE_OF_PETS;
         }
 
-        _tvSelectedServiceName.setText(serviceType);
+        _tvSelectedServiceName.setText(serviceType);*/
 
         // START
         // 1. GET THE DAYS SET BY THE VOLUNTEER IN HIS/PROFILES FOR THE SPINNER
