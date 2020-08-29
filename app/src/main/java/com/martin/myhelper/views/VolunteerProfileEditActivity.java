@@ -53,7 +53,7 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
 
     private Button btnSelectDaysForService, btnSelectTimesOnDaysForService, btnSelectAvailableDaysForCalls;
     private String[] availableDays, availableTimesOnDay, availableTimesForCalls;
-    private TextView tvDaysForService, tvTimesOfDays, tvTimesForCalls, tvDescription;
+    private TextView tvDaysForService, tvTimesForService, tvTimesForCalls, tvDescription;
 
     private boolean[] checkedDaysItemBoxes;
     private boolean[] checkedTimesItemBoxes;
@@ -175,13 +175,13 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tvServiceDescriptionMultiLine);
         spnServiceType = findViewById(R.id.spnServiceType);
 
-        tvTimesOfDays = findViewById(R.id.tvTimeOnDays);
+        tvTimesForService = findViewById(R.id.tvTimesForService);
         tvDaysForService = findViewById(R.id.tvDaysForService);
         tvTimesForCalls = findViewById(R.id.tvTimesForCalls);
 
         tvDescription.setText(_editProfileList.get(2));
         tvDaysForService.setText(_editProfileList.get(3).replaceAll("(^\\[|\\]$)", ""));
-        tvTimesOfDays.setText(_editProfileList.get(4).replaceAll("(^\\[|\\]$)", ""));
+        tvTimesForService.setText(_editProfileList.get(4).replaceAll("(^\\[|\\]$)", ""));
         tvTimesForCalls.setText(_editProfileList.get(5).replaceAll("(^\\[|\\]$)", ""));
 
         actualPickedItemsForDays.add(_editProfileList.get(3).replaceAll("(^\\[|\\]$)", ""));
@@ -411,7 +411,7 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
     private void selectTimesOnDaysForServiceProvision(){
 
         btnSelectTimesOnDaysForService = (Button) findViewById(R.id.btnTimesForeService);
-        tvTimesOfDays = (TextView) findViewById(R.id.tvTimeOnDays);
+        tvTimesForService = (TextView) findViewById(R.id.tvTimesForService);
 
         availableTimesOnDay = getResources().getStringArray(R.array.availableTimes);
         checkedTimesItemBoxes = new boolean[availableTimesOnDay.length];
@@ -449,7 +449,7 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
                             }
 
                             // set the items checked to the textView
-                            tvTimesOfDays.setText(item);
+                            tvTimesForService.setText(item);
                             actualPickedItemsForTimesForService.add(availableTimesOnDay[userSelectedTimesItems.get(j)]);
                         }
                     }
@@ -469,7 +469,7 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
                             checkedTimesItemBoxes[k] = false;
                             userSelectedTimesItems.clear();
 
-                            tvTimesOfDays.setText("");
+                            tvTimesForService.setText("");
                             actualPickedItemsForTimesForService.clear();
                         }
                     }
