@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -28,6 +29,9 @@ import com.martin.myhelper.model.GenericModel;
 import com.martin.myhelper.model.VolunteerModel;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_EMAIL_SUCCESS_MSG;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_MSG;
@@ -108,11 +112,11 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                 if ( !validationSucceeded ) {
                     return;
                 } else if (mobileNumber.getText() != null || mobileNumber.getText().toString().isEmpty()) {
-                    for (int i = 0; i < irishNumberPrefixes.length; i++){
-                        if (!mobileNumber.getText().toString().substring(0,2).contains(irishNumberPrefixes[i])){
-                            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
-                            return;
-                        }
+
+                    List validList = Arrays.asList(irishNumberPrefixes);
+                    if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
+                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
+                        return;
                     }
                 } else if (imageUri == null) {
                     Utility.showInformationDialog("IMAGE VALIDATION FAILED",
@@ -239,13 +243,11 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                     }
 
                     if (mobileNumber.getText() != null || mobileNumber.getText().toString().isEmpty()) {
-
                         //mobileNumber.requestFocus();
-                        for (int i = 0; i < irishNumberPrefixes.length; i++){
-                            if (!mobileNumber.getText().toString().substring(0,2).contains(irishNumberPrefixes[i])){
-                                Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
-                                return;
-                            }
+                        List validList = Arrays.asList(irishNumberPrefixes);
+                        if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
+                            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
+                            return;
                         }
                     }
                 }
@@ -267,6 +269,11 @@ public class VolunteerRegistrationActivity extends AppCompatActivity {
                             Utility.showInformationDialog(Utility.INVALID_PASSWORD_TITLE,
                                     Utility.INVALID_REPASSWORD_ALL_MSG, appCompatActivity);
                             //retypePassword.requestFocus();
+                            return;
+                        }
+
+                        if (!retypePassword.getText().toString().equals(password.getText().toString())){
+                            Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Your password and re-type password do not match. Please try again", appCompatActivity);
                             return;
                         }
                     }
