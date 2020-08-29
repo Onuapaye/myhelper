@@ -51,8 +51,8 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
     private ArrayList<String> _editProfileList = new ArrayList<>();;
     private String _description;
 
-    private Button btnSelectDaysForService, btnSelectTimesOnDaysForService, btnSelectAvailableDaysForCalls;
-    private String[] availableDays, availableTimesOnDay, availableTimesForCalls;
+    private Button btnSelectDaysForService, btnSelectTimesForService, btnSelectTimesForCalls;
+    private String[] availableDays, availableTimesForService, availableTimesForCalls;
     private TextView tvDaysForService, tvTimesForService, tvTimesForCalls, tvDescription;
 
     private boolean[] checkedDaysItemBoxes;
@@ -63,12 +63,12 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
     private ArrayList<Integer> userSelectedTimesItems = new ArrayList<>();
     private ArrayList<Integer> userSelectedCallsItems = new ArrayList<>();
 
-    private ArrayList<String> actualPickedItemsForDays = new ArrayList<>();
-    private ArrayList<String> actualPickedItemsForTimesForService = new ArrayList<>();
-    private ArrayList<String> actualPickedItemsForTimesForCalls = new ArrayList<>();
+    private ArrayList<String> actualDaysForServiceList = new ArrayList<>();
+    private ArrayList<String> actualTimesForServiceList = new ArrayList<>();
+    private ArrayList<String> actualTimesForCallsList = new ArrayList<>();
 
-    private AlertDialog.Builder mBuilder;
-    private AlertDialog alertDialog;
+    private AlertDialog.Builder daysAlertBuilder, timesAlertBuilder, callsAlertBuilder;
+    private AlertDialog daysAlertDialog, timesAlertDialog, callAlertDialog;
 
     private String[] serviceTypes;
     private Spinner spnServiceType;
@@ -95,8 +95,8 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
         this.showProvidedServiceTypes();
 
         this.selectDaysForServiceProvision();
-        this.selectTimesOnDaysForServiceProvision();
-        this.selectAvailableTimesOfDaysForCalls();
+        this.selectTimesForServiceProvision();
+        this.selectTimesForCalls();
 
         this.getData();
         this.setData();
@@ -146,9 +146,9 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
         volunteerModel.setProfileId(_editProfileList.get(0));
         volunteerModel.setServiceTypeId(serviceTypeID);
         volunteerModel.setDescriptionOfService(tvDescription.getText().toString().trim());
-        volunteerModel.setDaysForService(actualPickedItemsForDays);
-        volunteerModel.setTimesForService(actualPickedItemsForTimesForService);
-        volunteerModel.setTimesForCalls(actualPickedItemsForTimesForCalls);
+        volunteerModel.setDaysForService(actualDaysForServiceList);
+        volunteerModel.setTimesForService(actualTimesForServiceList);
+        volunteerModel.setTimesForCalls(actualTimesForCallsList);
 
         volunteerCRUDHelper.updateVolunteerServiceProfile(VolunteerProfileEditActivity.this,
                 volunteerModel);
@@ -184,9 +184,9 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
         tvTimesForService.setText(_editProfileList.get(4).replaceAll("(^\\[|\\]$)", ""));
         tvTimesForCalls.setText(_editProfileList.get(5).replaceAll("(^\\[|\\]$)", ""));
 
-        actualPickedItemsForDays.add(_editProfileList.get(3).replaceAll("(^\\[|\\]$)", ""));
-        actualPickedItemsForTimesForService.add(_editProfileList.get(4).replaceAll("(^\\[|\\]$)", ""));
-        actualPickedItemsForTimesForCalls.add(_editProfileList.get(5).replaceAll("(^\\[|\\]$)", ""));
+        actualDaysForServiceList.add(_editProfileList.get(3).replaceAll("(^\\[|\\]$)", ""));
+        actualTimesForServiceList.add(_editProfileList.get(4).replaceAll("(^\\[|\\]$)", ""));
+        actualTimesForCallsList.add(_editProfileList.get(5).replaceAll("(^\\[|\\]$)", ""));
 
         serviceTypeIDs = getResources().getStringArray(R.array.serviceTypeIDs);
         switch (_editProfileList.get(1)) {
@@ -315,23 +315,24 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
             showInformationDialog(REQUIRED_FIELD_TITLE, "Please enter the description for this profile", appCompatActivity);
             return false;
         }
-        if (actualPickedItemsForDays.size() <= 0){
+        if (actualDaysForServiceList.size() <= 0){
             showInformationDialog(REQUIRED_FIELD_TITLE, SELECT_DAYS_FOR_SERVICE_MSG, appCompatActivity);
             return false;
         }
 
-        if (actualPickedItemsForTimesForService.size() <= 0){
+        if (actualTimesForServiceList.size() <= 0){
             showInformationDialog(REQUIRED_FIELD_TITLE, SELECT_TIMES_FOR_SERVICE_MSG, appCompatActivity);
             return false;
         }
 
-        if (actualPickedItemsForTimesForCalls.size() <= 0){
+        if (actualTimesForCallsList.size() <= 0){
             showInformationDialog(REQUIRED_FIELD_TITLE, SELECT_TIMES_FOR_CALLS_MSG , appCompatActivity);
             return false;
         }
 
         return true;
     }
+
 
     private void selectDaysForServiceProvision(){
 
@@ -345,9 +346,9 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                mBuilder = new AlertDialog.Builder(VolunteerProfileEditActivity.this);
-                mBuilder.setTitle("Available Days For Service");
-                mBuilder.setMultiChoiceItems(availableDays, checkedDaysItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
+                daysAlertBuilder = new AlertDialog.Builder(VolunteerProfileEditActivity.this);
+                daysAlertBuilder.setTitle("Days for Service");
+                daysAlertBuilder.setMultiChoiceItems(availableDays, checkedDaysItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int position, boolean isItemChecked) {
 
@@ -359,11 +360,13 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
                     }
                 });
 
-                mBuilder.setCancelable(false);
-                mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                daysAlertBuilder.setCancelable(false);
+                daysAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String item = "";
+                        actualDaysForServiceList.clear();
+
                         for (int j = 0; j < userSelectedDaysItems.size(); j++){
                             item += availableDays[userSelectedDaysItems.get(j)];
 
@@ -375,20 +378,19 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
 
                             // set the items checked to the textView
                             tvDaysForService.setText(item);
-                            actualPickedItemsForDays.add(availableDays[userSelectedDaysItems.get(j)]);
+                            actualDaysForServiceList.add(availableDays[userSelectedDaysItems.get(j)]);
                         }
-                        Log.i("DAYS", actualPickedItemsForDays.toString());
                     }
                 });
 
-                mBuilder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+                daysAlertBuilder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                     }
                 });
 
-                mBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+                daysAlertBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         for (int k = 0; k < checkedDaysItemBoxes.length; k++){
@@ -396,33 +398,33 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
                             userSelectedDaysItems.clear();
 
                             tvDaysForService.setText("");
-                            actualPickedItemsForDays.clear();
+                            actualDaysForServiceList.clear();
                         }
                     }
                 });
 
-                alertDialog = mBuilder.create();
-                alertDialog.show();
+                daysAlertDialog = daysAlertBuilder.create();
+                daysAlertDialog.show();
             }
 
         });
     }
 
-    private void selectTimesOnDaysForServiceProvision(){
+    private void selectTimesForServiceProvision(){
 
-        btnSelectTimesOnDaysForService = (Button) findViewById(R.id.btnTimesForeService);
+        btnSelectTimesForService = (Button) findViewById(R.id.btnTimesForeService);
         tvTimesForService = (TextView) findViewById(R.id.tvTimesForService);
 
-        availableTimesOnDay = getResources().getStringArray(R.array.availableTimes);
-        checkedTimesItemBoxes = new boolean[availableTimesOnDay.length];
+        availableTimesForService = getResources().getStringArray(R.array.availableTimes);
+        checkedTimesItemBoxes = new boolean[availableTimesForService.length];
 
-        btnSelectTimesOnDaysForService.setOnClickListener(new View.OnClickListener() {
+        btnSelectTimesForService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                mBuilder = new AlertDialog.Builder(VolunteerProfileEditActivity.this);
-                mBuilder.setTitle("Time On Days For Service");
-                mBuilder.setMultiChoiceItems(availableTimesOnDay, checkedTimesItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
+                timesAlertBuilder = new AlertDialog.Builder(VolunteerProfileEditActivity.this);
+                timesAlertBuilder.setTitle("Times For Service");
+                timesAlertBuilder.setMultiChoiceItems(availableTimesForService, checkedTimesItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int position, boolean isItemChecked) {
 
@@ -434,13 +436,15 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
                     }
                 });
 
-                mBuilder.setCancelable(false);
-                mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                timesAlertBuilder.setCancelable(false);
+                timesAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String item = "";
+                        actualTimesForServiceList.clear();
+
                         for (int j = 0; j < userSelectedTimesItems.size(); j++){
-                            item += availableTimesOnDay[userSelectedTimesItems.get(j)];
+                            item += availableTimesForService[userSelectedTimesItems.get(j)];
 
                             // check if the item selected by the user is not the last
                             // item and append a comma
@@ -450,19 +454,20 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
 
                             // set the items checked to the textView
                             tvTimesForService.setText(item);
-                            actualPickedItemsForTimesForService.add(availableTimesOnDay[userSelectedTimesItems.get(j)]);
+                            actualTimesForServiceList.add(availableTimesForService[userSelectedTimesItems.get(j)]);
                         }
+
                     }
                 });
 
-                mBuilder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+                timesAlertBuilder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                     }
                 });
 
-                mBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+                timesAlertBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         for (int k = 0; k < checkedTimesItemBoxes.length; k++){
@@ -470,33 +475,33 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
                             userSelectedTimesItems.clear();
 
                             tvTimesForService.setText("");
-                            actualPickedItemsForTimesForService.clear();
+                            actualTimesForServiceList.clear();
                         }
                     }
                 });
 
-                alertDialog = mBuilder.create();
-                alertDialog.show();
+                timesAlertDialog = timesAlertBuilder.create();
+                timesAlertDialog.show();
             }
 
         });
     }
 
-    private void selectAvailableTimesOfDaysForCalls(){
+    private void selectTimesForCalls(){
 
-        btnSelectAvailableDaysForCalls = (Button) findViewById(R.id.btnTimesForeCalls);
+        btnSelectTimesForCalls = (Button) findViewById(R.id.btnTimesForeCalls);
         tvTimesForCalls = (TextView) findViewById(R.id.tvTimesForCalls);
 
         availableTimesForCalls = getResources().getStringArray(R.array.availableTimes);
         checkedCallsItemBoxes = new boolean[availableTimesForCalls.length];
 
-        btnSelectAvailableDaysForCalls.setOnClickListener(new View.OnClickListener() {
+        btnSelectTimesForCalls.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                mBuilder = new AlertDialog.Builder(VolunteerProfileEditActivity.this);
-                mBuilder.setTitle("Available Times For Calls");
-                mBuilder.setMultiChoiceItems(availableTimesForCalls, checkedCallsItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
+                callsAlertBuilder = new AlertDialog.Builder(VolunteerProfileEditActivity.this);
+                callsAlertBuilder.setTitle("Available Times For Calls");
+                callsAlertBuilder.setMultiChoiceItems(availableTimesForCalls, checkedCallsItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int position, boolean isItemChecked) {
 
@@ -508,11 +513,13 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
                     }
                 });
 
-                mBuilder.setCancelable(false);
-                mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                callsAlertBuilder.setCancelable(false);
+                callsAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String item = "";
+                        actualTimesForCallsList.clear();
+
                         for (int j = 0; j < userSelectedCallsItems.size(); j++){
                             item += availableTimesForCalls[userSelectedCallsItems.get(j)];
 
@@ -524,19 +531,19 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
 
                             // set the items checked to the textView
                             tvTimesForCalls.setText(item);
-                            actualPickedItemsForTimesForCalls.add(availableTimesForCalls[userSelectedCallsItems.get(j)]);
+                            actualTimesForCallsList.add(availableTimesForCalls[userSelectedCallsItems.get(j)]);
                         }
                     }
                 });
 
-                mBuilder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+                callsAlertBuilder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                     }
                 });
 
-                mBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+                callsAlertBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         for (int k = 0; k < checkedCallsItemBoxes.length; k++){
@@ -544,56 +551,18 @@ public class VolunteerProfileEditActivity extends AppCompatActivity {
                             userSelectedCallsItems.clear();
 
                             tvTimesForCalls.setText("");
-                            actualPickedItemsForTimesForCalls.clear();
+                            actualTimesForCallsList.clear();
                         }
                     }
                 });
 
-                alertDialog = mBuilder.create();
-                alertDialog.show();
+                callAlertDialog = callsAlertBuilder.create();
+                callAlertDialog.show();
             }
+
         });
     }
 
-    private void setCheckedItemsWithoutDialogOpening(String[] _arrayForDialog){
-
-        availableTimesForCalls = _arrayForDialog;
-        checkedCallsItemBoxes = new boolean[availableTimesForCalls.length];
-
-        mBuilder = new AlertDialog.Builder(VolunteerProfileEditActivity.this);
-        mBuilder.setMultiChoiceItems(availableTimesForCalls, checkedCallsItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int position, boolean isItemChecked) {
-
-                if (isItemChecked) {
-                    userSelectedCallsItems.add(position);
-                } else {
-                    userSelectedCallsItems.remove(Integer.valueOf(position));
-                }
-            }
-        });
-
-        mBuilder.setCancelable(false);
-        mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                String item = "";
-                for (int j = 0; j < userSelectedCallsItems.size(); j++){
-                    item += availableTimesForCalls[userSelectedCallsItems.get(j)];
-
-                    // check if the item selected by the user is not the last
-                    // item and append a comma
-                    if (j != userSelectedCallsItems.size() - 1){
-                        item += ", ";
-                    }
-
-                    // set the items checked to the textView
-                    tvTimesForCalls.setText(item);
-                    actualPickedItemsForTimesForCalls.add(availableTimesForCalls[userSelectedCallsItems.get(j)]);
-                }
-            }
-        });
-    }
 
     private void showProvidedServiceTypes(){
 
