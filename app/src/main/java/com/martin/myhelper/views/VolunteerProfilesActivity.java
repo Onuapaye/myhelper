@@ -62,15 +62,26 @@ public class VolunteerProfilesActivity extends AppCompatActivity {
 
             profileList = new ArrayList<>();
 
-            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+            for (QueryDocumentSnapshot ds1 : queryDocumentSnapshots){
 
                 ArrayList<String> _tempList = new ArrayList<>(Arrays.asList(
-                    documentSnapshot.getString("id"),
-                    documentSnapshot.getString("serviceTypeId"),
-                    documentSnapshot.getString("description"),
-                    String.valueOf(documentSnapshot.get("daysForService")),
-                    String.valueOf(documentSnapshot.get("timesForService")),
-                    String.valueOf(documentSnapshot.get("timesForCalls"))
+                    ds1.getString("id"),
+                    ds1.getString("serviceTypeId"),
+                    ds1.getString("description"),
+                    String.valueOf(ds1.get("monCalls")),
+                    String.valueOf(ds1.get("monTimes")),
+                    String.valueOf(ds1.get("tueCalls")),
+                    String.valueOf(ds1.get("tueTimes")),
+                    String.valueOf(ds1.get("wedCalls")),
+                    String.valueOf(ds1.get("wedTimes")),
+                    String.valueOf(ds1.get("thuCalls")),
+                    String.valueOf(ds1.get("thuTimes")),
+                    String.valueOf(ds1.get("friCalls")),
+                    String.valueOf(ds1.get("friTimes")),
+                    String.valueOf(ds1.get("satCalls")),
+                    String.valueOf(ds1.get("satTimes")),
+                    String.valueOf(ds1.get("sunCalls")),
+                    String.valueOf(ds1.get("sunTimes"))
                 ));
 
                 profileList.add(_tempList);

@@ -50,13 +50,14 @@ public class VolunteerHomeActivity extends AppCompatActivity {
         this.handleEditProfileOnClick();
         this.handleViewElderlyFeedBacks();
     }
+
     private  void handleCreateProfileOnClick(){
         createServiceProfile = findViewById(R.id.createProfileTextView);
         createServiceProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(VolunteerHomeActivity.this,
-                        VolunteerProfileCreateActivity.class);
+                //intent = new Intent(VolunteerHomeActivity.this, VolunteerProfileCreateActivity.class);
+                intent = new Intent(VolunteerHomeActivity.this, VolunteerCreateServiceProfileActivity.class);
                 startActivity(intent);
             }
         });

@@ -148,11 +148,61 @@ public class ElderlyCRUDHelper extends Activity {
 
     }
 
+    public void makeElderlyServiceRequest(final AppCompatActivity appCompatActivity, final ElderlyModel elderlyModel){
+
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+
+        final String requestID = UUID.randomUUID().toString();
+        elderlyModel.setServiceRequestId(requestID);
+
+        // create a hash map of the object to be stored
+        Map<String, Object> modelMap = new HashMap<>();
+
+        modelMap.put("id", elderlyModel.getServiceRequestId());
+        modelMap.put("elderlyId", elderlyModel.getId());
+        modelMap.put("requestVolunteerId", elderlyModel.getServiceRequestVolunteerId());
+        modelMap.put("requestServiceTypeId", elderlyModel.getServiceRequestServiceTypeId());
+
+        modelMap.put("monCalls", elderlyModel.getMondayCalls());
+        modelMap.put("monTimes", elderlyModel.getMondayTimes());
+
+        modelMap.put("tueCalls", elderlyModel.getTuesdayCalls());
+        modelMap.put("tueTimes", elderlyModel.getTuesdayTimes());
+
+        modelMap.put("wedCalls", elderlyModel.getWednesdayCalls());
+        modelMap.put("wedTimes", elderlyModel.getWednesdayTimes());
+
+        modelMap.put("thuCalls", elderlyModel.getThursdayCalls());
+        modelMap.put("thuTimes", elderlyModel.getThursdayTimes());
+
+        modelMap.put("friCalls", elderlyModel.getFridayCalls());
+        modelMap.put("friTimes", elderlyModel.getFridayTimes());
+
+        modelMap.put("satCalls", elderlyModel.getSaturdayCalls());
+        modelMap.put("satTimes", elderlyModel.getSaturdayTimes());
+
+        modelMap.put("sunCalls", elderlyModel.getSundayCalls());
+        modelMap.put("sunTimes", elderlyModel.getSundayTimes());
+
+        modelMap.put("requestMessage", elderlyModel.getServiceRequestMessage());
+        modelMap.put("createdAt", FieldValue.serverTimestamp());
+        modelMap.put("updatedAt", FieldValue.serverTimestamp());
+
+        DocumentReference documentReference = firebaseFirestore.collection("elderly_requests")
+                .document(elderlyModel.getId()).collection("requests").document(elderlyModel.getServiceRequestId());
+
+        documentReference.set(modelMap).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE, CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
+                return;
+            }
+        });
+
+    }
+
     public void createElderlyServiceFeedback(final Context appCompatActivity, final ElderlyModel elderlyModel, final Context context){
 
-        // create an instance of the DocumentReference class of FirebaseStore
-        //firebaseAuth = Utility.getFirebaseAuthenticationInstance();
-        //firebaseUser = firebaseAuth.getCurrentUser();
         firebaseFirestore = Utility.getFirebaseFireStoreInstance();
 
         final String requestID = UUID.randomUUID().toString();

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Handler;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -24,6 +25,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.martin.myhelper.model.VolunteerModel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -33,6 +35,8 @@ import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_FAILED_MSG;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_FAILED_TITLE;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_MSG;
 import static com.martin.myhelper.helpers.Utility.CREATE_RECORD_SUCCESS_TITLE;
+import static com.martin.myhelper.helpers.Utility.UPDATE_RECORD_FAILED_MSG;
+import static com.martin.myhelper.helpers.Utility.UPDATE_RECORD_FAILED_TITLE;
 
 public class VolunteerCRUDHelper extends Activity {
 
@@ -41,6 +45,7 @@ public class VolunteerCRUDHelper extends Activity {
     private FirebaseFirestore firebaseFirestore;
     private StorageReference storageReference;
 
+    ArrayList<String> emptyArray = new ArrayList<>();
 
     public void createVolunteerUserRecord(final AppCompatActivity appCompatActivity, final VolunteerModel volunteerModel, final Uri profileImageUri){
 
@@ -183,6 +188,94 @@ public class VolunteerCRUDHelper extends Activity {
 
     }
 
+    public void volunteerCreateService(final AppCompatActivity appCompatActivity,
+                                       final VolunteerModel volunteerModel, CheckBox... checkBox){
+
+        // create an instance of the DocumentReference class of FirebaseStore
+        firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+
+        final String profileID = generateProfileId();
+
+        // create a hash map of the object to be stored
+        Map<String, Object> modelMap = new HashMap<>();
+        modelMap.put("id", profileID);
+        modelMap.put("volunteerId", volunteerModel.getId());
+        modelMap.put("serviceTypeId", volunteerModel.getServiceTypeId());
+
+        if (checkBox[0].isChecked()){
+            modelMap.put("monCalls", volunteerModel.getMondayCalls());
+            modelMap.put("monTimes", volunteerModel.getMondayTimes());
+        } else {
+            modelMap.put("monCalls", emptyArray);
+            modelMap.put("monTimes", emptyArray);
+        }
+
+        if (checkBox[1].isChecked()){
+            modelMap.put("tueCalls", volunteerModel.getTuesdayCalls());
+            modelMap.put("tueTimes", volunteerModel.getTuesdayTimes());
+        } else {
+            modelMap.put("tueCalls", emptyArray);
+            modelMap.put("tueTimes", emptyArray);
+        }
+        if (checkBox[2].isChecked()){
+            modelMap.put("wedCalls", volunteerModel.getWednesdayCalls());
+            modelMap.put("wedTimes", volunteerModel.getWednesdayTimes());
+        } else {
+            modelMap.put("wedCalls", emptyArray);
+            modelMap.put("wedTimes", emptyArray);
+        }
+        if (checkBox[3].isChecked()){
+            modelMap.put("thuCalls", volunteerModel.getThursdayCalls());
+            modelMap.put("thuTimes", volunteerModel.getThursdayTimes());
+        } else {
+            modelMap.put("thuCalls", emptyArray);
+            modelMap.put("thuTimes", emptyArray);
+        }
+        if (checkBox[4].isChecked()){
+            modelMap.put("friCalls", volunteerModel.getFridayCalls());
+            modelMap.put("friTimes", volunteerModel.getFridayTimes());
+        } else {
+            modelMap.put("friCalls", emptyArray);
+            modelMap.put("friTimes", emptyArray);
+        }
+        if (checkBox[5].isChecked()){
+            modelMap.put("satCalls", volunteerModel.getSaturdayCalls());
+            modelMap.put("satTimes", volunteerModel.getSaturdayTimes());
+        } else {
+            modelMap.put("satCalls", emptyArray);
+            modelMap.put("satTimes", emptyArray);
+        }
+        if (checkBox[6].isChecked()){
+            modelMap.put("sunCalls", volunteerModel.getSundayCalls());
+            modelMap.put("sunTimes", volunteerModel.getSundayTimes());
+        } else {
+            modelMap.put("sunCalls", emptyArray);
+            modelMap.put("sunTimes", emptyArray);
+        }
+
+        modelMap.put("description", volunteerModel.getDescriptionOfService());
+
+        modelMap.put("createdAt", FieldValue.serverTimestamp());
+        modelMap.put("updatedAt", FieldValue.serverTimestamp());
+
+        DocumentReference documentReference = firebaseFirestore.collection("volunteer_profiles")
+                .document(firebaseAuth.getCurrentUser().getUid())
+                .collection("profiles").document(profileID);
+
+        documentReference.set(modelMap).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE,
+                        CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
+                return;
+            }
+        });
+
+    }
+
+
     public void updateVolunteerServiceProfile(final AppCompatActivity appCompatActivity,
                                               final VolunteerModel volunteerModel){
 
@@ -211,6 +304,94 @@ public class VolunteerCRUDHelper extends Activity {
             public void onFailure(@NonNull Exception e) {
                 Utility.showInformationDialog(CREATE_RECORD_FAILED_TITLE,
                         CREATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
+                return;
+            }
+        });
+
+    }
+
+    public void volunteerUpdateService(final AppCompatActivity appCompatActivity,
+                                       final VolunteerModel volunteerModel, CheckBox... checkBox){
+
+        // create an instance of the DocumentReference class of FirebaseStore
+        firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+
+        //final String profileID = generateProfileId();
+
+        // create a hash map of the object to be stored
+        Map<String, Object> modelMap = new HashMap<>();
+        //modelMap.put("id", profileID);
+        //modelMap.put("volunteerId", volunteerModel.getId());
+        modelMap.put("serviceTypeId", volunteerModel.getServiceTypeId());
+
+        if (checkBox[0].isChecked()){
+            modelMap.put("monCalls", volunteerModel.getMondayCalls());
+            modelMap.put("monTimes", volunteerModel.getMondayTimes());
+        } else {
+            modelMap.put("monCalls", emptyArray);
+            modelMap.put("monTimes", emptyArray);
+        }
+
+        if (checkBox[1].isChecked()){
+            modelMap.put("tueCalls", volunteerModel.getTuesdayCalls());
+            modelMap.put("tueTimes", volunteerModel.getTuesdayTimes());
+        } else {
+            modelMap.put("tueCalls", emptyArray);
+            modelMap.put("tueTimes", emptyArray);
+        }
+        if (checkBox[2].isChecked()){
+            modelMap.put("wedCalls", volunteerModel.getWednesdayCalls());
+            modelMap.put("wedTimes", volunteerModel.getWednesdayTimes());
+        } else {
+            modelMap.put("wedCalls", emptyArray);
+            modelMap.put("wedTimes", emptyArray);
+        }
+        if (checkBox[3].isChecked()){
+            modelMap.put("thuCalls", volunteerModel.getThursdayCalls());
+            modelMap.put("thuTimes", volunteerModel.getThursdayTimes());
+        } else {
+            modelMap.put("thuCalls", emptyArray);
+            modelMap.put("thuTimes", emptyArray);
+        }
+        if (checkBox[4].isChecked()){
+            modelMap.put("friCalls", volunteerModel.getFridayCalls());
+            modelMap.put("friTimes", volunteerModel.getFridayTimes());
+        } else {
+            modelMap.put("friCalls", emptyArray);
+            modelMap.put("friTimes", emptyArray);
+        }
+        if (checkBox[5].isChecked()){
+            modelMap.put("satCalls", volunteerModel.getSaturdayCalls());
+            modelMap.put("satTimes", volunteerModel.getSaturdayTimes());
+        } else {
+            modelMap.put("satCalls", emptyArray);
+            modelMap.put("satTimes", emptyArray);
+        }
+        if (checkBox[6].isChecked()){
+            modelMap.put("sunCalls", volunteerModel.getSundayCalls());
+            modelMap.put("sunTimes", volunteerModel.getSundayTimes());
+        } else {
+            modelMap.put("sunCalls", emptyArray);
+            modelMap.put("sunTimes", emptyArray);
+        }
+
+        modelMap.put("description", volunteerModel.getDescriptionOfService());
+
+        modelMap.put("createdAt", FieldValue.serverTimestamp());
+        modelMap.put("updatedAt", FieldValue.serverTimestamp());
+
+        DocumentReference documentReference = firebaseFirestore
+                .collection("volunteer_profiles")
+                .document(firebaseAuth.getCurrentUser().getUid()).collection("profiles")
+                .document(volunteerModel.getProfileId());
+
+        documentReference.update(modelMap).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Utility.showInformationDialog(UPDATE_RECORD_FAILED_TITLE,
+                        UPDATE_RECORD_FAILED_MSG + e.getMessage(), appCompatActivity);
                 return;
             }
         });

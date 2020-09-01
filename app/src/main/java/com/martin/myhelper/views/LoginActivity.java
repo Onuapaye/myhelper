@@ -71,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
         intent.getExtras();
 
         final int userType = intent.getIntExtra("userType",0);
-        Log.e("USER TYPE", String.valueOf(userType));
 
         registerLinkTextView = findViewById(R.id.registerLink);
         registerLinkTextView.setOnClickListener(new View.OnClickListener() {

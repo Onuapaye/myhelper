@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.martin.myhelper.R;
 import com.martin.myhelper.helpers.Utility;
 import com.martin.myhelper.helpers.VolunteerViewElderlyRequestsAdapter;
+import com.martin.myhelper.helpers.VolunteerViewEldersRequestsAdapter;
 
 import java.util.ArrayList;
 
@@ -86,8 +87,28 @@ public class VolunteerViewElderlyRequestsActivity extends AppCompatActivity {
                                                 _tempListOfElders.add(ds.getString("elderlyId"));
                                                 _tempListOfElders.add(ds.getString("requestVolunteerId"));
                                                 _tempListOfElders.add(ds.getString("requestServiceTypeId"));
-                                                _tempListOfElders.add(String.valueOf(ds.get("requestDaysForService")));
-                                                _tempListOfElders.add(String.valueOf(ds.get("requestTimesForService")));
+
+                                                _tempListOfElders.add(String.valueOf(ds.get("monCalls")));
+                                                _tempListOfElders.add(String.valueOf(ds.get("monTimes")));
+
+                                                _tempListOfElders.add(String.valueOf(ds.get("tueCalls")));
+                                                _tempListOfElders.add(String.valueOf(ds.get("tueTimes")));
+
+                                                _tempListOfElders.add(String.valueOf(ds.get("wedCalls")));
+                                                _tempListOfElders.add(String.valueOf(ds.get("wedTimes")));
+
+                                                _tempListOfElders.add(String.valueOf(ds.get("thuCalls")));
+                                                _tempListOfElders.add(String.valueOf(ds.get("thuTimes")));
+
+                                                _tempListOfElders.add(String.valueOf(ds.get("friCalls")));
+                                                _tempListOfElders.add(String.valueOf(ds.get("friTimes")));
+
+                                                _tempListOfElders.add(String.valueOf(ds.get("satCalls")));
+                                                _tempListOfElders.add(String.valueOf(ds.get("satTimes")));
+
+                                                _tempListOfElders.add(String.valueOf(ds.get("sunCalls")));
+                                                _tempListOfElders.add(String.valueOf(ds.get("sunTimes")));
+
                                                 _tempListOfElders.add(ds.getString("requestMessage"));
 
                                                 listOfElders.add(_tempListOfElders);
@@ -97,13 +118,10 @@ public class VolunteerViewElderlyRequestsActivity extends AppCompatActivity {
 
                                     RecyclerView rcvViewElderlyRequest = findViewById(R.id.rcvProvidedServices);
 
-                                    VolunteerViewElderlyRequestsAdapter viewElderlyRequestsAdapter =
-                                            new VolunteerViewElderlyRequestsAdapter(
-                                            VolunteerViewElderlyRequestsActivity.this, listOfElders);
+                                    VolunteerViewEldersRequestsAdapter requestsAdapter = new VolunteerViewEldersRequestsAdapter(VolunteerViewElderlyRequestsActivity.this, listOfElders);
 
-                                    rcvViewElderlyRequest.setAdapter(viewElderlyRequestsAdapter);
-                                    rcvViewElderlyRequest.setLayoutManager(new LinearLayoutManager(
-                                            VolunteerViewElderlyRequestsActivity.this));
+                                    rcvViewElderlyRequest.setAdapter(requestsAdapter);
+                                    rcvViewElderlyRequest.setLayoutManager(new LinearLayoutManager(VolunteerViewElderlyRequestsActivity.this));
                                 }
                             });
                     }

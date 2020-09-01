@@ -21,7 +21,8 @@ import com.martin.myhelper.R;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class VolunteerViewElderlyRequestsAdapter extends RecyclerView.Adapter<VolunteerViewElderlyRequestsAdapter.VolunteerViewElderlyRequestViewHolder> {
+public class VolunteerViewEldersRequestsAdapter extends RecyclerView.Adapter<VolunteerViewEldersRequestsAdapter.VolunteerViewEldersRequestViewHolder> {
+
     Context _context;
     ArrayList<ArrayList<String>> _listOfElders, _elderlyRequestsForVolunteerList, _volunteerAccountList;
     ArrayList<String> _tempList, _tempList2;
@@ -30,7 +31,7 @@ public class VolunteerViewElderlyRequestsAdapter extends RecyclerView.Adapter<Vo
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
 
-    public VolunteerViewElderlyRequestsAdapter(Context context, ArrayList<ArrayList<String>> listOfElders) {
+    public VolunteerViewEldersRequestsAdapter(Context context, ArrayList<ArrayList<String>> listOfElders) {
         this._context = context;
         this._listOfElders = listOfElders;
         this.firebaseAuth = Utility.getFirebaseAuthenticationInstance();
@@ -40,7 +41,7 @@ public class VolunteerViewElderlyRequestsAdapter extends RecyclerView.Adapter<Vo
 
     @NonNull
     @Override
-    public VolunteerViewElderlyRequestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public VolunteerViewEldersRequestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // create a layout inflater to inflate the view
         LayoutInflater layoutInflater = LayoutInflater.from(_context);
 
@@ -48,16 +49,17 @@ public class VolunteerViewElderlyRequestsAdapter extends RecyclerView.Adapter<Vo
         View view = layoutInflater.inflate(R.layout.volunteer_view_elderly_requests_row, parent, false);
 
         // return the view using the view holder
-        return new VolunteerViewElderlyRequestsAdapter.VolunteerViewElderlyRequestViewHolder(view);
+        return new VolunteerViewEldersRequestsAdapter.VolunteerViewEldersRequestViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VolunteerViewElderlyRequestViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull VolunteerViewEldersRequestViewHolder holder, int position) {
 
         // STEP 1. get list of all elders by passing `listOfElders` as a parameter argument to the constructor;
-        holder.tvDays.setText(_listOfElders.get(position).get(4));
-        holder.tvTimes.setText(_listOfElders.get(position).get(5));
-        holder.requestedServiceDescription.setText(_listOfElders.get(position).get(6));
+        //holder.tvDays.setText(_listOfElders.get(position).get(4));
+        //holder.tvTimes.setText(_listOfElders.get(position).get(5));
+        getDayTimesAndCalls(holder, position);
+        holder.requestedServiceDescription.setText(_listOfElders.get(position).get(18));
         setRequestServiceTypeName(holder, position);
 
         // STEP 2. use the list of all elders to get all requests from the elderly based on the current volunteer id
@@ -70,13 +72,13 @@ public class VolunteerViewElderlyRequestsAdapter extends RecyclerView.Adapter<Vo
         return _listOfElders.size();
     }
 
-    public class VolunteerViewElderlyRequestViewHolder extends RecyclerView.ViewHolder {
+    public class VolunteerViewEldersRequestViewHolder extends RecyclerView.ViewHolder {
 
         TextView elderlyName, elderlyMobileNumber, requestedServiceDescription, serviceTypeName, tvDays, tvTimes;
         MaterialLetterIcon materialLetterIcon;
         Button btnGoToNotificationPage;
 
-        public VolunteerViewElderlyRequestViewHolder(@NonNull View itemView) {
+        public VolunteerViewEldersRequestViewHolder(@NonNull View itemView) {
             super(itemView);
 
             elderlyName = itemView.findViewById(R.id.tvRequestedElderlyName);
@@ -91,7 +93,7 @@ public class VolunteerViewElderlyRequestsAdapter extends RecyclerView.Adapter<Vo
         }
     }
 
-    private void getElderlyAccountDetails(String elderlyId, final VolunteerViewElderlyRequestViewHolder holder) {
+    private void getElderlyAccountDetails(String elderlyId, final VolunteerViewEldersRequestsAdapter.VolunteerViewEldersRequestViewHolder holder) {
 
         final DocumentReference reference = firebaseFirestore.collection("elders").document(elderlyId);
         reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -114,7 +116,7 @@ public class VolunteerViewElderlyRequestsAdapter extends RecyclerView.Adapter<Vo
         });
     }
 
-    private void setRequestServiceTypeName(final VolunteerViewElderlyRequestViewHolder holder, final int position){
+    private void setRequestServiceTypeName(final VolunteerViewEldersRequestsAdapter.VolunteerViewEldersRequestViewHolder holder, int position){
 
         DocumentReference reference = firebaseFirestore.collection("service_types").document(_listOfElders.get(position).get(3));
         reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -125,7 +127,49 @@ public class VolunteerViewElderlyRequestsAdapter extends RecyclerView.Adapter<Vo
                 }
             }
         });
-
     }
 
+    private void getDayTimesAndCalls(final VolunteerViewEldersRequestsAdapter.VolunteerViewEldersRequestViewHolder holder, int position){
+
+        String _allTimes = "", _allCalls = "";
+
+        // set times
+        if(!_listOfElders.get(position).get(4).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Monday - Call Time\n" + _listOfElders.get(position).get(4).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Monday - Service\n" + _listOfElders.get(position).get(5).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_listOfElders.get(position).get(6).replaceAll("(^\\[|\\]$)", "").equals("") ){
+            _allCalls += "Tuesday - Call Time\n" + _listOfElders.get(position).get(6).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Tuesday - Service Time\n" + _listOfElders.get(position).get(7).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_listOfElders.get(position).get(8).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Wednesday - Call Time\n" + _listOfElders.get(position).get(8).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Wednesday - Service Time\n" + _listOfElders.get(position).get(9).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_listOfElders.get(position).get(10).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Thursday - Call Time\n" + _listOfElders.get(position).get(10).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Thursday - Service Time\n" + _listOfElders.get(position).get(11).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_listOfElders.get(position).get(12).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Friday - Call Time\n" + _listOfElders.get(position).get(12).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Friday - Service Time\n" + _listOfElders.get(position).get(13).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_listOfElders.get(position).get(14).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Saturday - Call Time\n" + _listOfElders.get(position).get(14).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Saturday - Service Time\n" + _listOfElders.get(position).get(15).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_listOfElders.get(position).get(16).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Sunday - Call Time\n" + _listOfElders.get(position).get(16).replaceAll("(^\\[|\\]$)", "");
+            _allTimes += "Sunday - Service Time\n" + _listOfElders.get(position).get(17).replaceAll("(^\\[|\\]$)", "");
+        }
+
+        holder.tvDays.setText(_allCalls);
+        holder.tvTimes.setText(_allTimes);
+    }
 }

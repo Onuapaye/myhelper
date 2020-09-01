@@ -3,38 +3,46 @@ package com.martin.myhelper.helpers;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.martin.myhelper.R;
 import com.martin.myhelper.views.ElderlyCreateRequestActivity;
+import com.martin.myhelper.views.ElderlyEditRequestActivity;
+import com.martin.myhelper.views.ElderlyHomeActivity;
+import com.martin.myhelper.views.ElderlyMakeRequestActivity;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ElderlyViewVolunteerServicesAdapter extends RecyclerView.Adapter<ElderlyViewVolunteerServicesAdapter.ElderlyViewProvidedServicesViewHolder> {
+public class ElderlyViewVolunteerServicesToMakeRequestAdapter extends RecyclerView.Adapter<ElderlyViewVolunteerServicesToMakeRequestAdapter.ElderlyMakeRequestViewHolder> {
 
     ArrayList<ArrayList<String>> _volunteersProfiles, _volunteersAccounts;
     Context _context;
     FirebaseFirestore firebaseFirestore;
     ArrayList<String> _tempList2;
 
-    public ElderlyViewVolunteerServicesAdapter(Context context, ArrayList<ArrayList<String>> volunteersProfiles ){
+    public ElderlyViewVolunteerServicesToMakeRequestAdapter(Context context, ArrayList<ArrayList<String>> volunteersProfiles) {
         this._context = context;
         this._volunteersProfiles = volunteersProfiles;
         this._volunteersAccounts = null;
@@ -42,7 +50,7 @@ public class ElderlyViewVolunteerServicesAdapter extends RecyclerView.Adapter<El
 
     @NonNull
     @Override
-    public ElderlyViewProvidedServicesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ElderlyMakeRequestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         // create a layout inflater to inflate the view
         LayoutInflater layoutInflater = LayoutInflater.from(_context);
@@ -51,11 +59,11 @@ public class ElderlyViewVolunteerServicesAdapter extends RecyclerView.Adapter<El
         View view = layoutInflater.inflate(R.layout.elderly_view_provided_services_row, parent, false);
 
         // return the view using the view holder
-        return new ElderlyViewProvidedServicesViewHolder(view);
+        return new ElderlyViewVolunteerServicesToMakeRequestAdapter.ElderlyMakeRequestViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ElderlyViewProvidedServicesViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ElderlyMakeRequestViewHolder holder, final int position) {
 
         _volunteersAccounts = new ArrayList<>();
         // set the text view values from the data or arrays
@@ -65,13 +73,12 @@ public class ElderlyViewVolunteerServicesAdapter extends RecyclerView.Adapter<El
         holder.btnContactVolunteer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(_context, ElderlyCreateRequestActivity.class);
+                Intent intent = new Intent(_context, ElderlyMakeRequestActivity.class);
                 intent.putExtra("profileRecordForRequest", _volunteersProfiles.get(position));
                 intent.putExtra("accountRecordForRequest", _volunteersAccounts.get(position));
                 _context.startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -79,14 +86,14 @@ public class ElderlyViewVolunteerServicesAdapter extends RecyclerView.Adapter<El
         return _volunteersProfiles.size();
     }
 
-    public class ElderlyViewProvidedServicesViewHolder extends RecyclerView.ViewHolder {
+    public class ElderlyMakeRequestViewHolder extends RecyclerView.ViewHolder {
 
         // create a variable for the items in the view
         TextView volunteerName, serviceDescription, volunteerMobile;
         CircularImageView volunteerImage;
         Button btnContactVolunteer;
 
-        public ElderlyViewProvidedServicesViewHolder(@NonNull View itemView) {
+        public ElderlyMakeRequestViewHolder(@NonNull View itemView) {
             super(itemView);
 
             volunteerName = itemView.findViewById(R.id.viewRequestVolunteerName);
@@ -97,7 +104,7 @@ public class ElderlyViewVolunteerServicesAdapter extends RecyclerView.Adapter<El
         }
     }
 
-    private void getVolunteerAccountDetails(String volunteerId, final ElderlyViewProvidedServicesViewHolder holder) {
+    private void getVolunteerAccountDetails(String volunteerId, final ElderlyViewVolunteerServicesToMakeRequestAdapter.ElderlyMakeRequestViewHolder holder) {
 
         firebaseFirestore = Utility.getFirebaseFireStoreInstance();
         DocumentReference volunteerDocRef = firebaseFirestore.collection("volunteers").document(volunteerId);
@@ -130,7 +137,7 @@ public class ElderlyViewVolunteerServicesAdapter extends RecyclerView.Adapter<El
         });
     }
 
-    private void loadProfilePhotoIntoImageView(String imageName, String imageExtension, final ElderlyViewProvidedServicesViewHolder holder) {
+    private void loadProfilePhotoIntoImageView(String imageName, String imageExtension, final ElderlyViewVolunteerServicesToMakeRequestAdapter.ElderlyMakeRequestViewHolder holder) {
 
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         StorageReference storageReference = firebaseStorage.getReference("images/").child(imageName + "." + imageExtension);

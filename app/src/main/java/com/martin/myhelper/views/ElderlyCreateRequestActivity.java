@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -207,14 +209,14 @@ public class ElderlyCreateRequestActivity extends AppCompatActivity {
 
         //String serviceTypeCode = _requestedVolunteerProfileData.get(1);
         firebaseFirestore = Utility.getFirebaseFireStoreInstance();
-        CollectionReference reference = firebaseFirestore.collection("service_types");
+        DocumentReference reference = firebaseFirestore.collection("service_types").document(_requestedVolunteerProfileData.get(1));
         reference
-            .whereEqualTo("id", _requestedVolunteerProfileData.get(1))
+            //.whereEqualTo("id", _requestedVolunteerProfileData.get(1))
             .get()
-            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots ) {
+                public void onSuccess(DocumentSnapshot snapshot) {
+                    if(snapshot.exists()){
                         _tvSelectedServiceName.setText(snapshot.getString("service_name"));
                     }
                 }

@@ -20,6 +20,7 @@ public class VolunteerModel extends GenericModel {
     private ArrayList<String> timesForService;
     private ArrayList<String> timesForCalls;
 
+
     public VolunteerModel() {
     }
 
@@ -75,29 +76,6 @@ public class VolunteerModel extends GenericModel {
     public void setImageType(String imageType) {
         this.imageType = imageType;
     }
-/*public String getServiceDayId() {
-        return serviceDayId;
-    }
-
-    public void setServiceDayId(String serviceDayId) {
-        this.serviceDayId = serviceDayId;
-    }
-
-    public String getServiceTimeId() {
-        return serviceTimeId;
-    }
-
-    public void setServiceTimeId(String serviceTimeId) {
-        this.serviceTimeId = serviceTimeId;
-    }
-
-    public String getServiceCallId() {
-        return serviceCallId;
-    }
-
-    public void setServiceCallId(String serviceCallId) {
-        this.serviceCallId = serviceCallId;
-    }*/
 
     public ArrayList<String> getDaysForService() {
         return daysForService;
@@ -124,6 +102,7 @@ public class VolunteerModel extends GenericModel {
     }
 
 
+
     @Override
     public String toString() {
         return "VolunteerModel{" +
@@ -132,6 +111,7 @@ public class VolunteerModel extends GenericModel {
                 ", profileImage=" + profileImage +
                 ", descriptionOfService='" + descriptionOfService + '\'' +
                 ", serviceTypeId='" + serviceTypeId + '\'' +
+                ", imageType='" + imageType + '\'' +
                 ", daysForService=" + daysForService +
                 ", timesForService=" + timesForService +
                 ", timesForCalls=" + timesForCalls +

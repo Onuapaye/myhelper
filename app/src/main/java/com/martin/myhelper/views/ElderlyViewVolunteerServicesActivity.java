@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,23 +13,22 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.martin.myhelper.R;
-import com.martin.myhelper.helpers.ElderlyRequestsAdapter;
 import com.martin.myhelper.helpers.ElderlyViewVolunteerServicesAdapter;
+import com.martin.myhelper.helpers.ElderlyViewVolunteerServicesToMakeRequestAdapter;
 import com.martin.myhelper.helpers.Utility;
-import com.mikhaellopez.circularimageview.CircularImageView;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static com.martin.myhelper.helpers.Utility.ASSIST_WITH_ERRANDS;
 import static com.martin.myhelper.helpers.Utility.ASSIST_WITH_GARDENING;
@@ -44,100 +42,109 @@ import static com.martin.myhelper.helpers.Utility.TEACH_USAGE_WEB_APPS;
 import static com.martin.myhelper.helpers.Utility.WALK_WITH_U;
 
 public class ElderlyViewVolunteerServicesActivity extends AppCompatActivity {
-    /*String[] s1, s2, s3;
 
-    int images[] = {R.drawable.man, R.drawable.bis_smile, R.drawable.short_shave_1,
-            R.drawable.birthday_balloons2, R.drawable.short_shave_2,
-            R.drawable.short_shave_3, R.drawable.woman};*/
+    private List<String> servicesList;
+    private List<String> _tempServicesList;
+
+    /*variable for loading system times*/
+    private List<String> tempSystemTimeList;
+    private List<String> systemTimeList = new ArrayList<>();
+    private List<String> lstFinalSystemTimes = new ArrayList<>();
+    private String[] availableSystemTimesArray = null;
+
+    private HashMap<Integer, String> _tempServiceTypeHash;
+    private HashMap<Integer, String> serviceTypesHash = new HashMap<>();
+    private HashMap<Integer, String> finalServiceTypesHash = new HashMap<>() ;
+    private String[] serviceArrayForSpinner;
+    private ArrayAdapter<String> serviceTypesArrayAdapter;
+
+    private Spinner spnServiceType;
+    private String selectedServiceTypeID = "";
 
     private ArrayList<ArrayList<String>> volunteerProfilesLists, volunteerAccountList;
     private ArrayList<String> _tempList1;
 
-    private String[] serviceTypes;
-    private String[] serviceTypeIDs;
-    private String selectedServiceTypeID;
-    private Spinner spnServiceTypes;
-    private ArrayAdapter<String> arrayAdapter;
-
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
 
-    ///private CircularImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_elderly_view_provided_service);
+        setContentView(R.layout.activity_elderly_view_volunteer_service);
 
-        this.loadServicesTypes();
+        this.getServiceTypesRecordsForSpinner();
 
-        this.handleSpinnerSelectedItemChange();
+        this.handleSelectServiceTypeSpinnerOnItemChange();
     }
 
     /***
      * Loads all the service types from an array into the spinner control
      */
-    private void loadServicesTypes(){
+    private void getServiceTypesRecordsForSpinner(){
 
-        spnServiceTypes = findViewById(R.id.availableServiceTypeSpinner);
-        serviceTypes = getResources().getStringArray(R.array.serviceTypes);
-        serviceTypeIDs = getResources().getStringArray(R.array.serviceTypeIDs);
+        spnServiceType = findViewById(R.id.spnServiceType);
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
 
-        arrayAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item,  serviceTypes);
-        arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spnServiceTypes.setAdapter(arrayAdapter);
+        servicesList = new ArrayList<>();
+
+        final CollectionReference collection = firebaseFirestore.collection("service_types");
+        collection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                int key = 0;
+                for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots){
+
+                    _tempServiceTypeHash = new HashMap<>();
+                    serviceTypesHash.put(key, snapshot.getString("id"));
+
+                    _tempServicesList = new ArrayList<>();
+                    _tempServicesList.add(snapshot.getString("service_name") );
+
+                    servicesList.add(_tempServicesList.toString().replaceAll("(^\\[|\\]$)", ""));
+                    key++;
+                }
+
+                // convert the list into a normal array
+                serviceArrayForSpinner = new String[servicesList.size()];
+                servicesList.toArray(serviceArrayForSpinner);
+
+                // call the callback method to set the hash results
+                setServiceTypesHashCallBack(serviceTypesHash);
+
+                serviceTypesArrayAdapter = new ArrayAdapter<>(ElderlyViewVolunteerServicesActivity.this,
+                        R.layout.support_simple_spinner_dropdown_item, serviceArrayForSpinner);
+
+                serviceTypesArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+                spnServiceType.setAdapter(serviceTypesArrayAdapter);
+            }
+        });
+
     }
 
-    private void handleSpinnerSelectedItemChange(){
+    // a callback method to get the results of the hash map
+    private void setServiceTypesHashCallBack(HashMap<Integer, String> _hash){
+        this.finalServiceTypesHash = _hash;
+    }
 
-        spnServiceTypes = findViewById(R.id.availableServiceTypeSpinner);
-        spnServiceTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void handleSelectServiceTypeSpinnerOnItemChange(){
+
+        spnServiceType = findViewById(R.id.availableServiceTypeSpinner);
+        spnServiceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String _spinnerKey;
+                _spinnerKey = finalServiceTypesHash.get(spnServiceType.getSelectedItemPosition());
 
-                if (!(spnServiceTypes.getSelectedItem().toString().trim() == "")){
-
-                    switch (spnServiceTypes.getSelectedItem().toString()){
-                        case TEACH_USAGE_MOBILE_DEVICES:
-                            selectedServiceTypeID = serviceTypeIDs[0];
-                            break;
-                        case TEACH_USAGE_WEB_APPS:
-                            selectedServiceTypeID = serviceTypeIDs[1];
-                            break;
-                        case WALK_WITH_U:
-                            selectedServiceTypeID = serviceTypeIDs[2];
-                            break;
-                        case PROVIDE_LIFT_TO_SOCIAL:
-                            selectedServiceTypeID = serviceTypeIDs[3];
-                            break;
-                        case ASSIST_WITH_HOUSE_CLEANING:
-                            selectedServiceTypeID = serviceTypeIDs[4];
-                            break;
-                        case ASSIST_WITH_HOUSE_MAINTENANCE:
-                            selectedServiceTypeID = serviceTypeIDs[5];
-                            break;
-                        case ASSIST_WITH_GARDENING:
-                            selectedServiceTypeID = serviceTypeIDs[6];
-                            break;
-                        case ASSIST_WITH_ERRANDS:
-                            selectedServiceTypeID = serviceTypeIDs[7];
-                            break;
-                        case ASSIST_WITH_GROCERY_SHOPPING:
-                            selectedServiceTypeID = serviceTypeIDs[8];
-                            break;
-                        case PROVIDE_LIFT_TO_SHOP :
-                            selectedServiceTypeID = serviceTypeIDs[9];
-                            break;
-                        default:
-                            selectedServiceTypeID = serviceTypeIDs[10];
-                            break;
-                    }
-                }
+                // set the selected service time key for saving later
+                selectedServiceTypeID = _spinnerKey;
 
                 RecyclerView recyclerView = findViewById(R.id.rcvViewProvidedServices);
                 recyclerView.removeAllViewsInLayout();
 
                 // load the list by showing the recycler view
-                loadVolunteerServicesRecyclerView(selectedServiceTypeID);
+                loadVolunteerServicesForRecyclerView(selectedServiceTypeID);
             }
 
             @Override
@@ -147,15 +154,15 @@ public class ElderlyViewVolunteerServicesActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * Loads all volunteer with their profiles based on the service type selected
      * from the drop-down list
      * @param serviceTypeID
      */
-    private void loadVolunteerServicesRecyclerView(final String serviceTypeID) {
+    private void loadVolunteerServicesForRecyclerView(final String serviceTypeID) {
 
         firebaseFirestore = Utility.getFirebaseFireStoreInstance();
-        //firebaseAuth = Utility.getFirebaseAuthenticationInstance();
 
         final CollectionReference volunteersColsRef = firebaseFirestore.collection("volunteers");
 
@@ -187,16 +194,37 @@ public class ElderlyViewVolunteerServicesActivity extends AppCompatActivity {
                             if (task.getResult() != null){
 
                                 QuerySnapshot documentSnapshot = task.getResult();
+
                                 for (DocumentSnapshot ds1 : documentSnapshot) {
+
                                     // instantiate the temporal array list of volunteer services
                                     _tempList1 = new ArrayList<>();
+
                                     _tempList1.add(ds1.getString("id"));
                                     _tempList1.add(ds1.getString("serviceTypeId"));
                                     _tempList1.add(ds1.getString("volunteerId"));
                                     _tempList1.add(ds1.getString("description"));
-                                    _tempList1.add(String.valueOf(ds1.get("daysForService")));
-                                    _tempList1.add(String.valueOf(ds1.get("timesForService")));
-                                    _tempList1.add(String.valueOf(ds1.get("timesForCalls")));
+
+                                    _tempList1.add(String.valueOf(ds1.get("monCalls")));
+                                    _tempList1.add(String.valueOf(ds1.get("monTimes")));
+
+                                    _tempList1.add(String.valueOf(ds1.get("tueCalls")));
+                                    _tempList1.add(String.valueOf(ds1.get("tueTimes")));
+
+                                    _tempList1.add(String.valueOf(ds1.get("wedCalls")));
+                                    _tempList1.add(String.valueOf(ds1.get("wedTimes")));
+
+                                    _tempList1.add(String.valueOf(ds1.get("thuCalls")));
+                                    _tempList1.add(String.valueOf(ds1.get("thuTimes")));
+
+                                    _tempList1.add(String.valueOf(ds1.get("friCalls")));
+                                    _tempList1.add(String.valueOf(ds1.get("friTimes")));
+
+                                    _tempList1.add(String.valueOf(ds1.get("satCalls")));
+                                    _tempList1.add(String.valueOf(ds1.get("satTimes")));
+
+                                    _tempList1.add(String.valueOf(ds1.get("sunCalls")));
+                                    _tempList1.add(String.valueOf(ds1.get("sunTimes")));
 
                                     volunteerProfilesLists.add(_tempList1);
                                 }
@@ -204,11 +232,11 @@ public class ElderlyViewVolunteerServicesActivity extends AppCompatActivity {
                         }
                         RecyclerView viewVolunteerServices = findViewById(R.id.rcvViewProvidedServices);
 
-                        ElderlyViewVolunteerServicesAdapter
-                                viewVolunteerServicesAdapter = new ElderlyViewVolunteerServicesAdapter(
+                        ElderlyViewVolunteerServicesToMakeRequestAdapter
+                                servicesToMakeRequestAdapter = new ElderlyViewVolunteerServicesToMakeRequestAdapter(
                                         ElderlyViewVolunteerServicesActivity.this, volunteerProfilesLists);
                         viewVolunteerServices.
-                                setAdapter(viewVolunteerServicesAdapter);
+                                setAdapter(servicesToMakeRequestAdapter);
                         viewVolunteerServices.
                                 setLayoutManager(new LinearLayoutManager(ElderlyViewVolunteerServicesActivity.this));
                         }
@@ -218,25 +246,5 @@ public class ElderlyViewVolunteerServicesActivity extends AppCompatActivity {
             }
         });
     }
-
-
-    /*private void loadProfilePhotoIntoImageView(String imageName, String imageExtension) {
-
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        StorageReference storageReference = firebaseStorage.getReference("images/").child(imageName + "." + imageExtension);
-
-        storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()){
-
-                    Uri uri = task.getResult();
-
-                    CircularImageView imageView = findViewById(R.id.imgViewVolunteerImage);
-                    Picasso.get().load(uri).into(imageView);
-                }
-            }
-        });
-    }*/
 
 }
