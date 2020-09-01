@@ -324,7 +324,7 @@ public class VolunteerProfileCreateActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 timesAlertBuilder = new AlertDialog.Builder(VolunteerProfileCreateActivity.this);
-                timesAlertBuilder.setTitle("Times For Service");
+                timesAlertBuilder.setTitle("Times for Service");
                 timesAlertBuilder.setMultiChoiceItems(availableTimesForService, checkedTimesItemBoxes, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int position, boolean isItemChecked) {

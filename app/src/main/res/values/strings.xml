@@ -80,6 +80,8 @@
     <string name="select_available_times_of_days_for_calls">Select available times for calls on the days for service</string>
     <string name="send_request">Send Request</string>
     <string name="feedback_from_elderly">Feedback From Elderly</string>
+    <string name="times_for_telephone_calls">Times for Telephone Calls</string>
+    <string name="times_to_provide_service">Times to Provide Service</string>
 
     <array name="materialColors">
         <item>#1509ed</item>
@@ -102,8 +104,22 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+    <string-array name="systemLocalTime">
+        <item>09h00–10h00</item>
+        <item>10h00–11h00</item>
+        <item>11h00–12h00</item>
+        <item>12h00–13h00</item>
+        <item>13h00–14h00</item>
+        <item>14h00–15h00</item>
+        <item>15h00–16h00</item>
+        <item>16h00–17h00</item>
+        <item>17h00–18h00</item>
+        <item>18h00–19h00</item>
+        <item>20h00–21h00</item>
+        <item>21h00–22h00</item>
+    </string-array>
     <string-array name="availableTimes">
-        <item>09h00</item>
+        <item>09h00-</item>
         <item>09h30</item>
         <item>10h00</item>
         <item>10h30</item>

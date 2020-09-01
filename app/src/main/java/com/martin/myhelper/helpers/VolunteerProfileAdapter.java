@@ -12,7 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.martin.myhelper.R;
+import com.martin.myhelper.views.VolunteerEditServiceProfileActivity;
 import com.martin.myhelper.views.VolunteerProfileEditActivity;
 
 import java.util.ArrayList;
@@ -48,7 +53,7 @@ public class VolunteerProfileAdapter extends RecyclerView.Adapter<VolunteerProfi
     @Override
     public void onBindViewHolder(@NonNull final VolunteerProfileViewHolder holder, final int position) {
 
-        switch (_profileList.get(position).get(1)) {
+        /*switch (_profileList.get(position).get(1)) {
             case "100":
                 holder.tvServiceType.setText(TEACH_USAGE_MOBILE_DEVICES);
                 break;
@@ -82,17 +87,18 @@ public class VolunteerProfileAdapter extends RecyclerView.Adapter<VolunteerProfi
             default:
                 holder.tvServiceType.setText(TAKE_CARE_OF_PETS);
                 break;
-        }
-
+        }*/
+        setServiceTypeName(holder, position);
         holder.tvServiceDescription.setText(_profileList.get(position).get(2));
-        holder.tvServiceDays.setText(_profileList.get(position).get(3).replaceAll("(^\\[|\\]$)", ""));
-        holder.tvServicesTimes.setText(_profileList.get(position).get(4).replaceAll("(^\\[|\\]$)", ""));
-        holder.tvServiceCalls.setText(_profileList.get(position).get(5).replaceAll("(^\\[|\\]$)", ""));
+        getDayTimesAndCalls(holder, position);
+        //holder.tvServiceDays.setText(_profileList.get(position).get(3).replaceAll("(^\\[|\\]$)", ""));
+        //holder.tvServicesTimes.setText(_profileList.get(position).get(4).replaceAll("(^\\[|\\]$)", ""));
+        //holder.tvServiceCalls.setText(_profileList.get(position).get(5).replaceAll("(^\\[|\\]$)", ""));
 
         holder.btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(_context, VolunteerProfileEditActivity.class);
+                Intent intent = new Intent(_context, VolunteerEditServiceProfileActivity.class);
                 intent.putExtra("record", _profileList.get(position));
                 _context.startActivity(intent);
             }
@@ -132,4 +138,62 @@ public class VolunteerProfileAdapter extends RecyclerView.Adapter<VolunteerProfi
         }
     }
 
+    private void setServiceTypeName(final VolunteerProfileAdapter.VolunteerProfileViewHolder holder, int position){
+
+        FirebaseFirestore firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+
+        DocumentReference reference = firebaseFirestore.collection("service_types").document(_profileList.get(position).get(1));
+        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot snapshot) {
+                if (snapshot.exists()){
+                    holder.tvServiceType.setText(snapshot.getString("service_name"));
+                }
+            }
+        });
+    }
+
+    private void getDayTimesAndCalls(final VolunteerProfileAdapter.VolunteerProfileViewHolder holder, int position){
+
+        String _allTimes = "", _allCalls = "";
+
+        // set times
+        if(!_profileList.get(position).get(3).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Monday - Call Time\n" + _profileList.get(position).get(3).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Monday - Service\n" + _profileList.get(position).get(4).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_profileList.get(position).get(5).replaceAll("(^\\[|\\]$)", "").equals("") ){
+            _allCalls += "Tuesday - Call Time\n" + _profileList.get(position).get(5).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Tuesday - Service Time\n" + _profileList.get(position).get(6).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_profileList.get(position).get(7).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Wednesday - Call Time\n" + _profileList.get(position).get(7).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Wednesday - Service Time\n" + _profileList.get(position).get(8).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_profileList.get(position).get(9).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Thursday - Call Time\n" + _profileList.get(position).get(9).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Thursday - Service Time\n" + _profileList.get(position).get(10).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_profileList.get(position).get(11).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Friday - Call Time\n" + _profileList.get(position).get(11).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Friday - Service Time\n" + _profileList.get(position).get(12).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_profileList.get(position).get(13).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Saturday - Call Time\n" + _profileList.get(position).get(13).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+            _allTimes += "Saturday - Service Time\n" + _profileList.get(position).get(14).replaceAll("(^\\[|\\]$)", "") + " \n\n";
+        }
+
+        if(!_profileList.get(position).get(15).replaceAll("(^\\[|\\]$)", "").equals("")){
+            _allCalls += "Sunday - Call Time\n" + _profileList.get(position).get(15).replaceAll("(^\\[|\\]$)", "");
+            _allTimes += "Sunday - Service Time\n" + _profileList.get(position).get(16).replaceAll("(^\\[|\\]$)", "") ;
+        }
+
+        holder.tvServiceDays.setText(_allCalls);
+        holder.tvServicesTimes.setText(_allTimes);
+    }
 }

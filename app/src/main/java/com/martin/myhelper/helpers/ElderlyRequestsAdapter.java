@@ -149,7 +149,8 @@ public class ElderlyRequestsAdapter extends RecyclerView.Adapter<ElderlyRequests
 
     public class ElderlyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvVolunteerName, tvVolunteerMobile, tvServiceType, tvServiceDescription, tvServiceDays, tvServiceTimes, tvServiceCalls, tvRequestDays, tvRequestTimes;
+        TextView tvVolunteerName, tvVolunteerMobile, tvServiceType, tvServiceDescription,
+                tvServiceDays, tvServiceTimes, tvServiceCalls, tvRequestDays, tvRequestTimes;
         EditText etRequestMessage;
         CircularImageView volunteerImage;
         Button btnDeleteRequest, btnSendRequest, btnEditRequest;

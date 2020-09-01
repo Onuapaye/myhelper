@@ -108,7 +108,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                 if ( !validationSucceeded ) {
                     return;
                 } else if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
-                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
+                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "You must provide a valid Irish phone number ranging from " + irishNumberPrefixes[0] + " to " + irishNumberPrefixes[6], appCompatActivity);
                         return;
 
                 } else {
@@ -124,7 +124,8 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
                     crudHelper.createElderlyUserRecord(ElderlyRegistrationActivity.this, model);
 
                     // redirect to login activity
-                    intent = new Intent(context, MainActivity.class);
+                    intent = new Intent(context, LoginActivity.class);
+                    intent.putExtra("userType", GenericModel.USER_TYPE_VOLUNTEER);
                     intent.putExtra("recordCreated", CREATE_RECORD_SUCCESS_MSG + "\n" + CREATE_RECORD_EMAIL_SUCCESS_MSG);
                     intent.putExtra("loginPageHeaderTitle", "ELDERLY PERSON");
                     startActivity(intent);
@@ -203,7 +204,7 @@ public class ElderlyRegistrationActivity extends AppCompatActivity {
 
                     List validList = Arrays.asList(irishNumberPrefixes);
                     if ( !validList.contains(mobileNumber.getText().toString().substring(0, 3)) ){
-                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "Wrong phone number provided. You must provide a valid Irish phone number", appCompatActivity);
+                        Utility.showInformationDialog(REQUIRED_FIELD_TITLE, "You must provide a valid Irish phone number ranging from " + irishNumberPrefixes[0] + " to " + irishNumberPrefixes[6], appCompatActivity);
                         return;
                     }
                 }

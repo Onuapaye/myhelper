@@ -41,10 +41,13 @@ public class Utility extends Activity {
     public static final String CREATE_RECORD_SUCCESS_MSG = "Record created successfully!";
     public static final String UPDATE_RECORD_SUCCESS_MSG = "Record updated successfully!";
     public static final String CREATE_RECORD_FAILED_TITLE = "RECORD CREATION FAILED";
+    public static final String UPDATE_RECORD_FAILED_TITLE = "RECORD UPDATE FAILED";
     public static final String CREATE_RECORD_FAILED_MSG = "Record NOT created successfully!";
+    public static final String UPDATE_RECORD_FAILED_MSG = "Record NOT updated due to error!";
     public static final String CREATE_RECORD_EMAIL_SUCCESS_MSG = "An email is sent to your inbox for verification";
     public static final String CREATE_RECORD_EMAIL_FAILURE_MSG = "We could not send you a verification link. You can request for verification later.";
-    public static final String CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG = "You have added Service Type successfully to your profile.";
+    public static final String CREATE_VOLUNTEER_PROFILE_SUCCESS_MSG = "You have added a SERVICE successfully to your profile.";
+    public static final String UPDATE_VOLUNTEER_PROFILE_SUCCESS_MSG = "You have updated your SERVICE profile successfully.";
     public static final String CREATE_ELDERLY_REQUEST_SUCCESS_MSG = "You have successfully requested for a Service from a Volunteer.";
 
     public static final String PASSWORD_RESET_TITLE = "PASSWORD RESET";
@@ -62,6 +65,8 @@ public class Utility extends Activity {
     public static final String SELECT_TIMES_FOR_SERVICE_MSG = "Please select at least one or more TIME ON DAYS FOR SERVICE PROVISION from the list";
     public static final String SELECT_TIMES_FOR_CALLS_MSG = "Please select at least one or more TIME OF DAYS FOR CALLS from the list";
     public static final String SELECT_SERVICE_TYPE_MSG = "Please select a SERVICE TYPE from the list.";
+    public static final String SELECT_SERVICE_TIME_FOR = "Please select at least one or more SERVICE TIME(S) for ";
+    public static final String SELECT_SERVICE_CALL_FOR = "Please select at least one or more SERVICE CALL TIME(S) for ";
 
     public static final String TEACH_USAGE_MOBILE_DEVICES = "To teach you how to use a mobile phone/tablet/laptop";
     public static final String TEACH_USAGE_WEB_APPS = "To teach you how to use mobile/web applications";
