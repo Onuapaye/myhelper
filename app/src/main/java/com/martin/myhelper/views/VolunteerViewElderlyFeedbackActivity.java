@@ -35,13 +35,10 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
-    private ArrayList<ArrayList<String>> listOfElderlyFeedBacks, _elderlyAccountList;
+    private ArrayList<ArrayList<String>> listOfElderlyFeedBacks;
     private ArrayList<String> _tempListOfElders;
     private List<String> elders, services;
-    private List<String> _tempElderly;
 
-    private HashMap<Integer, String> _tempEldersHash;
-    private HashMap<Integer, String>  eldersHash = new HashMap<>();
     private HashMap<Integer, String>  finalHash = new HashMap<>() ;
     private HashMap<Integer, String>  finalServiceTypesHash = new HashMap<>() ;
     private String _selectedElderlyID;
@@ -55,6 +52,12 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
     private RecyclerView rcvViewElderlyFeedback;
     private VolunteerViewElderlyFeedbackAdapter feedbackAdapter;
 
+    private HashMap<Integer, String> elderlyDataHashMap = new HashMap<>();
+    private HashMap<Integer, String> servicesDataHashMap = new HashMap<>();
+    private HashMap<Integer, String> elderlyIdFieldHashMap = new HashMap<>(), serviceIdFieldHashMap = new HashMap<>();
+    private HashMap<Integer, String> tempHashMap;
+    private HashMap<String, String> dummyKeys = new HashMap<>();
+    private HashMap<String, String> dummySKeys = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +66,6 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
 
         this.initializeWidgets();
 
-        //this.getElderlyRecordsForSpinner();
-        //this.getFeedBackElders();
         this.getElderlyFeedBackEldersByCurrentVolunteer();
 
         this.handleSelectElderlySpinnerOnItemChange();
@@ -115,7 +116,6 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
                 String _spinnerKey;
                 _spinnerKey = finalServiceTypesHash.get(spnServiceTypes.getSelectedItemPosition());
 
-                System.out.println("S_TYPE " + _spinnerKey);
                 // clear the recyclerview before loading new records
                 rcvViewElderlyFeedback.removeAllViewsInLayout();
 
@@ -129,238 +129,6 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
         });
     }
 
-
-    private void getFeedBackElders(){
-
-        elders = new ArrayList<>();
-
-        CollectionReference reference = firebaseFirestore.collection("elders");
-        reference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    if (task != null){
-                        final QuerySnapshot snapshots = task.getResult();
-
-                        for (int i = 0; i < snapshots.size(); i++){
-
-                            // get the elderly id used as the path to the feedback document
-                            final String docPath = snapshots.getDocuments().get(i).getId();
-
-                            // STEP 2 : Get the collections and documents from the volunteer profiles
-                            final CollectionReference colRef = firebaseFirestore.collection("elderly_feedbacks").document(docPath).collection("feedbacks");
-
-                            colRef.whereEqualTo("elderlyId", snapshots.getDocuments().get(i).getString("id"))
-                                    .whereEqualTo("volunteerId", firebaseAuth.getCurrentUser().getUid())
-                                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-
-                                @Override
-                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                                    for (final QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-
-                                        if (firebaseAuth.getCurrentUser().getUid().equals(snapshot.getString("volunteerId"))) {
-
-                                            final DocumentReference doc = firebaseFirestore.collection("elders").document(snapshot.getString("elderlyId"));
-                                            doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onSuccess(DocumentSnapshot snp) {
-
-                                                    _tempEldersHash = new HashMap<>();
-                                                    eldersHash.put(key, snapshot.getString("elderlyId"));
-
-                                                    _tempElderly = new ArrayList<>();
-
-                                                    _tempElderly.add(snp.getString("firstName") + " " +
-                                                            snp.getString("lastName").toUpperCase());
-                                                    elders.add(_tempElderly.toString().replaceAll("(^\\[|\\]$)", ""));
-
-                                                    key++;
-
-                                                    // convert the list into a normal array
-                                                    eArray = new String[elders.size()];
-                                                    elders.toArray(eArray);
-
-                                                    // call the callback method to set the hash results
-                                                    callBackToSetHashValue(eldersHash);
-
-                                                    elderlyArrayAdapter = new ArrayAdapter<>(VolunteerViewElderlyFeedbackActivity.this,
-                                                            R.layout.support_simple_spinner_dropdown_item, eArray);
-                                                    elderlyArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                                                    spnElderlySpinner.setAdapter(elderlyArrayAdapter);
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    private void getTheFeedbackList(final QueryDocumentSnapshot qds) {
-
-        spnElderlySpinner = findViewById(R.id.availableElderlySpinner);
-        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
-
-        elders = new ArrayList<>();
-
-        final CollectionReference colRef = firebaseFirestore.collection("elderly_feedbacks").document(qds.getString("id")).collection("feedbacks");
-
-        colRef.whereEqualTo("elderlyId", qds.getString("id"))
-              .whereEqualTo("volunteerId", firebaseAuth.getCurrentUser().getUid())
-              .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                int key = 0;
-
-                for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-
-                    _tempEldersHash = new HashMap<>();
-                    eldersHash.put(key, qds.getString("id"));
-
-                    _tempElderly = new ArrayList<>();
-                    _tempElderly.add(qds.getString("firstName") + " " +
-                            qds.getString("lastName").toUpperCase());
-
-                    elders.add(_tempElderly.toString().replaceAll("(^\\[|\\]$)", ""));
-                    key++;
-                }
-
-                // convert the list into a normal array
-                eArray = new String[elders.size()];
-                elders.toArray(eArray);
-
-                // call the callback method to set the hash results
-                callBackToSetHashValue(eldersHash);
-
-                elderlyArrayAdapter = new ArrayAdapter<>(VolunteerViewElderlyFeedbackActivity.this,
-                        R.layout.support_simple_spinner_dropdown_item, eArray);
-                elderlyArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                spnElderlySpinner.setAdapter(elderlyArrayAdapter);
-            }
-        });
-    }
-
-   /* private void setBismark(){
-        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
-        firebaseAuth = Utility.getFirebaseAuthenticationInstance();
-
-        final CollectionReference volunteersColsRef = firebaseFirestore.collection("elders");
-
-        // instantiate the array list of volunteers
-        listOfElders = new ArrayList<>();
-
-        volunteersColsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-
-                    // get the query snapshot from the task
-                    QuerySnapshot snapshot = task.getResult();
-
-                    // loop through the snapshot and get the ids
-                    for(int i=0; i < snapshot.size(); i++){
-
-                        // get the volunteer id used as the path to the document
-                        final String docPath = snapshot.getDocuments().get(i).getId();
-
-                        // STEP 2 : Get the collections and documents from the volunteer profiles
-                        CollectionReference profileReference = firebaseFirestore.collection("elderly_feedbacks")
-                                .document(docPath).collection("feedbacks");
-
-                        profileReference
-                                .whereEqualTo("volunteerId", firebaseAuth.getCurrentUser().getUid())
-                                .get()
-                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()){
-                                            if (task.getResult() != null){
-
-                                                QuerySnapshot documentSnapshot = task.getResult();
-
-                                                for (DocumentSnapshot ds : documentSnapshot) {
-
-                                                    // instantiate the temporal array list of volunteer services
-                                                    _tempListOfElders = new ArrayList<>();
-
-                                                    _tempListOfElders.add(ds.getString("id"));
-                                                    _tempListOfElders.add(ds.getString("elderlyId"));
-                                                    _tempListOfElders.add(ds.getString("requestVolunteerId"));
-                                                    _tempListOfElders.add(ds.getString("requestServiceTypeId"));
-                                                    _tempListOfElders.add(String.valueOf(ds.get("requestDaysForService")));
-                                                    _tempListOfElders.add(String.valueOf(ds.get("requestTimesForService")));
-                                                    _tempListOfElders.add(ds.getString("requestMessage"));
-
-                                                    listOfElders.add(_tempListOfElders);
-                                                }
-                                            }
-                                        }
-
-                                        RecyclerView rcvViewElderlyRequest = findViewById(R.id.rcvProvidedServices);
-
-                                        VolunteerViewElderlyRequestsAdapter viewElderlyRequestsAdapter =
-                                                new VolunteerViewElderlyRequestsAdapter(
-                                                        VolunteerViewElderlyRequestsActivity.this, listOfElders);
-
-                                        rcvViewElderlyRequest.setAdapter(viewElderlyRequestsAdapter);
-                                        rcvViewElderlyRequest.setLayoutManager(new LinearLayoutManager(
-                                                VolunteerViewElderlyRequestsActivity.this));
-                                    }
-                                });
-                    }
-                }
-            }
-        });
-    }*/
-
-    /*private void getElderlyRecordsForSpinner(){
-
-        elderlySpinner = findViewById(R.id.availableElderlySpinner);
-        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
-
-        elders = new ArrayList<>();
-
-        final CollectionReference collection = firebaseFirestore.collection("elders");
-        collection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                int key = 0;
-                for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots){
-
-                    _tempEldersHash = new HashMap<>();
-                    eldersHash.put(key, snapshot.getString("id"));
-
-                    _tempElderly = new ArrayList<>();
-                    _tempElderly.add(snapshot.getString("firstName") + " " +
-                            snapshot.getString("lastName").toUpperCase());
-
-                    elders.add(_tempElderly.toString().replaceAll("(^\\[|\\]$)", ""));
-                    key++;
-                }
-
-                // convert the list into a normal array
-                array = new String[elders.size()];
-                elders.toArray(array);
-
-                // call the callback method to set the hash results
-                callBackHashValue(eldersHash);
-
-                arrayAdapter = new ArrayAdapter<>(VolunteerViewElderlyFeedbackActivity.this,
-                        R.layout.support_simple_spinner_dropdown_item, array);
-                arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                elderlySpinner.setAdapter(arrayAdapter);
-            }
-        });
-
-    }*/
-
     // a callback method to get the results of the hash map
     private void callBackToSetHashValue(HashMap<Integer, String> _hash){
         this.finalHash = _hash;
@@ -372,15 +140,8 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
 
     private void getElderlyFeedBacksFromVolunteer(String serviceTypeID, String userID) {
 
-        /*Log.e("SERV-ID", serviceTypeID);
-
-        String userID = firebaseAuth.getCurrentUser().getUid();
-        Log.e("CUSER-ID", userID);
-        Log.e("ELDER-ID", _selectedElderlyID);*/
-
         // instantiate the array list of volunteers
         listOfElderlyFeedBacks = new ArrayList<>();
-        _elderlyAccountList = new ArrayList<>();
 
         CollectionReference collectionReference = firebaseFirestore.collection("elderly_feedbacks")
                 .document(_selectedElderlyID).collection("feedbacks");
@@ -426,10 +187,6 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
             });
     }
 
-    HashMap<Integer, String> elderlyDataHashMap = new HashMap<>();
-    HashMap<Integer, String> servicesDataHashMap = new HashMap<>();
-    HashMap<Integer, String> elderlyIdFieldHashMap = new HashMap<>(), serviceIdFieldHashMap = new HashMap<>();
-    HashMap<Integer, String> tempHashMap;
 
     void getElderlyFeedBackEldersByCurrentVolunteer(){
 
@@ -444,9 +201,12 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
                     for (int i = 0; i < snapshots.size(); i++){
 
                         /*BEGIN*/
-                            CollectionReference collectionReference = firebaseFirestore.collection("elderly_feedbacks").document(snapshots.getDocuments().get(i).getId()).collection("feedbacks");
-                            collectionReference
-                                    .whereEqualTo("elderlyId", snapshots.getDocuments().get(i).getString("id"))
+                            CollectionReference collectionReference = firebaseFirestore.collection("elderly_feedbacks")
+                                    .document(snapshots.getDocuments().get(i).getId()).collection("feedbacks");
+
+                        final int finalI = i;
+                        collectionReference
+                                    .whereEqualTo("elderlyId", snapshots.getDocuments().get(i).getId())
                                     .whereEqualTo("volunteerId", firebaseAuth.getCurrentUser().getUid())
                                     .get()
                                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -459,18 +219,23 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
                                         for (QueryDocumentSnapshot qds : queryDocumentSnapshots){
 
                                             // get the elderly name and id to be hashed
-                                            DocumentReference documentReference = firebaseFirestore.collection("elders").document(qds.getString("elderlyId"));
+                                            DocumentReference documentReference = firebaseFirestore.collection("elders")
+                                                    .document(snapshots.getDocuments().get(finalI).getId());
+
                                             documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                 @Override
-                                                public void onSuccess(DocumentSnapshot snapshot) {
-                                                    if (snapshot.exists()){
+                                                public void onSuccess(DocumentSnapshot sn) {
+                                                    if (sn.exists()){
 
                                                         tempHashMap = new HashMap<>();
 
-                                                        if (! tempHashMap.containsKey(snapshot.getString("id"))){
+                                                        if (! dummyKeys.containsKey(sn.getString("id"))){
 
-                                                            elderlyIdFieldHashMap.put(key, snapshot.getString("id"));
-                                                            tempHashMap.put(key, snapshot.getString("firstName") + ", " + snapshot.getString("lastName").toUpperCase());
+                                                            dummyKeys.put(sn.getString("id"), sn.getString("firstName") + ", " + sn.getString("lastName").toUpperCase());
+
+                                                            elderlyIdFieldHashMap.put(key, sn.getString("id"));
+                                                            tempHashMap.put(key, sn.getString("firstName") + ", "
+                                                                    + sn.getString("lastName").toUpperCase());
 
                                                             key++;
                                                         }
@@ -510,22 +275,32 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
 
     void getSelectedElderlyFeedBackServiceTypesForVolunteer(String elderlyID){
 
-        CollectionReference collectionReference = firebaseFirestore.collection("elderly_feedbacks").document(elderlyID).collection("feedbacks");
-        collectionReference.whereEqualTo("volunteerId", firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        CollectionReference collectionReference = firebaseFirestore.collection("elderly_feedbacks")
+                .document(elderlyID).collection("feedbacks");
+
+        collectionReference
+                .whereEqualTo("volunteerId", firebaseAuth.getCurrentUser().getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (queryDocumentSnapshots.size() > 0){
 
                     for (QueryDocumentSnapshot qds : queryDocumentSnapshots){
 
-                        DocumentReference documentReference = firebaseFirestore.collection("service_types").document(qds.getString("serviceTypeId"));
+                        DocumentReference documentReference = firebaseFirestore.collection("service_types")
+                                .document(qds.getString("serviceTypeId"));
+
                         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot snapshot) {
                                 if (snapshot.exists()){
 
                                     tempHashMap = new HashMap<>();
-                                    if (! tempHashMap.containsKey(snapshot.getString("id"))){
+                                    if (! dummySKeys.containsKey(snapshot.getString("id"))){
+
+                                        dummySKeys.put(snapshot.getString("id"), snapshot.getString("service_name"));
 
                                         serviceIdFieldHashMap.put(sKey, snapshot.getString("id"));
                                         tempHashMap.put(key, snapshot.getString("service_name"));
