@@ -162,38 +162,56 @@ public class ElderlyProvideFeedbackAdapter extends RecyclerView.Adapter<ElderlyP
                 .document(requestVolunteerId).collection("profiles");
 
         volunteerCollection
-                .whereEqualTo("volunteerId", requestVolunteerId)
-                .whereEqualTo("serviceTypeId", requestServiceTypeId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            if (task.getResult() != null){
+            .whereEqualTo("volunteerId", requestVolunteerId)
+            .whereEqualTo("serviceTypeId", requestServiceTypeId)
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()){
+                        if (task.getResult() != null){
 
-                                QuerySnapshot querySnapshot = task.getResult();
+                            QuerySnapshot querySnapshot = task.getResult();
 
-                                for(QueryDocumentSnapshot docSnapshot : querySnapshot){
+                            for(QueryDocumentSnapshot dSpn : querySnapshot){
 
-                                    // instantiate the temporal array list of volunteer services
-                                    _tempList2 = new ArrayList<>();
+                                // instantiate the temporal array list of volunteer services
+                                _tempList2 = new ArrayList<>();
 
-                                    holder.serviceDescription.setText(docSnapshot.getString("description"));
+                                holder.serviceDescription.setText(dSpn.getString("description"));
 
-                                    _tempList2.add(docSnapshot.getString("id"));
-                                    _tempList2.add(docSnapshot.getString("serviceTypeId"));
-                                    _tempList2.add(docSnapshot.getString("volunteerId"));
-                                    _tempList2.add(docSnapshot.getString("description"));
-                                    _tempList2.add(String.valueOf(docSnapshot.get("daysForService")));
-                                    _tempList2.add(String.valueOf(docSnapshot.get("timesForService")));
-                                    _tempList2.add(String.valueOf(docSnapshot.get("timesForCalls")));
+                                _tempList2.add(dSpn.getString("id"));
+                                _tempList2.add(dSpn.getString("serviceTypeId"));
+                                _tempList2.add(dSpn.getString("volunteerId"));
+                                _tempList2.add(dSpn.getString("description"));
 
-                                    _volunteerProfileData.add(_tempList2);
-                                }
+                                _tempList2.add(String.valueOf(dSpn.get("monCalls")));
+                                _tempList2.add(String.valueOf(dSpn.get("monTimes")));
+
+                                _tempList2.add(String.valueOf(dSpn.get("tueCalls")));
+                                _tempList2.add(String.valueOf(dSpn.get("tueTimes")));
+
+                                _tempList2.add(String.valueOf(dSpn.get("wedCalls")));
+                                _tempList2.add(String.valueOf(dSpn.get("wedTimes")));
+
+                                _tempList2.add(String.valueOf(dSpn.get("thuCalls")));
+                                _tempList2.add(String.valueOf(dSpn.get("thuTimes")));
+
+                                _tempList2.add(String.valueOf(dSpn.get("friCalls")));
+                                _tempList2.add(String.valueOf(dSpn.get("friTimes")));
+
+                                _tempList2.add(String.valueOf(dSpn.get("satCalls")));
+                                _tempList2.add(String.valueOf(dSpn.get("satTimes")));
+
+                                _tempList2.add(String.valueOf(dSpn.get("sunCalls")));
+                                _tempList2.add(String.valueOf(dSpn.get("sunTimes")));
+
+                                _volunteerProfileData.add(_tempList2);
                             }
                         }
                     }
-                });
+                }
+            });
     }
 
     private void getVolunteerAccountDetails(String volunteerId, final ElderlyProvideFeedbackAdapter.ElderlyProvideFeedbackViewHolder holder) {
