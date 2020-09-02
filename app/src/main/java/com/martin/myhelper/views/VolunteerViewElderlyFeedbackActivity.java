@@ -25,7 +25,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.martin.myhelper.R;
 import com.martin.myhelper.helpers.Utility;
 import com.martin.myhelper.helpers.VolunteerViewElderlyFeedbackAdapter;
-import com.martin.myhelper.helpers.VolunteerViewElderlyRequestsAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,41 +37,67 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
 
     private ArrayList<ArrayList<String>> listOfElderlyFeedBacks, _elderlyAccountList;
     private ArrayList<String> _tempListOfElders;
-    private List<String> elders;
+    private List<String> elders, services;
     private List<String> _tempElderly;
 
     private HashMap<Integer, String> _tempEldersHash;
     private HashMap<Integer, String>  eldersHash = new HashMap<>();
     private HashMap<Integer, String>  finalHash = new HashMap<>() ;
+    private HashMap<Integer, String>  finalServiceTypesHash = new HashMap<>() ;
+    private String _selectedElderlyID;
 
-    private ArrayAdapter<String> arrayAdapter;
-    private String[] array;
-    private Spinner elderlySpinner;
+    private ArrayAdapter<String> elderlyArrayAdapter, servicesArrayAdapter;
+    private String[] eArray, sArray;
+    private Spinner spnElderlySpinner, spnServiceTypes;
+    private int key = 0;
+    private int sKey = 0;
+
+    private RecyclerView rcvViewElderlyFeedback;
+    private VolunteerViewElderlyFeedbackAdapter feedbackAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_volunteer_view_elderly_feedback);
 
+        this.initializeWidgets();
+
         //this.getElderlyRecordsForSpinner();
-        this.getFeedBackElders();
+        //this.getFeedBackElders();
+        this.getElderlyFeedBackEldersByCurrentVolunteer();
+
         this.handleSelectElderlySpinnerOnItemChange();
+        this.handleSelectServiceTypeSpinnerOnItemChange();
+    }
+
+    void initializeWidgets(){
+        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+        firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+        spnElderlySpinner = findViewById(R.id.availableElderlySpinner);
+        spnServiceTypes = findViewById(R.id.spnAvailableFeedbackServices);
+        rcvViewElderlyFeedback = findViewById(R.id.rcvFeedbacks);
     }
 
     private void handleSelectElderlySpinnerOnItemChange(){
 
-        elderlySpinner = findViewById(R.id.availableElderlySpinner);
-        elderlySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spnElderlySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String _spinnerKey;
-                _spinnerKey = finalHash.get(elderlySpinner.getSelectedItemPosition());
+                _spinnerKey = finalHash.get(spnElderlySpinner.getSelectedItemPosition());
 
-                // clear the recyclerview before loading new records
-                RecyclerView recyclerView = findViewById(R.id.rcvFeedbacks);
-                recyclerView.removeAllViewsInLayout();
+                // set the global elderly id for reuse
+                _selectedElderlyID = _spinnerKey;
 
-                getElderlyFeedBacksFromVolunteer(_spinnerKey);
+                // clear the adapter and recycler view for the service type spinner
+                sArray = null;
+                spnServiceTypes.setAdapter(null);
+                rcvViewElderlyFeedback.removeAllViewsInLayout();
+                rcvViewElderlyFeedback.setAdapter(null);
+
+                // load all service types based on the selected elderly feed backs
+                getSelectedElderlyFeedBackServiceTypesForVolunteer(_spinnerKey.trim());
             }
 
             @Override
@@ -82,12 +107,30 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
         });
     }
 
-    int key = 0;
+    private void handleSelectServiceTypeSpinnerOnItemChange(){
+
+        spnServiceTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String _spinnerKey;
+                _spinnerKey = finalServiceTypesHash.get(spnServiceTypes.getSelectedItemPosition());
+
+                System.out.println("S_TYPE " + _spinnerKey);
+                // clear the recyclerview before loading new records
+                rcvViewElderlyFeedback.removeAllViewsInLayout();
+
+                getElderlyFeedBacksFromVolunteer(_spinnerKey, firebaseAuth.getCurrentUser().getUid());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
 
     private void getFeedBackElders(){
-        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
-        firebaseAuth = Utility.getFirebaseAuthenticationInstance();
-        elderlySpinner = findViewById(R.id.availableElderlySpinner);
 
         elders = new ArrayList<>();
 
@@ -135,16 +178,16 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
                                                     key++;
 
                                                     // convert the list into a normal array
-                                                    array = new String[elders.size()];
-                                                    elders.toArray(array);
+                                                    eArray = new String[elders.size()];
+                                                    elders.toArray(eArray);
 
                                                     // call the callback method to set the hash results
-                                                    callBackHashValue(eldersHash);
+                                                    callBackToSetHashValue(eldersHash);
 
-                                                    arrayAdapter = new ArrayAdapter<>(VolunteerViewElderlyFeedbackActivity.this,
-                                                            R.layout.support_simple_spinner_dropdown_item, array);
-                                                    arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                                                    elderlySpinner.setAdapter(arrayAdapter);
+                                                    elderlyArrayAdapter = new ArrayAdapter<>(VolunteerViewElderlyFeedbackActivity.this,
+                                                            R.layout.support_simple_spinner_dropdown_item, eArray);
+                                                    elderlyArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                                                    spnElderlySpinner.setAdapter(elderlyArrayAdapter);
                                                 }
                                             });
                                         }
@@ -160,7 +203,7 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
 
     private void getTheFeedbackList(final QueryDocumentSnapshot qds) {
 
-        elderlySpinner = findViewById(R.id.availableElderlySpinner);
+        spnElderlySpinner = findViewById(R.id.availableElderlySpinner);
         firebaseFirestore = Utility.getFirebaseFireStoreInstance();
 
         elders = new ArrayList<>();
@@ -189,16 +232,16 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
                 }
 
                 // convert the list into a normal array
-                array = new String[elders.size()];
-                elders.toArray(array);
+                eArray = new String[elders.size()];
+                elders.toArray(eArray);
 
                 // call the callback method to set the hash results
-                callBackHashValue(eldersHash);
+                callBackToSetHashValue(eldersHash);
 
-                arrayAdapter = new ArrayAdapter<>(VolunteerViewElderlyFeedbackActivity.this,
-                        R.layout.support_simple_spinner_dropdown_item, array);
-                arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                elderlySpinner.setAdapter(arrayAdapter);
+                elderlyArrayAdapter = new ArrayAdapter<>(VolunteerViewElderlyFeedbackActivity.this,
+                        R.layout.support_simple_spinner_dropdown_item, eArray);
+                elderlyArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                spnElderlySpinner.setAdapter(elderlyArrayAdapter);
             }
         });
     }
@@ -319,25 +362,33 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
     }*/
 
     // a callback method to get the results of the hash map
-    private void callBackHashValue(HashMap<Integer, String> _hash){
+    private void callBackToSetHashValue(HashMap<Integer, String> _hash){
         this.finalHash = _hash;
     }
 
-    private void getElderlyFeedBacksFromVolunteer(String elderlyID) {
+    private void callBackToSetServiceTypesHashValue(HashMap<Integer, String> _hash){
+        this.finalServiceTypesHash = _hash;
+    }
 
-        firebaseFirestore = Utility.getFirebaseFireStoreInstance();
-        firebaseAuth = Utility.getFirebaseAuthenticationInstance();
+    private void getElderlyFeedBacksFromVolunteer(String serviceTypeID, String userID) {
+
+        /*Log.e("SERV-ID", serviceTypeID);
+
         String userID = firebaseAuth.getCurrentUser().getUid();
+        Log.e("CUSER-ID", userID);
+        Log.e("ELDER-ID", _selectedElderlyID);*/
 
         // instantiate the array list of volunteers
         listOfElderlyFeedBacks = new ArrayList<>();
         _elderlyAccountList = new ArrayList<>();
+
         CollectionReference collectionReference = firebaseFirestore.collection("elderly_feedbacks")
-                .document(elderlyID).collection("feedbacks");
+                .document(_selectedElderlyID).collection("feedbacks");
 
         collectionReference
             .whereEqualTo("volunteerId", userID)
-            .whereEqualTo("elderlyId", elderlyID)
+            .whereEqualTo("elderlyId", _selectedElderlyID)
+            .whereEqualTo("serviceTypeId", serviceTypeID)
             .get()
             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -362,12 +413,12 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
                         }
                     }
 
-                    RecyclerView rcvViewElderlyFeedback = findViewById(R.id.rcvFeedbacks);
                     rcvViewElderlyFeedback.removeAllViewsInLayout();
 
-                    VolunteerViewElderlyFeedbackAdapter feedbackAdapter = new
-                            VolunteerViewElderlyFeedbackAdapter(VolunteerViewElderlyFeedbackActivity.this,
-                            listOfElderlyFeedBacks);
+                    feedbackAdapter = new VolunteerViewElderlyFeedbackAdapter(
+                                                    VolunteerViewElderlyFeedbackActivity.this,
+                                                            listOfElderlyFeedBacks);
+
                     rcvViewElderlyFeedback.setAdapter(feedbackAdapter);
                     rcvViewElderlyFeedback.setLayoutManager(new LinearLayoutManager(
                             VolunteerViewElderlyFeedbackActivity.this));
@@ -375,5 +426,136 @@ public class VolunteerViewElderlyFeedbackActivity extends AppCompatActivity {
             });
     }
 
+    HashMap<Integer, String> elderlyDataHashMap = new HashMap<>();
+    HashMap<Integer, String> servicesDataHashMap = new HashMap<>();
+    HashMap<Integer, String> elderlyIdFieldHashMap = new HashMap<>(), serviceIdFieldHashMap = new HashMap<>();
+    HashMap<Integer, String> tempHashMap;
 
+    void getElderlyFeedBackEldersByCurrentVolunteer(){
+
+        CollectionReference reference = firebaseFirestore.collection("elders");
+        reference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+
+                    final QuerySnapshot snapshots = task.getResult();
+
+                    for (int i = 0; i < snapshots.size(); i++){
+
+                        /*BEGIN*/
+                            CollectionReference collectionReference = firebaseFirestore.collection("elderly_feedbacks").document(snapshots.getDocuments().get(i).getId()).collection("feedbacks");
+                            collectionReference
+                                    .whereEqualTo("elderlyId", snapshots.getDocuments().get(i).getString("id"))
+                                    .whereEqualTo("volunteerId", firebaseAuth.getCurrentUser().getUid())
+                                    .get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                                    if (queryDocumentSnapshots.size() > 0){
+
+                                        for (QueryDocumentSnapshot qds : queryDocumentSnapshots){
+
+                                            // get the elderly name and id to be hashed
+                                            DocumentReference documentReference = firebaseFirestore.collection("elders").document(qds.getString("elderlyId"));
+                                            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DocumentSnapshot snapshot) {
+                                                    if (snapshot.exists()){
+
+                                                        tempHashMap = new HashMap<>();
+
+                                                        if (! tempHashMap.containsKey(snapshot.getString("id"))){
+
+                                                            elderlyIdFieldHashMap.put(key, snapshot.getString("id"));
+                                                            tempHashMap.put(key, snapshot.getString("firstName") + ", " + snapshot.getString("lastName").toUpperCase());
+
+                                                            key++;
+                                                        }
+
+                                                        elderlyDataHashMap.putAll(tempHashMap);
+
+                                                        elders = new ArrayList<>(elderlyDataHashMap.values());
+
+                                                        // convert the list into a normal array
+                                                        eArray = new String[elders.size()];
+                                                        elders.toArray(eArray);
+
+                                                        // call the callback method to set the hash results
+                                                        callBackToSetHashValue(elderlyIdFieldHashMap);
+
+                                                        elderlyArrayAdapter = new ArrayAdapter<>(VolunteerViewElderlyFeedbackActivity.this,
+                                                                R.layout.support_simple_spinner_dropdown_item, eArray);
+
+                                                        elderlyArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                                                        spnElderlySpinner.setAdapter(elderlyArrayAdapter);
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                }
+                            });
+
+                        /*END*/
+                    }
+                }
+            }
+        });
+
+    }
+
+    void getSelectedElderlyFeedBackServiceTypesForVolunteer(String elderlyID){
+
+        CollectionReference collectionReference = firebaseFirestore.collection("elderly_feedbacks").document(elderlyID).collection("feedbacks");
+        collectionReference.whereEqualTo("volunteerId", firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (queryDocumentSnapshots.size() > 0){
+
+                    for (QueryDocumentSnapshot qds : queryDocumentSnapshots){
+
+                        DocumentReference documentReference = firebaseFirestore.collection("service_types").document(qds.getString("serviceTypeId"));
+                        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot snapshot) {
+                                if (snapshot.exists()){
+
+                                    tempHashMap = new HashMap<>();
+                                    if (! tempHashMap.containsKey(snapshot.getString("id"))){
+
+                                        serviceIdFieldHashMap.put(sKey, snapshot.getString("id"));
+                                        tempHashMap.put(key, snapshot.getString("service_name"));
+
+                                        sKey++;
+                                    }
+
+                                    servicesDataHashMap.putAll(tempHashMap);
+
+                                    services = new ArrayList<>(servicesDataHashMap.values());
+
+                                    // convert the list into a normal array
+                                    sArray = new String[services.size()];
+                                    services.toArray(sArray);
+
+
+                                    // call the callback method to set the hash results
+                                    callBackToSetServiceTypesHashValue(serviceIdFieldHashMap);
+
+                                    servicesArrayAdapter = new ArrayAdapter<>(VolunteerViewElderlyFeedbackActivity.this,
+                                            R.layout.support_simple_spinner_dropdown_item, sArray);
+
+                                    servicesArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                                    spnServiceTypes.setAdapter(servicesArrayAdapter);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
 }

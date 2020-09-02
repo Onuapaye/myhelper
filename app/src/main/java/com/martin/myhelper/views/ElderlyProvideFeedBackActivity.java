@@ -14,6 +14,7 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -25,6 +26,8 @@ import com.martin.myhelper.helpers.ElderlyProvideFeedbackAdapter;
 import com.martin.myhelper.helpers.Utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static com.martin.myhelper.R.layout.support_simple_spinner_dropdown_item;
 import static com.martin.myhelper.helpers.Utility.ASSIST_WITH_ERRANDS;
@@ -45,40 +48,92 @@ public class ElderlyProvideFeedBackActivity extends AppCompatActivity {
     private ArrayList<String> _tempList1, _tempList2;
     private ArrayList<String> list;
 
-    private ArrayList<String> serviceTypes;
+    private ArrayList<String> servicesList;
+    private List<String> _tempServicesList;
     private String[] serviceTypeIDs;
     private String selectedServiceTypeID;
     private Spinner spnServiceTypes;
-    private ArrayAdapter<String> arrayAdapter;
+    private ArrayAdapter<String> serviceTypesArrayAdapter;
+    private String[] serviceArrayForSpinner;
+    private HashMap<Integer, String> _tempServiceTypeHash;
+    private HashMap<Integer, String> serviceTypesHash = new HashMap<>();
+    private HashMap<Integer, String> finalServiceTypesHash = new HashMap<>() ;
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
 
+    RecyclerView viewVolunteerServices;
+    ElderlyProvideFeedbackAdapter provideFeedbackAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_elderly_provide_feed_back);
 
-        this.loadServicesTypes();
-        this.handleSpinnerSelectedItemChange();
+        this.initializeWidgets();
+
+        this.loadElderlyRequestedServicesTypes();
+        this.handleSelectServiceTypeSpinnerOnItemChange();
+    }
+
+    private void getServiceTypesRecordsForSpinner(String serviceTypeID){
+
+        //firebaseFirestore = Utility.getFirebaseFireStoreInstance();
+
+        servicesList = new ArrayList<>();
+
+        final CollectionReference collection = firebaseFirestore.collection("service_types");
+        collection.whereEqualTo("id", serviceTypeID).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                int key = 0;
+                for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots){
+
+                    _tempServiceTypeHash = new HashMap<>();
+                    serviceTypesHash.put(key, snapshot.getString("id"));
+
+                    _tempServicesList = new ArrayList<>();
+                    _tempServicesList.add(snapshot.getString("service_name") );
+
+                    servicesList.add(_tempServicesList.toString().replaceAll("(^\\[|\\]$)", ""));
+                    key++;
+                }
+
+                // convert the list into a normal array
+                serviceArrayForSpinner = new String[servicesList.size()];
+                servicesList.toArray(serviceArrayForSpinner);
+
+                // call the callback method to set the hash results
+                setServiceTypesHashCallBack(serviceTypesHash);
+
+                serviceTypesArrayAdapter = new ArrayAdapter<String>(ElderlyProvideFeedBackActivity.this,
+                                            R.layout.support_simple_spinner_dropdown_item, serviceArrayForSpinner);
+
+                serviceTypesArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+                spnServiceTypes.setAdapter(serviceTypesArrayAdapter);
+            }
+        });
+
+    }
+
+    // a callback method to get the results of the hash map
+    private void setServiceTypesHashCallBack(HashMap<Integer, String> _hash){
+        this.finalServiceTypesHash = _hash;
     }
 
     /***
      * Loads all the service types from an array into the spinner control
      */
-    private void loadServicesTypes(){
+    private void loadElderlyRequestedServicesTypes(){
 
         firebaseFirestore = Utility.getFirebaseFireStoreInstance();
         firebaseAuth = Utility.getFirebaseAuthenticationInstance();
 
-        spnServiceTypes = findViewById(R.id.availableServiceTypeSpinner);
-        //serviceTypes = getResources().getStringArray(R.array.serviceTypes);
-        serviceTypeIDs = getResources().getStringArray(R.array.serviceTypeIDs);
-
-        serviceTypes = new ArrayList<>();
         final CollectionReference elderlyCollection = firebaseFirestore.collection("elderly_requests")
                 .document(firebaseAuth.getCurrentUser().getUid()).collection("requests");
+
         elderlyCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
               @Override
               public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -89,54 +144,34 @@ public class ElderlyProvideFeedBackActivity extends AppCompatActivity {
                           for (QueryDocumentSnapshot qDoc : snapshot) {
 
                               // instantiate the temporal array list of volunteer services
-                              list = new ArrayList<>();
-                              list.add(qDoc.getString("requestServiceTypeId"));
-                              switch (list.toString().replaceAll("(^\\[|\\]$)", "")) {
-                                  case "100":
-                                      serviceTypes.add(TEACH_USAGE_MOBILE_DEVICES);
-                                      break;
-                                  case "200":
-                                      serviceTypes.add(TEACH_USAGE_WEB_APPS);
-                                      break;
-                                  case "300":
-                                      serviceTypes.add(WALK_WITH_U);
-                                      break;
-                                  case "400":
-                                      serviceTypes.add(PROVIDE_LIFT_TO_SOCIAL);
-                                      break;
-                                  case "500":
-                                      serviceTypes.add(ASSIST_WITH_HOUSE_CLEANING);
-                                      break;
-                                  case "600":
-                                      serviceTypes.add(ASSIST_WITH_HOUSE_MAINTENANCE);
-                                      break;
-                                  case "700":
-                                      serviceTypes.add(ASSIST_WITH_GARDENING);
-                                      break;
-                                  case "800":
-                                      serviceTypes.add(ASSIST_WITH_ERRANDS);
-                                      break;
-                                  case "900":
-                                      serviceTypes.add(ASSIST_WITH_GROCERY_SHOPPING);
-                                      break;
-                                  case "1000":
-                                      serviceTypes.add(PROVIDE_LIFT_TO_SHOP);
-                                      break;
-                                  default:
-                                      serviceTypes.add(TAKE_CARE_OF_PETS);
-                                      break;
-                              }
+                              getServiceTypesRecordsForSpinner(qDoc.getString("requestServiceTypeId"));
 
-                              //serviceTypes.add(String.valueOf());
-
-                              arrayAdapter = new ArrayAdapter<String>(ElderlyProvideFeedBackActivity.this,
-                                      support_simple_spinner_dropdown_item, serviceTypes);
-                              arrayAdapter.setDropDownViewResource(support_simple_spinner_dropdown_item);
-                              spnServiceTypes.setAdapter(arrayAdapter);
                           }
                       }
                   }
               }
+        });
+    }
+
+    private void handleSelectServiceTypeSpinnerOnItemChange(){
+
+        spnServiceTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String _spinnerKey;
+                _spinnerKey = finalServiceTypesHash.get(spnServiceTypes.getSelectedItemPosition());
+
+                // set the selected service time key for saving later
+                selectedServiceTypeID = _spinnerKey;
+
+                // load the system times for dialog builder selection
+                loadVolunteerServicesRecyclerView(selectedServiceTypeID);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
     }
 
@@ -216,9 +251,13 @@ public class ElderlyProvideFeedBackActivity extends AppCompatActivity {
 
         // STEP 1. get the elderly requests;
         final CollectionReference elderlyCollection = firebaseFirestore.collection("elderly_requests")
-                .document(firebaseAuth.getCurrentUser().getUid()).collection("requests");
+                                                      .document(firebaseAuth.getCurrentUser().getUid()).collection("requests");
+
         elderlyCollection.whereEqualTo("requestServiceTypeId", serviceTypeID)
-                .whereEqualTo("elderlyId", firebaseAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("elderlyId", firebaseAuth.getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
@@ -234,8 +273,28 @@ public class ElderlyProvideFeedBackActivity extends AppCompatActivity {
                             _tempList1.add(qDoc.getString("elderlyId"));
                             _tempList1.add(qDoc.getString("requestVolunteerId"));
                             _tempList1.add(qDoc.getString("requestServiceTypeId"));
-                            _tempList1.add(String.valueOf(qDoc.get("requestDaysForService")));
-                            _tempList1.add(String.valueOf(qDoc.get("requestTimesForService")));
+
+                            _tempList1.add(String.valueOf(qDoc.get("monCalls")));
+                            _tempList1.add(String.valueOf(qDoc.get("monTimes")));
+
+                            _tempList1.add(String.valueOf(qDoc.get("tueCalls")));
+                            _tempList1.add(String.valueOf(qDoc.get("tueTimes")));
+
+                            _tempList1.add(String.valueOf(qDoc.get("wedCalls")));
+                            _tempList1.add(String.valueOf(qDoc.get("wedTimes")));
+
+                            _tempList1.add(String.valueOf(qDoc.get("thuCalls")));
+                            _tempList1.add(String.valueOf(qDoc.get("thuTimes")));
+
+                            _tempList1.add(String.valueOf(qDoc.get("friCalls")));
+                            _tempList1.add(String.valueOf(qDoc.get("friTimes")));
+
+                            _tempList1.add(String.valueOf(qDoc.get("satCalls")));
+                            _tempList1.add(String.valueOf(qDoc.get("satTimes")));
+
+                            _tempList1.add(String.valueOf(qDoc.get("sunCalls")));
+                            _tempList1.add(String.valueOf(qDoc.get("sunTimes")));
+
                             _tempList1.add(qDoc.getString("requestMessage"));
 
                             elderlyRequestsList.add(_tempList1);
@@ -243,9 +302,9 @@ public class ElderlyProvideFeedBackActivity extends AppCompatActivity {
                     }
                 }
 
-                RecyclerView viewVolunteerServices = findViewById(R.id.rcvViewProvidedServices);
-                ElderlyProvideFeedbackAdapter provideFeedbackAdapter = new ElderlyProvideFeedbackAdapter(elderlyRequestsList,
+                provideFeedbackAdapter = new ElderlyProvideFeedbackAdapter(elderlyRequestsList,
                         ElderlyProvideFeedBackActivity.this );
+
                 viewVolunteerServices.setAdapter(provideFeedbackAdapter);
                 viewVolunteerServices.setLayoutManager(new LinearLayoutManager(ElderlyProvideFeedBackActivity.this));
 
@@ -254,4 +313,10 @@ public class ElderlyProvideFeedBackActivity extends AppCompatActivity {
     }
 
 
+    void initializeWidgets(){
+
+        viewVolunteerServices = findViewById(R.id.rcvViewProvidedServices);
+        spnServiceTypes = findViewById(R.id.availableServiceTypeSpinner);
+
+    }
 }
