@@ -268,7 +268,7 @@ public class ElderlyMakeRequestActivity extends AppCompatActivity {
             _allCalls += "Monday\n" + _requestedVolunteerProfileData.get(4).replaceAll("(^\\[|\\]$)", "") + " \n\n";
             _allTimes += "Monday\n" + _requestedVolunteerProfileData.get(5).replaceAll("(^\\[|\\]$)", "") + " \n\n";
 
-            createAndShowDayCheckBoxes(cvMondayMains, 5, 4, lLayoutMondayCalls,
+            createAndShowDayCheckBoxes(cvMondayMains, 4, 5, lLayoutMondayCalls,
                     lLayoutMondayTimes, 1000, 2000);
 
         } else {
@@ -593,7 +593,7 @@ public class ElderlyMakeRequestActivity extends AppCompatActivity {
             return false;
         }
 
-        if ( (hashMapMondayCalls.size() > 0 && hashMapMondayTimes.size() <= 0) || (hashMapMondayCalls.size() <= 0 && hashMapMondayTimes.size() > 0)){
+        /*if ( (hashMapMondayCalls.size() > 0 && hashMapMondayTimes.size() <= 0) || (hashMapMondayCalls.size() <= 0 && hashMapMondayTimes.size() > 0)){
             showInformationDialog("INVALID DEFINITION", getInvalidDefinitionMessage("Monday"), this);
             return false;
         }
@@ -626,7 +626,7 @@ public class ElderlyMakeRequestActivity extends AppCompatActivity {
         if ( (hashMapSundayCalls.size() > 0 && hashMapSundayTimes.size() <= 0) || (hashMapSundayCalls.size() <= 0 && hashMapSundayTimes.size() > 0)){
             showInformationDialog("INVALID DEFINITION", getInvalidDefinitionMessage("Sunday"), this);
             return false;
-        }
+        }*/
 
         return true;
     }
